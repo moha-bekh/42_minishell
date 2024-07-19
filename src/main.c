@@ -6,35 +6,11 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:53 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/19 20:02:24 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/19 22:44:54 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// int	_tok_parenthesis_process(char *input, u_padll token, int *i)
-// {
-// 	int	j;
-
-// 	j = *i;
-// 	if (input[*i] == ')')
-// 		return (_tok_syntax_err(')', 1));
-// 	while (input[*i] && input[*i] != _NEWLINE)
-// 	{
-// 		*i += 1;
-// 		if (input[*i] == '(')
-// 			_tok_parenthesis_process(input, token, i);
-// 		if (input[*i] == ')')
-// 		{
-// 			token = _tok_push_back(token, _OPEN_PAR, ft_substr(input, j + 1, *i
-// - j - 1));
-// 			_tok_process(token->t_bot->value, token);
-// 			*i += 1;
-// 			return (IT_IS);
-// 		}
-// 	}
-// 	return (_tok_syntax_close_err('('));
-// }
 
 int	_tok_is(char *str, char a)
 {
@@ -67,6 +43,76 @@ int	_tok_syntax_close_err(char a)
 	return (RET_ERR);
 }
 
+int	_tok_check_operator(u_padll tokens)
+{
+	t_ptok	tmp;
+
+	tmp = tokens->t_top->next;
+	if (tmp->type == 'A' || tmp->type == 'O')
+		return (_tok_syntax_err(tmp->value[0], 2));
+	if (tokens->t_bot->type == 'A' || tokens->t_bot->type == 'O')
+		return (_tok_syntax_err(tokens->t_bot->value[0], 2));
+	return (RET_OK);
+}
+
+int	_tok_check_pipe(u_padll tokens)
+{
+	t_ptok	tmp;
+
+	tmp = tokens->t_top->next;
+	if (tmp->type == '|')
+		return (_tok_syntax_err('|', 1));
+	if (tokens->t_bot->type == '|')
+		return (_tok_syntax_err('|', 1));
+	return (RET_OK);
+}
+int	_tok_check_redir(t_ptok tok)
+{
+	if (_tok_is(_REDIRS, tok->value[0]) && tok->next->type != _LITERAL)
+		return (_tok_syntax_err(tok->next->value[0], 2));
+	return (RET_OK);
+}
+
+int	_tok_check(u_padll tokens)
+{
+	t_ptok	tmp;
+
+	tmp = tokens->t_top;
+	if (_tok_check_operator(tokens) == -1 || _tok_check_pipe(tokens) == -1)
+		return (RET_ERR);
+	while (tmp)
+	{
+		if (_tok_check_redir(tmp) == -1)
+			return (RET_ERR);
+		tmp = tmp->next;
+	}
+	return (RET_OK);
+}
+
+// int	_tok_parenthesis_process(char *input, u_padll token, int *i)
+// {
+// 	int	j;
+
+// 	j = *i;
+// 	if (input[*i] == ')')
+// 		return (_tok_syntax_err(')', 1));
+// 	while (input[*i] && input[*i] != _NEWLINE)
+// 	{
+// 		*i += 1;
+// 		if (input[*i] == '(')
+// 			_tok_parenthesis_process(input, token, i);
+// 		if (input[*i] == ')')
+// 		{
+// 			token = _tok_push_back(token, _OPEN_PAR, ft_substr(input, j + 1, *i
+// - j - 1));
+// 			_tok_process(token->t_bot->value, token);
+// 			*i += 1;
+// 			return (IT_IS);
+// 		}
+// 	}
+// 	return (_tok_syntax_close_err('('));
+// }
+
 int	_tok_quotes_process(char *input, u_padll token, int *i)
 {
 	char	tok;
@@ -79,7 +125,8 @@ int	_tok_quotes_process(char *input, u_padll token, int *i)
 		*i += 1;
 		if (input[*i] && input[*i] == tok)
 		{
-			token = _tok_push_back(token, tok, ft_substr(input, j + 1, (*i - j - 1)));
+			token = _tok_push_back(token, tok, ft_substr(input, j + 1, (*i - j
+							- 1)));
 			*i += 1;
 			if (input[*i] && !ft_isspace(input[*i]))
 				token->t_bot->join = true;
@@ -164,13 +211,11 @@ int	_tok_pipe(char *input, u_padll token, int *i)
 
 int	_tok_operator_process(char *input, u_padll token, int *i)
 {
-	if (token->t_bot->value[*i] == '&' && token->t_bot->value[*i + 1] == '&')
+	if (token->t_top->value[*i] == '&' && token->t_top->value[*i + 1] == '&')
 		return (_tok_and(input, token, i));
-	else if (token->t_bot->value[*i] == '|' && token->t_bot->value[*i
-		+ 1] == '|')
+	else if (token->t_top->value[*i] == '|' && token->t_top->value[*i + 1] == '|')
 		return (_tok_or(input, token, i));
-	else if (token->t_bot->value[*i] == '|' && token->t_bot->value[*i
-		+ 1] != '|')
+	else if (token->t_top->value[*i] == '|' && token->t_top->value[*i + 1] != '|')
 		return (_tok_pipe(input, token, i));
 	else
 		*i += 1;
@@ -221,20 +266,16 @@ int	_tok_redir_process(char *input, u_padll token, int *i)
 
 int	_tok_token_process(char *input, u_padll token, int *i)
 {
-	if (_tok_is(_OPERATORS, input[*i]) && _tok_operator_process(input, token,
-			i) == EXIT_ERROR)
+	if (_tok_is(_OPERATORS, input[*i]) && _tok_operator_process(input, token, i) == EXIT_ERROR)
 		return (EXIT_ERROR);
-	else if (_tok_is(_REDIRS, input[*i]) && _tok_redir_process(input, token,
-			i) == EXIT_ERROR)
+	else if (_tok_is(_REDIRS, input[*i]) && _tok_redir_process(input, token, i) == EXIT_ERROR)
 		return (EXIT_ERROR);
-	else if (_tok_is(_QUOTES, input[*i]) && _tok_quotes_process(input, token,
-			i) == EXIT_ERROR)
+	else if (_tok_is(_QUOTES, input[*i]) && _tok_quotes_process(input, token, i) == EXIT_ERROR)
 		return (EXIT_ERROR);
-	else if (_tok_is(_OTHERS, input[*i]) && _tok_others_process(input, token,
-			i) == EXIT_ERROR)
+	else if (_tok_is(_OTHERS, input[*i]) && _tok_others_process(input, token, i) == EXIT_ERROR)
 		return (EXIT_ERROR);
 	// else if (_tok_is(_PARENTHESIS, input[*i])
-		// && _tok_parenthesis_process(input, token, i) == EXIT_ERROR)
+	// && _tok_parenthesis_process(input, token, i) == EXIT_ERROR)
 	// 	return (EXIT_ERROR);
 	return (EXIT_SUCCESS);
 }
@@ -252,25 +293,43 @@ int	_tok_literal_process(char *input, u_padll token, int *i)
 	return (EXIT_SUCCESS);
 }
 
-int	_tok_process(char *input, u_padll token)
+int	_tok_process(char *input, u_padll *token)
 {
 	int	i;
 
 	i = 0;
-	token->t_bot->type = _TOP;
+	*token = _tok_push_back(*token, _TOP, ft_strdup(input));
 	while (input[i] && input[i] != _NEWLINE)
 	{
 		if (input[i] && _tok_is(_TOKENS, input[i]))
 		{
-			if (_tok_token_process(input, token, &i) == EXIT_ERROR)
+			if (_tok_token_process(input, *token, &i) == EXIT_ERROR)
 				return (EXIT_ERROR);
 		}
 		else if (input[i] && !ft_isspace(input[i]))
-			_tok_literal_process(input, token, &i);
+			_tok_literal_process(input, *token, &i);
 		else if (input[i])
 			i++;
 	}
 	return (EXIT_SUCCESS);
+}
+
+t_pbt_op _operation_tree(t_pdata data, t_ptok tok)
+{
+	t_ptok	tmp;
+
+	tmp = tok;
+	while (tmp)
+	{
+		printf("tmp->type = %c\n", tmp->type);
+		if (tmp->type == _AND || tmp->type == _OR)
+		{
+			data->tree = _op_bt_join(_op_bt_create(tmp->type), data->tree, _op_bt_create(tmp->next->value[0]));
+		}
+		tmp = tmp->next;
+	}
+	(void)data;
+	return (data->tree);
 }
 
 int	main(int ac, char **av, char **ev)
@@ -287,12 +346,21 @@ int	main(int ac, char **av, char **ev)
 		printf(CYAN "-------------------------------------- PROMPT --------------------------------------" RESET "\n");
 		data.input = readline(">$ ");
 		if (!data.input || !ft_strncmp(data.input, "exit", 4))
-			return (EXIT_FAILURE);
+			return (free(data.input), EXIT_FAILURE);
 		add_history(data.input);
 		printf(BLUE "-------------------------------------- TOKENS --------------------------------------" RESET "\n");
-		_tok_process(data.input, data.tok);
-		_tok_print(data.tok);
-		_tok_clear(data.tok);
+		_tok_process(data.input, &data.tok);
+		_tok_check(data.tok);
+		// _tok_print(data.tok);
+		if (!ft_strncmp(data.input, "clear", 5))
+			system("clear");
+		data.scop = _scp_push_back(data.scop, NULL);
+		// data.tree = _op_bt_create(_TOP);
+		data.tree =_operation_tree(&data, data.tok->t_top->next);
+		_op_bt_print(data.tree, true);
+		data.tree = _op_bt_create(data.tok->t_top->next->value[0]);
+		data.tree = _op_bt_clear(data.tree);
+		data.tok = _tok_clear(data.tok);
 	}
 	return (EXIT_SUCCESS);
 }

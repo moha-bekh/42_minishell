@@ -1,28 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _tok_bt_create.c                                   :+:      :+:    :+:   */
+/*   _op_bt_clear.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/17 14:16:21 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/19 20:23:38 by mbekheir         ###   ########.fr       */
+/*   Created: 2024/07/19 20:26:47 by mbekheir          #+#    #+#             */
+/*   Updated: 2024/07/19 22:24:49 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "data_struct.h"
+#include "minishell.h"
 
-t_pbt_tok	_tok_bt_create(char *value, char type)
+t_pbt_op	_op_bt_clear(t_pbt_op tree)
 {
-	t_pbt_tok	tree;
-
-	tree = NULL;
-	if (_alloc((void **)&tree, sizeof(t_bt_tok)))
+	if (!tree)
 		return (NULL);
-	tree->value = value;
-	tree->type = type;
-	tree->join = NULL;
-	tree->left = NULL;
-	tree->right = NULL;
+	_op_bt_clear(tree->left);
+	_op_bt_clear(tree->right);
+	free(tree);
+	tree = NULL;
 	return (tree);
 }

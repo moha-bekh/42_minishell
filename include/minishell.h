@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/19 19:56:35 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/19 22:30:45 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,11 @@ typedef struct s_bt_op
 {
 	char			operator;
 	int				status;
-	u_padll			cmd_left;
 	u_padll			cmd_right;
+	u_padll			cmd_left;
+	struct s_bt_op	*left;
+	struct s_bt_op	*root;
+	struct s_bt_op	*right;
 
 } t_bt_op, *t_pbt_op;
 
@@ -137,6 +140,7 @@ typedef struct s_data
 	char			*input;
 	t_env			env;
 	u_padll			tok;
+	u_padll			scop;
 	t_pbt_op		tree;
 } t_data, *t_pdata;
 
@@ -176,7 +180,7 @@ enum				e_tokens
 # define _PARENTHESIS "()"
 # define _QUOTES "'\""
 # define _REDIRS "<>"
-# define _OTHERS "$*"
+# define _OTHERS "()$*"
 
 // #  TOKENS SYNTAX ERRORS
 
@@ -236,6 +240,13 @@ u_padll				_tok_clear(u_padll dll);
 u_padll				_tok_pop_back(u_padll dll);
 void				_tok_print(u_padll dll);
 u_padll				_tok_push_back(u_padll dll, char type, char *value);
+
+// # OPERATIONS
+t_pbt_op				_op_bt_clear(t_pbt_op tree);
+t_pbt_op			_op_bt_create(char operator);
+t_pbt_op			_op_bt_join(t_pbt_op tree, t_pbt_op left, t_pbt_op right);
+void				_op_bt_print(t_pbt_op tree, bool prefix);
+t_pbt_op			_op_bt_push_at(t_pbt_op tree, t_pbt_op node, bool left);
 
 // ###########################################################################
 

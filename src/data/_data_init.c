@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 23:44:34 by moha              #+#    #+#             */
-/*   Updated: 2024/07/19 18:23:40 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/19 20:12:46 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ int	_data_init_args(t_pdata data, int ac, char **av, char **ev)
 	data->ac = ac;
 	data->av = av;
 	data->env.ev = ev;
+	data->input = NULL;
+	data->tok = NULL;
+	data->tree = NULL;
 	return (EXIT_SUCCESS);
 }
 

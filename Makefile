@@ -28,6 +28,11 @@ DATA_STRUCT_SRCS := 			_env_clear\
 								_env_print\
 								_env_push_back\
 								_env_push_in\
+								_op_bt_clear\
+								_op_bt_create\
+								_op_bt_join\
+								_op_bt_print\
+								_op_bt_push_at\
 								_scp_clear\
 								_scp_pop_back\
 								_scp_print\

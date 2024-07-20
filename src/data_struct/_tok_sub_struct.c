@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _op_bt_create.c                                    :+:      :+:    :+:   */
+/*   _tok_sub_struct.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/19 20:22:59 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/20 21:25:23 by moha             ###   ########.fr       */
+/*   Created: 2024/07/20 20:49:21 by moha              #+#    #+#             */
+/*   Updated: 2024/07/20 21:26:10 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_pbt_op	_op_bt_create(char type, char *value)
+u_padll	_tok_sub_struct(t_ptok start, t_ptok end)
 {
-	t_pbt_op	tree;
+	u_padll	new_dll;
 
-	tree = NULL;
-	if (_alloc((void **)&tree, sizeof(t_bt_op)))
+	if (!start || !end)
 		return (NULL);
-	tree->type= type;
-	tree->tok = NULL;
-	tree->value = value;
-	tree->cmd_left = NULL;
-	tree->cmd_right = NULL;
-	tree->left = NULL;
-	tree->root = NULL;
-	tree->right = NULL;
-	return (tree);
+	new_dll = NULL;
+	if (_alloc((void *)&new_dll, sizeof(u_adll)) || !new_dll)
+		return (NULL);
+	new_dll->t_top = start;
+	new_dll->t_bot = end;
+	return (new_dll);
 }

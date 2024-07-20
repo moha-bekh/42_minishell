@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:53 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/20 19:22:15 by moha             ###   ########.fr       */
+/*   Updated: 2024/07/20 21:33:42 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,22 +318,50 @@ int	_tok_process(char *input, u_padll *token)
 		else if (input[i])
 			i++;
 	}
-	_tok_check(token);
+	_tok_check(*token);
 	return (EXIT_SUCCESS);
 }
 
-t_pbt_op	_operation_tree(t_pdata data, t_ptok tok)
+t_pbt_op	_operation_tree(t_pdata data)
 {
-	t_ptok	tmp;
+	t_ptok	tok;
+	t_ptok start;
 
-	tmp = tok;
-	while (tmp)
+	tok = data->tok->t_top->next;
+	start = NULL;
+	while (tok)
 	{
-		if (tok->type == _AND || tok->type == _OR)
-			
-		tmp = tmp->next;
+		start = tok;
+		// if (tok->type == _AND || tok->type == _OR)
+		// 	data->tree = _op_bt_push_root(data->tree, _op_bt_create(tok->type, NULL));
+		if (tok->type == _OPEN_PAR)
+		{
+			data->scop = _scp_push_back(data->scop, data->tree);
+			data->tree = NULL;
+		}
+		else if (tok->type == _CLOSE_PAR)
+		{
+			data->scop->s_bot->ptr_op->right = data->tree;
+			data->tree->root = data->scop->s_bot->ptr_op;
+			data->tree = data->scop->s_bot->ptr_op;
+			data->scop = _scp_pop_back(data->scop);
+		}
+		else
+		{
+			while (tok->next && !_tok_is(_TREE_SEP, tok->next->type))
+				tok = tok->next;
+			data->tree = _op_bt_push_right(data->tree, _op_bt_create(_LITERAL, NULL));
+			data->tree->right->tok = _tok_sub_struct(start, tok);
+			// tok = data->tree->right->tok->t_top;
+			// while (tok)
+			// {
+			// 	printf("tok->value = %s\n", tok->value);
+			// 	tok = tok->next;
+			// }
+		}
+		tok = tok->next;
 	}
-	(void)data;
+	(void)start;
 	return (data->tree);
 }
 
@@ -361,13 +389,38 @@ int	main(int ac, char **av, char **ev)
 		printf(BLUE "-------------------------------------- TOKENS --------------------------------------" RESET "\n");
 		_tok_process(data.input, &data.tok);
 		_tok_print(data.tok);
-		data.tree = _operation_tree(&data, data.tok->t_top->next);
+		data.tree = _operation_tree(&data);
 		_op_bt_print(data.tree, true);
 		data.tree = _op_bt_clear(data.tree);
 		data.tok = _tok_clear(data.tok);
 	}
 	return (EXIT_SUCCESS);
 }
+
+// int	main(void)
+// {
+// 	t_pbt_op	tree_1;
+// 	t_pbt_op	tree_2;
+// 	u_padll		scop;
+
+// 	tree_1 = NULL;
+// 	tree_2 = NULL;
+// 	scop = NULL;
+
+// 	tree_1 = _op_bt_push_right(tree_1, _op_bt_create('1', NULL));
+// 	tree_2 = _op_bt_push_root(tree_2, _op_bt_create('2', NULL));
+// 	scop = _scp_push_back(scop, tree_1);
+// 	scop = _scp_push_back(scop, tree_2);
+// 	printf("scp top value = %c\n", scop->s_top->ptr_op->type);
+// 	printf("scp bot value = %c\n", scop->s_bot->ptr_op->type);
+
+// 	scop = _scp_pop_back(scop);
+// 	printf("scp top value = %c\n", scop->s_bot->ptr_op->type);
+
+// 	(void)tree_1;
+// 	(void)tree_2;
+// 	return (0);
+// }
 
 // int main(void)
 // {

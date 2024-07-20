@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/20 18:32:53 by moha             ###   ########.fr       */
+/*   Updated: 2024/07/20 21:16:40 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,15 +112,15 @@ typedef struct s_adll
 
 typedef struct s_bt_op
 {
-	char			*value;
 	char			type;
-	int				status;
+	u_padll			tok;
+	char			*value;
 	u_padll			cmd_right;
 	u_padll			cmd_left;
+	int				status;
 	struct s_bt_op	*left;
 	struct s_bt_op	*root;
 	struct s_bt_op	*right;
-
 } t_bt_op, *t_pbt_op;
 
 // ###########################################################################
@@ -183,6 +183,7 @@ enum				e_tokens
 # define _QUOTES "'\""
 # define _REDIRS "<>"
 # define _OTHERS "()$*"
+# define _TREE_SEP "AO()"
 
 // #  TOKENS SYNTAX ERRORS
 
@@ -242,10 +243,11 @@ u_padll				_tok_clear(u_padll dll);
 u_padll				_tok_pop_back(u_padll dll);
 void				_tok_print(u_padll dll);
 u_padll				_tok_push_back(u_padll dll, char type, char *value);
+u_padll				_tok_sub_struct(t_ptok start, t_ptok end);
 
 // # OPERATIONS
 t_pbt_op			_op_bt_clear(t_pbt_op tree);
-t_pbt_op			_op_bt_create(char operator, char * value);
+t_pbt_op			_op_bt_create(char type, char *value);
 t_pbt_op			_op_bt_join(t_pbt_op tree, t_pbt_op left, t_pbt_op right);
 void				_op_bt_print(t_pbt_op tree, bool prefix);
 t_pbt_op			_op_bt_push_at(t_pbt_op tree, t_pbt_op node, bool left);

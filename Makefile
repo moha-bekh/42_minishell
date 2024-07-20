@@ -44,6 +44,7 @@ DATA_STRUCT_SRCS := 			_env_clear\
 								_tok_pop_back\
 								_tok_print\
 								_tok_push_back\
+								_tok_sub_struct\
 
 DATA_STRUCT_OBJS := 			$(addprefix $(DATA_STRUCT_DIR), $(addsuffix .o, $(DATA_STRUCT_SRCS)))
 

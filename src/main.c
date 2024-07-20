@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:53 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/19 22:44:54 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/20 19:22:15 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,9 +213,11 @@ int	_tok_operator_process(char *input, u_padll token, int *i)
 {
 	if (token->t_top->value[*i] == '&' && token->t_top->value[*i + 1] == '&')
 		return (_tok_and(input, token, i));
-	else if (token->t_top->value[*i] == '|' && token->t_top->value[*i + 1] == '|')
+	else if (token->t_top->value[*i] == '|' && token->t_top->value[*i
+		+ 1] == '|')
 		return (_tok_or(input, token, i));
-	else if (token->t_top->value[*i] == '|' && token->t_top->value[*i + 1] != '|')
+	else if (token->t_top->value[*i] == '|' && token->t_top->value[*i
+		+ 1] != '|')
 		return (_tok_pipe(input, token, i));
 	else
 		*i += 1;
@@ -266,13 +268,17 @@ int	_tok_redir_process(char *input, u_padll token, int *i)
 
 int	_tok_token_process(char *input, u_padll token, int *i)
 {
-	if (_tok_is(_OPERATORS, input[*i]) && _tok_operator_process(input, token, i) == EXIT_ERROR)
+	if (_tok_is(_OPERATORS, input[*i]) && _tok_operator_process(input, token,
+			i) == EXIT_ERROR)
 		return (EXIT_ERROR);
-	else if (_tok_is(_REDIRS, input[*i]) && _tok_redir_process(input, token, i) == EXIT_ERROR)
+	else if (_tok_is(_REDIRS, input[*i]) && _tok_redir_process(input, token,
+			i) == EXIT_ERROR)
 		return (EXIT_ERROR);
-	else if (_tok_is(_QUOTES, input[*i]) && _tok_quotes_process(input, token, i) == EXIT_ERROR)
+	else if (_tok_is(_QUOTES, input[*i]) && _tok_quotes_process(input, token,
+			i) == EXIT_ERROR)
 		return (EXIT_ERROR);
-	else if (_tok_is(_OTHERS, input[*i]) && _tok_others_process(input, token, i) == EXIT_ERROR)
+	else if (_tok_is(_OTHERS, input[*i]) && _tok_others_process(input, token,
+			i) == EXIT_ERROR)
 		return (EXIT_ERROR);
 	// else if (_tok_is(_PARENTHESIS, input[*i])
 	// && _tok_parenthesis_process(input, token, i) == EXIT_ERROR)
@@ -288,7 +294,8 @@ int	_tok_literal_process(char *input, u_padll token, int *i)
 	while (input[*i] && !ft_isspace(input[*i]) && !_tok_is(_TOKENS, input[*i]))
 		*i += 1;
 	token = _tok_push_back(token, _LITERAL, ft_substr(input, j, (*i - j)));
-	if (input[*i] && !ft_isspace(input[*i]) && (input[*i] == '"' || input[*i] == '\''))
+	if (input[*i] && !ft_isspace(input[*i]) && (input[*i] == '"'
+			|| input[*i] == '\''))
 		token->t_bot->join = true;
 	return (EXIT_SUCCESS);
 }
@@ -311,21 +318,19 @@ int	_tok_process(char *input, u_padll *token)
 		else if (input[i])
 			i++;
 	}
+	_tok_check(token);
 	return (EXIT_SUCCESS);
 }
 
-t_pbt_op _operation_tree(t_pdata data, t_ptok tok)
+t_pbt_op	_operation_tree(t_pdata data, t_ptok tok)
 {
 	t_ptok	tmp;
 
 	tmp = tok;
 	while (tmp)
 	{
-		printf("tmp->type = %c\n", tmp->type);
-		if (tmp->type == _AND || tmp->type == _OR)
-		{
-			data->tree = _op_bt_join(_op_bt_create(tmp->type), data->tree, _op_bt_create(tmp->next->value[0]));
-		}
+		if (tok->type == _AND || tok->type == _OR)
+			
 		tmp = tmp->next;
 	}
 	(void)data;
@@ -348,22 +353,75 @@ int	main(int ac, char **av, char **ev)
 		if (!data.input || !ft_strncmp(data.input, "exit", 4))
 			return (free(data.input), EXIT_FAILURE);
 		add_history(data.input);
+		if (!ft_strncmp(data.input, "clear", 5))
+		{
+			system("clear");
+			continue ;
+		}
 		printf(BLUE "-------------------------------------- TOKENS --------------------------------------" RESET "\n");
 		_tok_process(data.input, &data.tok);
-		_tok_check(data.tok);
-		// _tok_print(data.tok);
-		if (!ft_strncmp(data.input, "clear", 5))
-			system("clear");
-		data.scop = _scp_push_back(data.scop, NULL);
-		// data.tree = _op_bt_create(_TOP);
-		data.tree =_operation_tree(&data, data.tok->t_top->next);
+		_tok_print(data.tok);
+		data.tree = _operation_tree(&data, data.tok->t_top->next);
 		_op_bt_print(data.tree, true);
-		data.tree = _op_bt_create(data.tok->t_top->next->value[0]);
 		data.tree = _op_bt_clear(data.tree);
 		data.tok = _tok_clear(data.tok);
 	}
 	return (EXIT_SUCCESS);
 }
+
+// int main(void)
+// {
+// 	t_pbt_op tree;
+// 	t_pbt_op scop_1;
+// 	t_pbt_op scop_2;
+// 	t_pbt_op scop_3;
+
+// 	scop_1 = NULL;
+// 	scop_2 = NULL;
+// 	scop_3 = NULL;
+// 	tree = NULL;
+
+// 	tree = _op_bt_push_right(tree, _op_bt_create('X', NULL));
+// 	tree = _op_bt_push_root(tree, _op_bt_create('&', NULL));
+// 	tree = _op_bt_push_right(tree, _op_bt_create('Y', NULL));
+// 	tree = _op_bt_push_root(tree, _op_bt_create('|', NULL));
+
+// 	scop_1 = tree;
+// 	tree = NULL;
+// 	tree = _op_bt_push_right(tree, _op_bt_create('Z', NULL));
+// 	tree = _op_bt_push_root(tree, _op_bt_create('&', NULL));
+// 	tree = _op_bt_push_right(tree, _op_bt_create('A', NULL));
+// 	tree = _op_bt_push_root(tree, _op_bt_create('&', NULL));
+
+// 	scop_2 = tree;
+// 	tree = NULL;
+
+// 	tree = _op_bt_push_right(tree, _op_bt_create('M', NULL));
+// 	tree = _op_bt_push_root(tree, _op_bt_create('|', NULL));
+// 	tree = _op_bt_push_right(tree, _op_bt_create('N', NULL));
+
+// 	scop_2->right = tree;
+// 	tree->root = scop_2;
+// 	tree = scop_2;
+
+// 	tree = _op_bt_push_root(tree, _op_bt_create('|', NULL));
+// 	tree = _op_bt_push_right(tree, _op_bt_create('O', NULL));
+
+// 	scop_1->right = tree;
+// 	tree->root = scop_1;
+// 	tree = scop_1;
+
+// 	tree = _op_bt_push_root(tree, _op_bt_create('|', NULL));
+// 	tree = _op_bt_push_right(tree, _op_bt_create('B', NULL));
+
+// 	_op_bt_print(tree, true);
+
+// 	_op_bt_clear(tree);
+// 	(void)scop_1;
+// 	(void)scop_2;
+// 	(void)scop_3;
+// 	return (EXIT_SUCCESS);
+// }
 
 // {
 //// DATA INIT TEST

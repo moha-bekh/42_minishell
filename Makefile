@@ -32,6 +32,9 @@ DATA_STRUCT_SRCS := 			_env_clear\
 								_op_bt_create\
 								_op_bt_join\
 								_op_bt_print\
+								_op_bt_push_root\
+								_op_bt_push_left\
+								_op_bt_push_right\
 								_op_bt_push_at\
 								_scp_clear\
 								_scp_pop_back\

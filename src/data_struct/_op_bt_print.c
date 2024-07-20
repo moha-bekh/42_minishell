@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _op_bt_print.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 20:28:49 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/19 22:35:51 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/20 19:01:05 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ void	_op_bt_print(t_pbt_op tree, bool prefix)
 		return ;
 	if (tree->root)
 	{
-		printf("root: ( %c ) -> tree: ( %c )\n", tree->root->operator, tree->operator);
+		printf("root: ( %c ) -> tree: ( %c ) value: %s\n", tree->root->type, tree->type, tree->value);
 	}
 	else
 	{	
-		printf("tree: ( %c )\n", tree->operator);
+		printf("root: ( %c ) value: %s\n", tree->type, tree->value);
 	}
 	if (prefix)
 	{

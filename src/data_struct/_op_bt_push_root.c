@@ -1,30 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _op_bt_create.c                                    :+:      :+:    :+:   */
+/*   _op_bt_push_root.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/19 20:22:59 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/20 18:33:27 by moha             ###   ########.fr       */
+/*   Created: 2024/07/20 17:51:02 by moha              #+#    #+#             */
+/*   Updated: 2024/07/20 18:01:56 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_pbt_op	_op_bt_create(char type, char *value)
+t_pbt_op	_op_bt_push_root(t_pbt_op tree, t_pbt_op node)
 {
-	t_pbt_op	tree;
-
-	tree = NULL;
-	if (_alloc((void **)&tree, sizeof(t_bt_op)))
-		return (NULL);
-	tree->type= type;
-	tree->value = value;
-	tree->cmd_left = NULL;
-	tree->cmd_right = NULL;
-	tree->left = NULL;
-	tree->root = NULL;
-	tree->right = NULL;
+	if (!tree)
+		tree = node;
+	else
+	{
+		node->left = tree;
+		tree->root = node;
+		tree = node;
+	}
 	return (tree);
 }

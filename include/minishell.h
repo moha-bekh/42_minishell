@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/20 21:16:40 by moha             ###   ########.fr       */
+/*   Updated: 2024/07/23 00:26:43 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,10 +113,9 @@ typedef struct s_adll
 typedef struct s_bt_op
 {
 	char			type;
-	u_padll			tok;
-	char			*value;
-	u_padll			cmd_right;
+	t_ptok			token;
 	u_padll			cmd_left;
+	u_padll			cmd_right;
 	int				status;
 	struct s_bt_op	*left;
 	struct s_bt_op	*root;
@@ -220,6 +219,12 @@ int					_data_init(t_pdata data, int ac, char **av, char **ev);
 void				_cleaner(t_pdata data);
 
 // ###########################################################################
+// #  TOKENS FUNCTIONS
+// ###########################################################################
+
+int					_tok_is(char *str, char a);
+
+// ###########################################################################
 // #  DATA STRUCTURE FUNCTIONS
 // ###########################################################################
 
@@ -247,7 +252,7 @@ u_padll				_tok_sub_struct(t_ptok start, t_ptok end);
 
 // # OPERATIONS
 t_pbt_op			_op_bt_clear(t_pbt_op tree);
-t_pbt_op			_op_bt_create(char type, char *value);
+t_pbt_op			_op_bt_create(char type, t_ptok token);
 t_pbt_op			_op_bt_join(t_pbt_op tree, t_pbt_op left, t_pbt_op right);
 void				_op_bt_print(t_pbt_op tree, bool prefix);
 t_pbt_op			_op_bt_push_at(t_pbt_op tree, t_pbt_op node, bool left);

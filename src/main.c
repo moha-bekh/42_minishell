@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:53 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/20 21:33:42 by moha             ###   ########.fr       */
+/*   Updated: 2024/07/23 00:21:47 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -325,15 +325,12 @@ int	_tok_process(char *input, u_padll *token)
 t_pbt_op	_operation_tree(t_pdata data)
 {
 	t_ptok	tok;
-	t_ptok start;
 
 	tok = data->tok->t_top->next;
-	start = NULL;
 	while (tok)
 	{
-		start = tok;
-		// if (tok->type == _AND || tok->type == _OR)
-		// 	data->tree = _op_bt_push_root(data->tree, _op_bt_create(tok->type, NULL));
+		if (tok->type == _AND || tok->type == _OR)
+			data->tree = _op_bt_push_root(data->tree, _op_bt_create(tok->type, tok));
 		if (tok->type == _OPEN_PAR)
 		{
 			data->scop = _scp_push_back(data->scop, data->tree);
@@ -346,22 +343,10 @@ t_pbt_op	_operation_tree(t_pdata data)
 			data->tree = data->scop->s_bot->ptr_op;
 			data->scop = _scp_pop_back(data->scop);
 		}
-		else
-		{
-			while (tok->next && !_tok_is(_TREE_SEP, tok->next->type))
-				tok = tok->next;
-			data->tree = _op_bt_push_right(data->tree, _op_bt_create(_LITERAL, NULL));
-			data->tree->right->tok = _tok_sub_struct(start, tok);
-			// tok = data->tree->right->tok->t_top;
-			// while (tok)
-			// {
-			// 	printf("tok->value = %s\n", tok->value);
-			// 	tok = tok->next;
-			// }
-		}
+		else if (tok->prev->type != _LITERAL)
+			data->tree = _op_bt_push_right(data->tree, _op_bt_create(tok->type, tok));
 		tok = tok->next;
 	}
-	(void)start;
 	return (data->tree);
 }
 

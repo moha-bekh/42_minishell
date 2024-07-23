@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:53 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/23 00:21:47 by moha             ###   ########.fr       */
+/*   Updated: 2024/07/23 18:11:10 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,30 +88,6 @@ int	_tok_check(u_padll tokens)
 	}
 	return (RET_OK);
 }
-
-// int	_tok_parenthesis_process(char *input, u_padll token, int *i)
-// {
-// 	int	j;
-
-// 	j = *i;
-// 	if (input[*i] == ')')
-// 		return (_tok_syntax_err(')', 1));
-// 	while (input[*i] && input[*i] != _NEWLINE)
-// 	{
-// 		*i += 1;
-// 		if (input[*i] == '(')
-// 			_tok_parenthesis_process(input, token, i);
-// 		if (input[*i] == ')')
-// 		{
-// 			token = _tok_push_back(token, _OPEN_PAR, ft_substr(input, j + 1, *i
-// - j - 1));
-// 			_tok_process(token->t_bot->value, token);
-// 			*i += 1;
-// 			return (IT_IS);
-// 		}
-// 	}
-// 	return (_tok_syntax_close_err('('));
-// }
 
 int	_tok_quotes_process(char *input, u_padll token, int *i)
 {
@@ -280,9 +256,6 @@ int	_tok_token_process(char *input, u_padll token, int *i)
 	else if (_tok_is(_OTHERS, input[*i]) && _tok_others_process(input, token,
 			i) == EXIT_ERROR)
 		return (EXIT_ERROR);
-	// else if (_tok_is(_PARENTHESIS, input[*i])
-	// && _tok_parenthesis_process(input, token, i) == EXIT_ERROR)
-	// 	return (EXIT_ERROR);
 	return (EXIT_SUCCESS);
 }
 
@@ -322,6 +295,15 @@ int	_tok_process(char *input, u_padll *token)
 	return (EXIT_SUCCESS);
 }
 
+t_pbt_op	_ptr_recovery(t_pbt_op tree, u_padll *scop)
+{
+	(*scop)->s_bot->ptr_op->right = tree;
+	tree->root = (*scop)->s_bot->ptr_op;
+	tree = (*scop)->s_bot->ptr_op;
+	(*scop) = _scp_pop_back((*scop));
+	return (tree);
+}
+
 t_pbt_op	_operation_tree(t_pdata data)
 {
 	t_ptok	tok;
@@ -337,13 +319,8 @@ t_pbt_op	_operation_tree(t_pdata data)
 			data->tree = NULL;
 		}
 		else if (tok->type == _CLOSE_PAR)
-		{
-			data->scop->s_bot->ptr_op->right = data->tree;
-			data->tree->root = data->scop->s_bot->ptr_op;
-			data->tree = data->scop->s_bot->ptr_op;
-			data->scop = _scp_pop_back(data->scop);
-		}
-		else if (tok->prev->type != _LITERAL)
+			data->tree = _ptr_recovery(data->tree, &data->scop);
+		else if (_tok_is(_TREE_SEP, tok->prev->type))
 			data->tree = _op_bt_push_right(data->tree, _op_bt_create(tok->type, tok));
 		tok = tok->next;
 	}
@@ -355,16 +332,45 @@ int	main(int ac, char **av, char **ev)
 	t_data	data;
 	int		i;
 
-	i = -1;
-	(void)i;
+	i = 0;
 	if (_data_init(&data, ac, av, ev))
 		return (EXIT_FAILURE);
+
+	// i = -1;
+	// while (data.env.min_ev[++i])
+	// 	printf("%s\n", data.env.min_ev[i]);
+	// printf("\n====================================================\n\n");
+
+
+	data.env.dll_env = _env_sort(data.env.dll_env);
+	t_pev tmp = data.env.dll_env->e_top;
+	
+	while (tmp)
+	{
+		printf("%s=", tmp->key);
+		printf("%s\n", tmp->value);
+		tmp = tmp->next;
+	}
+
+
+	// data.env.dll_sort_env = _env_sort(data.env.dll_sort_env);
+	// t_pev tmp_ = data.env.dll_sort_env->e_top;
+	// while (tmp_)
+	// {
+	// 	printf("export %s=", tmp_->key);
+	// 	printf("%s\n", tmp_->value);
+	// 	tmp_ = tmp_->next;
+	// }
+	
+	
+	return (0);
+
 	while (1)
 	{
 		printf(CYAN "-------------------------------------- PROMPT --------------------------------------" RESET "\n");
 		data.input = readline(">$ ");
 		if (!data.input || !ft_strncmp(data.input, "exit", 4))
-			return (free(data.input), EXIT_FAILURE);
+			return (_cleaner(&data), EXIT_FAILURE);
 		add_history(data.input);
 		if (!ft_strncmp(data.input, "clear", 5))
 		{
@@ -375,11 +381,11 @@ int	main(int ac, char **av, char **ev)
 		_tok_process(data.input, &data.tok);
 		_tok_print(data.tok);
 		data.tree = _operation_tree(&data);
-		_op_bt_print(data.tree, true);
+		_op_bt_print(data.tree, true, i);
 		data.tree = _op_bt_clear(data.tree);
 		data.tok = _tok_clear(data.tok);
 	}
-	return (EXIT_SUCCESS);
+	return (_cleaner(&data), EXIT_SUCCESS);
 }
 
 // int	main(void)

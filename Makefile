@@ -28,6 +28,7 @@ DATA_STRUCT_SRCS := 			_env_clear\
 								_env_print\
 								_env_push_back\
 								_env_push_in\
+								_env_sort\
 								_op_bt_clear\
 								_op_bt_create\
 								_op_bt_join\

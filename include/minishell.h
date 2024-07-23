@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/23 00:26:43 by moha             ###   ########.fr       */
+/*   Updated: 2024/07/23 17:45:40 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,24 @@
 
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 
 // ###########################################################################
 // #  MY LIBS
 // ###########################################################################
 
 # include "libft.h"
+
+// ###########################################################################
+// #  ENVIROMENT
+// ###########################################################################
+
+# define _PATH "/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
+// # define _PATH_ "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 // ###########################################################################
 // # DOUBLE LINKED LIST
@@ -113,10 +123,10 @@ typedef struct s_adll
 typedef struct s_bt_op
 {
 	char			type;
+	int				status;
 	t_ptok			token;
 	u_padll			cmd_left;
 	u_padll			cmd_right;
-	int				status;
 	struct s_bt_op	*left;
 	struct s_bt_op	*root;
 	struct s_bt_op	*right;
@@ -128,9 +138,11 @@ typedef struct s_bt_op
 
 typedef struct s_env
 {
-	char			**ev;
+	char			**env;
 	char			**min_ev;
-	u_padll			l_ev;
+	u_padll			dll_env;
+	u_padll			dll_sort_env;
+	int				shlvl;
 } t_env, *t_penv;
 
 typedef struct s_data
@@ -182,7 +194,7 @@ enum				e_tokens
 # define _QUOTES "'\""
 # define _REDIRS "<>"
 # define _OTHERS "()$*"
-# define _TREE_SEP "AO()"
+# define _TREE_SEP "^AO()"
 
 // #  TOKENS SYNTAX ERRORS
 
@@ -229,13 +241,14 @@ int					_tok_is(char *str, char a);
 // ###########################################################################
 
 // # ENVIRONMENT
-u_padll				_tok_clear(u_padll dll);
+u_padll				_env_clear(u_padll dll);
 u_padll				_env_pop_back(u_padll dll);
 u_padll				_env_pop_in(u_padll dll, t_pev target);
 void				_env_print(u_padll dll);
 u_padll				_env_push_back(u_padll dll, char *key, char *value);
 u_padll				_env_push_in(u_padll dll, t_pev target, char *key,
 						char *value);
+u_padll				_env_sort(u_padll dll);
 
 // # SCOP
 u_padll				_scp_clear(u_padll dll);
@@ -254,7 +267,7 @@ u_padll				_tok_sub_struct(t_ptok start, t_ptok end);
 t_pbt_op			_op_bt_clear(t_pbt_op tree);
 t_pbt_op			_op_bt_create(char type, t_ptok token);
 t_pbt_op			_op_bt_join(t_pbt_op tree, t_pbt_op left, t_pbt_op right);
-void				_op_bt_print(t_pbt_op tree, bool prefix);
+void				_op_bt_print(t_pbt_op tree, bool prefix, int i);
 t_pbt_op			_op_bt_push_at(t_pbt_op tree, t_pbt_op node, bool left);
 t_pbt_op			_op_bt_push_root(t_pbt_op tree, t_pbt_op node);
 t_pbt_op			_op_bt_push_right(t_pbt_op tree, t_pbt_op node);

@@ -28,7 +28,8 @@ DATA_OBJS := 					$(addprefix $(DATA_DIR), $(addsuffix .o, $(DATA_SRCS)))
 
 UTILS_DIR := 					utils/
 UTILS_SRCS := 					_alloc\
-								_clean
+								_clean\
+								utils
 UTILS_OBJS := 					$(addprefix $(UTILS_DIR), $(addsuffix .o, $(UTILS_SRCS)))
 
 ENV_DIR	:= 						env/
@@ -39,7 +40,7 @@ ENV_SRCS :=						_env_clear\
 								_env_push_back\
 								_env_push_in\
 								_env_sort\
-								_set_env
+								set_env
 ENV_OBJS := 					$(addprefix $(ENV_DIR), $(addsuffix .o, $(ENV_SRCS)))
 
 TOKEN_DIR := 					token/

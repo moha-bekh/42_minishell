@@ -1,23 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _clean.c                                           :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/09 23:33:55 by moha              #+#    #+#             */
-/*   Updated: 2024/07/23 22:36:08 by moha             ###   ########.fr       */
+/*   Created: 2024/07/23 22:35:57 by moha              #+#    #+#             */
+/*   Updated: 2024/07/23 22:36:12 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	_clean(void *target, size_t size)
+void	ft_free_arr(char **arr)
 {
-	if (!target || !size)
+	int	i;
+
+	if (!arr)
 		return ;
-	ft_memset(target, 0, size);
-	free(target);
-	target = NULL;
-	return ;
+	i = -1;
+	while (arr[++i])
+		free(arr[i]);
+	free(arr);
+}
+
+int	_get_start_index(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '=')
+			return (i);
+	}
+	return (i);
 }

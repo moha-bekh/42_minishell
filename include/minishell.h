@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/23 22:27:14 by moha             ###   ########.fr       */
+/*   Updated: 2024/07/23 22:34:23 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,7 @@ typedef struct s_data
 	int				ac;
 	char			**av;
 	char			*input;
+	char			*tmp;
 	t_env			env;
 	u_padll			tok;
 	u_padll			scop;
@@ -245,6 +246,7 @@ void				_cleaner(t_pdata data);
 int					_get_start_index(char *str);
 int					_set_env(u_padll *dll_env, char **ev);
 int					_set_senv(u_padll *dll_senv, u_padll dll_env);
+int					_clean_env(t_pdata data, char **arg);
 
 // ###########################################################################
 // #  TOKENS FUNCTIONS

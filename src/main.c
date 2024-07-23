@@ -6,11 +6,46 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:53 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/23 22:26:42 by moha             ###   ########.fr       */
+/*   Updated: 2024/07/23 23:36:42 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char *get_env_value(u_padll env, char *key)
+{
+	t_pev tmp;
+
+	tmp = env->e_top;
+	while (tmp)
+	{
+		if (!ft_strncmp(tmp->key, key, ft_strlen(key)))
+			return (tmp->value);
+		tmp = tmp->next;
+	}
+	return (ft_strdup(""));
+}
+
+int _expand_value(t_pdata data)
+{
+	t_ptok t_tmp;
+	char *value;
+
+	t_tmp = data->tok->t_top;
+	while (t_tmp)
+	{
+		if (t_tmp->type == _DOLLAR)
+		{
+			
+			data->tmp = t_tmp->next->value;
+			value = get_env_value(data->env.dll_env, t_tmp->next->value);
+			t_tmp->next->value = value;
+			free(data->tmp);
+		}
+		t_tmp = t_tmp->next;
+	}
+	return (EXIT_SUCCESS);
+}
 
 int	main(int ac, char **av, char **ev)
 {
@@ -18,6 +53,7 @@ int	main(int ac, char **av, char **ev)
 	int		i;
 
 	i = 0;
+	(void)i;
 	if (_data_init(&data, ac, av, ev))
 		return (EXIT_FAILURE);
 
@@ -41,9 +77,13 @@ int	main(int ac, char **av, char **ev)
 		printf(BLUE "-------------------------------------- TOKENS --------------------------------------" RESET "\n");
 		_tok_process(data.input, &data.tok);
 		_tok_print(data.tok);
-		data.tree = _tree_op(&data);
-		_op_bt_print(data.tree, true, i);
-		data.tree = _op_bt_clear(data.tree);
+		_expand_value(&data);
+		_tok_print(data.tok);
+
+		// data.tree = _tree_op(&data);
+		// _op_bt_print(data.tree, true, i);
+		// data.tree = _op_bt_clear(data.tree);
+		
 		data.tok = _tok_clear(data.tok);
 	}
 	return (_cleaner(&data), EXIT_SUCCESS);

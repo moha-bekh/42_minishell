@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/23 17:45:40 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/23 22:27:14 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,17 @@
 
 # define _PATH "/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
 // # define _PATH_ "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+// ###########################################################################
+// #  EXIT CODES
+// ###########################################################################
+
+# ifndef EXIT_ERROR
+#  define EXIT_ERROR -1
+# endif // EXIT_ERROR
+# ifndef ALLOC_FAIL
+#  define ALLOC_FAIL "allocation failed\n"
+# endif // ALLOC_FAIL
 
 // ###########################################################################
 // # DOUBLE LINKED LIST
@@ -141,7 +152,7 @@ typedef struct s_env
 	char			**env;
 	char			**min_ev;
 	u_padll			dll_env;
-	u_padll			dll_sort_env;
+	u_padll			dll_senv;
 	int				shlvl;
 } t_env, *t_penv;
 
@@ -210,15 +221,12 @@ enum				e_tokens
 # define _SYNTAX_HERE_DOC_ERR "<&|();\n"
 
 // ###########################################################################
-// #  EXIT CODES
+// #  BUILT-IN FUNCTIONS
 // ###########################################################################
 
-# ifndef EXIT_ERROR
-#  define EXIT_ERROR -1
-# endif // EXIT_ERROR
-# ifndef ALLOC_FAIL
-#  define ALLOC_FAIL "allocation failed\n"
-# endif // ALLOC_FAIL
+int					_env(t_pdata data);
+int					_export(t_pdata data, char **arg);
+void				_export_print(u_padll dll);
 
 // ###########################################################################
 // #  UTILS FUNCTIONS
@@ -231,10 +239,31 @@ int					_data_init(t_pdata data, int ac, char **av, char **ev);
 void				_cleaner(t_pdata data);
 
 // ###########################################################################
+// #  ENVIRONMENT FUNCTIONS
+// ###########################################################################
+
+int					_get_start_index(char *str);
+int					_set_env(u_padll *dll_env, char **ev);
+int					_set_senv(u_padll *dll_senv, u_padll dll_env);
+
+// ###########################################################################
 // #  TOKENS FUNCTIONS
 // ###########################################################################
 
 int					_tok_is(char *str, char a);
+int					_tok_syntax_err(char a, int n);
+int					_tok_syntax_close_err(char a);
+int					_tok_check(u_padll tokens);
+
+int					_tok_redir_process(char *input, u_padll token, int *i);
+int					_tok_operator_process(char *input, u_padll token, int *i);
+int					_tok_process(char *input, u_padll *token);
+
+// ###########################################################################
+// #  OPERATOR FUNCTIONS
+// ###########################################################################
+
+t_pbt_op			_tree_op(t_pdata data);
 
 // ###########################################################################
 // #  DATA STRUCTURE FUNCTIONS
@@ -273,6 +302,8 @@ t_pbt_op			_op_bt_push_root(t_pbt_op tree, t_pbt_op node);
 t_pbt_op			_op_bt_push_right(t_pbt_op tree, t_pbt_op node);
 t_pbt_op			_op_bt_push_left(t_pbt_op tree, t_pbt_op node);
 
+// ###########################################################################
+// # COLORS
 // ###########################################################################
 
 # define RED "\033[0;91m"

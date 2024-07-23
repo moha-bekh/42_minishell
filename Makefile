@@ -19,17 +19,44 @@ LIBFT =							-L ./libft -l ft
 READLINE =						-L /usr/local/lib -l readline
 # READLINE =					-L /usr/lib/x86_64-linux-gnu -l readline // home
 
-LIBRARYS =						$(LIBFT) $(READLINE)
+LIBRARYS =						$(LIBFT) $(READLINE)		
 
-DATA_STRUCT_DIR := 				data_struct/
-DATA_STRUCT_SRCS := 			_env_clear\
+DATA_DIR := 					data/
+DATA_SRCS := 					_data_init\
+								_data_cleaner
+DATA_OBJS := 					$(addprefix $(DATA_DIR), $(addsuffix .o, $(DATA_SRCS)))
+
+UTILS_DIR := 					utils/
+UTILS_SRCS := 					_alloc\
+								_clean
+UTILS_OBJS := 					$(addprefix $(UTILS_DIR), $(addsuffix .o, $(UTILS_SRCS)))
+
+ENV_DIR	:= 						env/
+ENV_SRCS :=						_env_clear\
 								_env_pop_back\
 								_env_pop_in\
 								_env_print\
 								_env_push_back\
 								_env_push_in\
 								_env_sort\
-								_op_bt_clear\
+								_set_env
+ENV_OBJS := 					$(addprefix $(ENV_DIR), $(addsuffix .o, $(ENV_SRCS)))
+
+TOKEN_DIR := 					token/
+TOKEN_SRCS :=					_tok_clear\
+								_tok_pop_back\
+								_tok_print\
+								_tok_push_back\
+								_tok_sub_struct\
+								check_tok\
+								operator_tok\
+								redir_tok\
+								token\
+								utils_tok
+TOKEN_OBJS := 					$(addprefix $(TOKEN_DIR), $(addsuffix .o, $(TOKEN_SRCS)))
+
+OP_TREE_DIR := 					op_tree/
+OP_TREE_SRCS :=					_op_bt_clear\
 								_op_bt_create\
 								_op_bt_join\
 								_op_bt_print\
@@ -41,33 +68,16 @@ DATA_STRUCT_SRCS := 			_env_clear\
 								_scp_pop_back\
 								_scp_print\
 								_scp_push_back\
-								_tok_clear\
-								_tok_pop_back\
-								_tok_print\
-								_tok_push_back\
-								_tok_sub_struct\
+								tree_op
+OP_TREE_OBJS := 				$(addprefix $(OP_TREE_DIR), $(addsuffix .o, $(OP_TREE_SRCS)))
 
-DATA_STRUCT_OBJS := 			$(addprefix $(DATA_STRUCT_DIR), $(addsuffix .o, $(DATA_STRUCT_SRCS)))
+EXPAND_DIR := 					expand/
+EXPAND_SRCS := 					_expand
+EXPAND_OBJS := 					$(addprefix $(EXPAND_DIR), $(addsuffix .o, $(EXPAND_SRCS)))
 
-DATA_DIR := 					data/
-DATA_SRCS := 					_data_init _data_cleaner
-DATA_OBJS := 					$(addprefix $(DATA_DIR), $(addsuffix .o, $(DATA_SRCS)))
-
-UTILS_DIR := 					utils/
-UTILS_SRCS := 					_alloc _clean
-UTILS_OBJS := 					$(addprefix $(UTILS_DIR), $(addsuffix .o, $(UTILS_SRCS)))
-
-# TOKEN_DIR := 					token/
-# TOKEN_SRCS := 					
-# TOKEN_OBJS := 					$(addprefix $(TOKEN_DIR), $(addsuffix .o, $(TOKEN_SRCS)))
-
-# EXPAND_DIR := 					expand/
-# EXPAND_SRCS := 					
-# EXPAND_OBJS := 					$(addprefix $(EXPAND_DIR), $(addsuffix .o, $(EXPAND_SRCS)))
-
-# BULTINS_DIR = 					built_in/
-# BULTINS_SRCS = 					
-# BULTINS_OBJS = 					$(addprefix $(BULTINS_DIR), $(addsuffix .o, $(BULTINS_SRCS)))
+BULTINS_DIR = 					built_in/
+BULTINS_SRCS = 					_env _export
+BULTINS_OBJS = 					$(addprefix $(BULTINS_DIR), $(addsuffix .o, $(BULTINS_SRCS)))
 
 SRC_DIR =						./src/
 OBJ_DIR =						./obj/
@@ -77,8 +87,10 @@ SRCS +=							$(addprefix $(SRC_DIR), $(addsuffix .c, $(FILES)))
 SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(DATA_STRUCT_DIR), $(addsuffix .c, $(DATA_STRUCT_SRCS))))
 SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(DATA_DIR), $(addsuffix .c, $(DATA_SRCS))))
 SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(UTILS_DIR), $(addsuffix .c, $(UTILS_SRCS))))
-# SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(TOKEN_DIR), $(addsuffix .c, $(TOKEN_SRCS))))
-# SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(BULTINS_DIR), $(addsuffix .c, $(BULTINS_SRCS))))
+SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(ENV_DIR), $(addsuffix .c, $(ENV_SRCS))))
+SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(TOKEN_DIR), $(addsuffix .c, $(TOKEN_SRCS))))
+SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(OP_TREE_DIR), $(addsuffix .c, $(OP_TREE_SRCS))))
+SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(BULTINS_DIR), $(addsuffix .c, $(BULTINS_SRCS))))
 OBJS = 							$(SRCS:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
 all:							$(NAME)

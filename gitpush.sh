@@ -16,7 +16,12 @@ echo -e ${purple}"\n########################################################"${d
 echo -e ${purple}"#----------------------- COMMIT -----------------------#"${default}
 echo -e ${purple}"########################################################\n"${default}
 export date="$(date '+%Y-%m-%d')"
-git commit -m "$1 $date"
+
+if [ $# -eq 0 ]; then
+	git commit -m "Work In Progress $date"
+else
+	git commit -m "$1 $date"
+fi
 echo -e ${purple}"\n########################################################"${default}
 echo -e ${purple}"#----------------------- STATUS -----------------------#"${default}
 echo -e ${purple}"########################################################\n"${default}

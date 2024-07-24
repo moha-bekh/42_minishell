@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _data_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 23:44:34 by moha              #+#    #+#             */
-/*   Updated: 2024/07/23 22:08:17 by moha             ###   ########.fr       */
+/*   Updated: 2024/07/24 18:39:17 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,6 @@ int	_data_min_env(t_pdata data)
 	data->env.min_ev[2] = NULL;
 	return (EXIT_SUCCESS);
 }
-
-
-
-
 
 int	_data_init(t_pdata data, int ac, char **av, char **ev)
 {

@@ -3,49 +3,128 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:53 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/23 23:36:42 by moha             ###   ########.fr       */
+/*   Updated: 2024/07/24 19:02:39 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char *get_env_value(u_padll env, char *key)
+char	*get_env_value(u_padll env, char *key)
 {
-	t_pev tmp;
+	t_pev	tmp;
 
 	tmp = env->e_top;
 	while (tmp)
 	{
-		if (!ft_strncmp(tmp->key, key, ft_strlen(key)))
-			return (tmp->value);
+		if (!ft_strcmp(tmp->key, key))
+			return (ft_strdup(tmp->value));
 		tmp = tmp->next;
 	}
 	return (ft_strdup(""));
 }
 
-int _expand_value(t_pdata data)
+int	_var_process(t_pdata data, t_ptok token, int *i)
 {
-	t_ptok t_tmp;
-	char *value;
+	char	*tmp;
+	int		j;
 
-	t_tmp = data->tok->t_top;
-	while (t_tmp)
+	*i += 1;
+	j = *i;
+	while (token->value[*i] && ft_isalnum(token->value[*i]))
+		*i += 1;
+	tmp = ft_substr(token->value, j, *i - j);
+	data->tmp = get_env_value(data->env.dll_env, tmp);
+	free(tmp);
+	data->exp = _env_push_back(data->exp, NULL, ft_strdup(data->tmp));
+	free(data->tmp);
+	return (EXIT_SUCCESS);
+}
+
+int	_str_process(t_pdata data, t_ptok token, int *i)
+{
+	char	*tmp;
+	int		j;
+
+	j = *i;
+	while (token->value[*i + 1] && token->value[*i + 1] != _DOLLAR)
+		*i += 1;
+	tmp = ft_substr(token->value, j, *i - j + 1);
+	data->exp = _env_push_back(data->exp, NULL, ft_strdup(tmp));
+	*i += 1;
+	return (EXIT_SUCCESS);
+}
+
+int	_expand_string(t_pdata data, t_ptok token)
+{
+	char	*tmp_1;
+	t_pev	tmp_2;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	while (token->value[i])
 	{
-		if (t_tmp->type == _DOLLAR)
+		if (token->value[i] == _DOLLAR)
+			_var_process(data, token, &i);
+		else
+			_str_process(data, token, &i);
+	}
+	tmp_2 = data->exp->e_top;
+	tmp_1 = ft_strdup("");
+	while (tmp_2)
+	{
+		data->tmp = tmp_1;
+		tmp_1 = ft_strjoin(tmp_1, tmp_2->value);
+		free(data->tmp);
+		tmp_2 = tmp_2->next;
+	}
+	free(token->value);
+	token->value = tmp_1;
+	data->exp = _env_clear(data->exp);
+	return (EXIT_SUCCESS);
+}
+
+int	_expand_tokens(t_pdata data)
+{
+	t_ptok	tmp;
+	char	*value;
+
+	tmp = data->tok->t_top->next;
+	while (tmp)
+	{
+		if (tmp->type == _DOLLAR && tmp->next)
 		{
-			
-			data->tmp = t_tmp->next->value;
-			value = get_env_value(data->env.dll_env, t_tmp->next->value);
-			t_tmp->next->value = value;
-			free(data->tmp);
+			tmp = tmp->next;
+			data->tok = _tok_pop_in(data->tok, tmp->prev);
+			value = get_env_value(data->env.dll_env, tmp->value);
+			free(tmp->value);
+			tmp->value = value;
 		}
-		t_tmp = t_tmp->next;
+		if (tmp->type == _DQUOTE)
+			_expand_string(data, tmp);
+		tmp = tmp->next;
 	}
 	return (EXIT_SUCCESS);
 }
+
+// int	main(void)
+// {
+// 	char	**arr;
+// 	int		i;
+
+// 	arr = psplit("echo hey $USER$HOSTNAME       $SHLVL comment cv?", " $");
+// 	if (!arr)
+// 		return (EXIT_FAILURE);
+// 	i = -1;
+// 	while (arr[++i])
+// 		printf("%s\n", arr[i]);
+// 	ft_free_arr(arr);
+// 	return (EXIT_SUCCESS);
+// }
 
 int	main(int ac, char **av, char **ev)
 {
@@ -56,7 +135,6 @@ int	main(int ac, char **av, char **ev)
 	(void)i;
 	if (_data_init(&data, ac, av, ev))
 		return (EXIT_FAILURE);
-
 	while (1)
 	{
 		printf(CYAN "-------------------------------------- PROMPT --------------------------------------" RESET "\n");
@@ -76,14 +154,11 @@ int	main(int ac, char **av, char **ev)
 		}
 		printf(BLUE "-------------------------------------- TOKENS --------------------------------------" RESET "\n");
 		_tok_process(data.input, &data.tok);
+		_expand_tokens(&data);
 		_tok_print(data.tok);
-		_expand_value(&data);
-		_tok_print(data.tok);
-
-		// data.tree = _tree_op(&data);
-		// _op_bt_print(data.tree, true, i);
-		// data.tree = _op_bt_clear(data.tree);
-		
+		data.tree = _tree_op(&data);
+		_op_bt_print(data.tree, true, i);
+		data.tree = _op_bt_clear(data.tree);
 		data.tok = _tok_clear(data.tok);
 	}
 	return (_cleaner(&data), EXIT_SUCCESS);

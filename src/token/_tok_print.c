@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 18:45:05 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/19 20:10:37 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/24 19:08:33 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	_tok_print(u_padll dll)
 		printf("\033[0;34m");
 		printf("type: %c \t", tmp->type);
 		printf("value: %s \t", tmp->value);
+		printf("join: %d \t", tmp->join);
 		printf("\033[0;39m\n");
 		tmp = tmp->next;
 	}

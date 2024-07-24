@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 09:16:28 by moha              #+#    #+#             */
-/*   Updated: 2024/07/16 22:29:47 by moha             ###   ########.fr       */
+/*   Updated: 2024/07/24 13:41:35 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	**init_arr(int count)
 	return (arr);
 }
 
-bool	splitter(char const *str, char c, char **arr)
+bool	splitter(char const *str, char c, char **arr, bool show_sep)
 {
 	int	start;
 	int	i;
@@ -56,7 +56,10 @@ bool	splitter(char const *str, char c, char **arr)
 	{
 		if (str[i] != c && !ft_isspace(str[i]))
 		{
-			start = i;
+			if (i > 0 && show_sep)
+				start = i - 1;
+			else
+				start = i;
 			while (str[i] && str[i] != c)
 				i++;
 			arr[j] = ft_substr(str, start, (i - start));
@@ -69,7 +72,7 @@ bool	splitter(char const *str, char c, char **arr)
 	return (true);
 }
 
-char	**ft_split(char const *str, char c)
+char	**ft_split(char const *str, char c, bool show_sep)
 {
 	char	**arr;
 
@@ -78,7 +81,7 @@ char	**ft_split(char const *str, char c)
 	arr = init_arr(count_word(str, c));
 	if (!arr)
 		return (NULL);
-	if (!splitter(str, c, arr))
+	if (!splitter(str, c, arr, show_sep))
 		return (m_free_arr(arr), NULL);
 	return (arr);
 }

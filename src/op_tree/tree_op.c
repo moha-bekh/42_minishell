@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _tree_op.c                                         :+:      :+:    :+:   */
+/*   tree_op.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:26:15 by moha              #+#    #+#             */
-/*   Updated: 2024/07/23 22:26:19 by moha             ###   ########.fr       */
+/*   Updated: 2024/07/24 19:02:05 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ t_pbt_op	_tree_op(t_pdata data)
 	while (tok)
 	{
 		if (tok->type == _AND || tok->type == _OR)
-			data->tree = _op_bt_push_root(data->tree, _op_bt_create(tok->type,
-						tok));
+			data->tree = _op_bt_push_root(data->tree, _op_bt_create(tok->type, tok));
 		if (tok->type == _OPEN_PAR)
 		{
 			data->scop = _scp_push_back(data->scop, data->tree);
@@ -39,8 +38,7 @@ t_pbt_op	_tree_op(t_pdata data)
 		else if (tok->type == _CLOSE_PAR)
 			data->tree = _ptr_recovery(data->tree, &data->scop);
 		else if (_tok_is(_TREE_SEP, tok->prev->type))
-			data->tree = _op_bt_push_right(data->tree, _op_bt_create(tok->type,
-						tok));
+			data->tree = _op_bt_push_right(data->tree, _op_bt_create(tok->type, tok));
 		tok = tok->next;
 	}
 	return (data->tree);

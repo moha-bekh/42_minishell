@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 09:41:33 by ajordan-          #+#    #+#             */
-/*   Updated: 2024/07/17 14:55:20 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/24 13:36:02 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void				ft_putendl_fd(char *s, int fd);
 void				ft_putnbr_fd(int n, int fd);
 void				ft_putstr_fd(char *s, int fd);
 // FT_STR
-char				**ft_split(char const *s, char c);
+char				**ft_split(char const *s, char c, bool show_sep);
 char				*ft_strchr(const char *s, int c);
 int					ft_strcmp(const char *s1, const char *s2);
 char				*ft_strdup(const char *s);

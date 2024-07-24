@@ -29,7 +29,8 @@ DATA_OBJS := 					$(addprefix $(DATA_DIR), $(addsuffix .o, $(DATA_SRCS)))
 UTILS_DIR := 					utils/
 UTILS_SRCS := 					_alloc\
 								_clean\
-								utils
+								utils\
+								psplit
 UTILS_OBJS := 					$(addprefix $(UTILS_DIR), $(addsuffix .o, $(UTILS_SRCS)))
 
 ENV_DIR	:= 						env/
@@ -49,6 +50,7 @@ TOKEN_SRCS :=					_tok_clear\
 								_tok_print\
 								_tok_push_back\
 								_tok_sub_struct\
+								_tok_pop_in\
 								check_tok\
 								operator_tok\
 								redir_tok\

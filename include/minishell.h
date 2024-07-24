@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/23 22:34:23 by moha             ###   ########.fr       */
+/*   Updated: 2024/07/24 18:51:32 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ typedef struct s_data
 	char			*tmp;
 	t_env			env;
 	u_padll			tok;
+	u_padll			exp;
 	u_padll			scop;
 	t_pbt_op		tree;
 } t_data, *t_pdata;
@@ -236,6 +237,7 @@ void				_export_print(u_padll dll);
 int					_alloc(void **target, size_t size);
 void				_clean(void *target, size_t size);
 void				ft_free_arr(char **arr);
+char				**psplit(char *str, char *sep);
 int					_data_init(t_pdata data, int ac, char **av, char **ev);
 void				_cleaner(t_pdata data);
 
@@ -290,6 +292,7 @@ u_padll				_scp_push_back(u_padll dll, struct s_bt_op *ptr_op);
 // # TOKENS
 u_padll				_tok_clear(u_padll dll);
 u_padll				_tok_pop_back(u_padll dll);
+u_padll				_tok_pop_in(u_padll dll, t_ptok target);
 void				_tok_print(u_padll dll);
 u_padll				_tok_push_back(u_padll dll, char type, char *value);
 u_padll				_tok_sub_struct(t_ptok start, t_ptok end);

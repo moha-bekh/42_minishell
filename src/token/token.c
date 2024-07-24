@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:00:11 by moha              #+#    #+#             */
-/*   Updated: 2024/07/23 22:26:51 by moha             ###   ########.fr       */
+/*   Updated: 2024/07/24 19:06:25 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ int	_tok_quotes_process(char *input, u_padll token, int *i)
 		*i += 1;
 		if (input[*i] && input[*i] == tok)
 		{
-			token = _tok_push_back(token, tok, ft_substr(input, j + 1, (*i - j
-							- 1)));
+			token = _tok_push_back(token, tok, ft_substr(input, j, (*i - j + 1)));
 			*i += 1;
 			if (input[*i] && !ft_isspace(input[*i]))
 				token->t_bot->join = true;
@@ -34,6 +33,7 @@ int	_tok_quotes_process(char *input, u_padll token, int *i)
 	}
 	return (_tok_syntax_close_err(tok));
 }
+			// token = _tok_push_back(token, tok, ft_substr(input, j + 1, (*i - j - 1)));
 
 int	_tok_others_process(char *input, u_padll token, int *i)
 {

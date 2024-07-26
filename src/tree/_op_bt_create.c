@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 20:22:59 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/26 18:46:51 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/26 19:03:10 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_pbt_op	_op_bt_create(char type, t_ptok token)
 	tree->type= type;
 	tree->token = token;
 	tree->cmd_a = NULL;
+	tree->redir.here_name = NULL;
 	tree->left = NULL;
 	tree->root = NULL;
 	tree->right = NULL;

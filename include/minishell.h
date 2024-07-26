@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/26 18:48:41 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/26 19:31:33 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,15 +86,6 @@ typedef struct s_redir
 	char			*here_name;
 } t_redir, t_predir;
 
-// typedef struct s_cmd
-// {
-// 	char			**cmd_a;
-// 	int				status;
-// 	t_predir		redir;
-// 	struct s_cmd	*next;
-// 	struct s_cmd	*prev;
-// } t_cmd, *t_pcmd;
-
 typedef struct s_adll
 {
 	union
@@ -117,12 +108,6 @@ typedef struct s_adll
 			t_ptok	t_bot;
 			int		t_size;
 		};
-		// struct
-		// {
-		// 	t_pcmd	c_top;
-		// 	t_pcmd	c_bot;
-		// 	int		c_size;
-		// };
 	};
 } u_adll, *u_padll;
 
@@ -135,8 +120,10 @@ typedef struct s_bt_op
 	char			type;
 	int				status;
 	t_ptok			token;
-	char			**cmd_a;
 	t_redir			redir;
+	char			**cmd_a;
+	char			*cmd_path;
+	bool			built_in;
 	struct s_bt_op	*left;
 	struct s_bt_op	*root;
 	struct s_bt_op	*right;
@@ -161,6 +148,7 @@ typedef struct s_data
 	char			**av;
 	char			*input;
 	char			*tmp;
+	char			*built_in[7];
 	t_env			env;
 	u_padll			tok;
 	u_padll			exp;
@@ -225,19 +213,18 @@ enum				e_tokens
 // #  UTILS FUNCTIONS
 // ###########################################################################
 
-// void				ft_free_arr(char **arr);
 int					_alloc(void **target, size_t size);
 void				_clean(void *target, size_t size);
 void				_cleaner(t_pdata data);
 char				**_psplit(char *str, char *sep);
 int					_data_init(t_pdata data, int ac, char **av, char **ev);
+int					_get_start_index(char *str);
 char				*_get_env_value(u_padll env, char *key);
 
 // ###########################################################################
 // #  ENVIRONMENT FUNCTIONS
 // ###########################################################################
 
-int					_get_start_index(char *str);
 int					_set_env(u_padll *dll_env, char **ev);
 int					_set_senv(u_padll *dll_senv, u_padll dll_env);
 int					_clean_env(t_pdata data, char **arg);

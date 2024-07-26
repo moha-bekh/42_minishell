@@ -1,26 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _op_bt_clear.c                                     :+:      :+:    :+:   */
+/*   _exec.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/19 20:26:47 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/26 19:02:51 by mbekheir         ###   ########.fr       */
+/*   Created: 2024/07/26 18:53:33 by mbekheir          #+#    #+#             */
+/*   Updated: 2024/07/26 19:20:23 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_pbt_op	_op_bt_clear(t_pbt_op tree)
+int _exec_process(t_pdata data, t_pbt_op node)
+{
+	// _infile_process(data, node);
+
+	// _loop_process(data, node);
+
+	// _outfile_process(data, node);
+}
+
+int _exec(t_pdata data, t_pbt_op tree)
 {
 	if (!tree)
-		return (NULL);
-	_op_bt_clear(tree->left);
-	_op_bt_clear(tree->right);
-	free(tree->cmd_a);
-	free(tree->redir.here_name);
-	free(tree);
-	tree = NULL;
-	return (tree);
+		return (EXIT_SUCCESS);
+	_path_resolver(data, tree);
+	_exec_process(data, tree);
+	if (tree->left)
+		_exec(data, tree->left);
+	if (tree->right)
+		_exec(data, tree->right);
+	return (EXIT_SUCCESS);
 }

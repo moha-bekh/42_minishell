@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 18:28:37 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/19 19:56:16 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/26 19:26:52 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ u_padll	_tok_push_back(u_padll dll, char type, char *value)
 		return (NULL);
 	node->next = NULL;
 	node->prev = NULL;
-	node->value = value;
-	node->type = type;
 	if (!dll)
 	{
 		if (_alloc((void *)&dll, sizeof(u_adll)) || !dll)
@@ -35,6 +33,8 @@ u_padll	_tok_push_back(u_padll dll, char type, char *value)
 		dll->t_bot->next = node;
 		dll->t_bot = node;
 	}
+	node->value = value;
+	node->type = type;
 	dll->t_size++;
 	return (dll);
 }

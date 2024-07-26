@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 20:28:49 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/23 14:53:43 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/26 18:36:21 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,12 @@ void	_op_bt_print(t_pbt_op tree, bool prefix, int i)
 	t_ptok tmp;
 	int tab;
 
+	int j;
+
 	tab = 0;
 	if (!tree)
 		return ;
+	j = -1;
 	if (tree->root)
 	{
 		tmp = tree->token;
@@ -28,10 +31,18 @@ void	_op_bt_print(t_pbt_op tree, bool prefix, int i)
 		// printf("root: ( %s ) -> ", tree->root->token->value);
 		if (tmp->type == _AND || tmp->type == _OR)
 			printf(" ( %s )", tmp->value);
+		
+		printf("\ttokens: ");
 		while (tmp && !_tok_is(_TREE_SEP, tmp->type))
 		{
 			printf(" %s", tmp->value);
 			tmp = tmp->next;
+		}
+		if (tree->cmd_a)
+		{
+			printf("\t\tcmd arg: ");
+			while (tree->cmd_a[++j])
+				printf(" %s", tree->cmd_a[j]);
 		}
 		printf("\n");
 	}

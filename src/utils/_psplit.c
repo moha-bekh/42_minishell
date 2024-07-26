@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_psplit.c                                        :+:      :+:    :+:   */
+/*   _psplit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 14:58:27 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/24 16:22:30 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/26 18:38:28 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_sep(char c, char *sep)
+int	_is_sep(char c, char *sep)
 {
 	int	i;
 
@@ -32,15 +32,15 @@ int	_cnt_chr(char *str, char *sep, int **tab)
 	int	cnt;
 
 	i = 0;
-	while (is_sep(str[i], sep))
+	while (_is_sep(str[i], sep))
 		i++;
 	j = 1;
 	while (str[i])
 	{
-		if (str[i] && !is_sep(str[i], sep))
+		if (str[i] && !_is_sep(str[i], sep))
 		{
 			cnt = 0;
-			while (str[i] && !is_sep(str[i], sep))
+			while (str[i] && !_is_sep(str[i], sep))
 			{
 				cnt++;
 				i++;
@@ -54,7 +54,7 @@ int	_cnt_chr(char *str, char *sep, int **tab)
 	return ((*tab)[0]);
 }
 
-char	**psplit(char *str, char *sep)
+char	**_psplit(char *str, char *sep)
 {
 	char	**arr;
 	int		*tab;
@@ -73,9 +73,9 @@ char	**psplit(char *str, char *sep)
 		k = 0;
 		if (_alloc((void *)&arr[i], sizeof(char) * (tab[i + 1] + 2)) || !arr[i])
 			return (free(tab), ft_free_arr(arr), NULL);
-		while (str[j] && is_sep(str[j], sep))
+		while (str[j] && _is_sep(str[j], sep))
 			arr[i][k++] = str[j++];
-		while (str[j] && !is_sep(str[j], sep))
+		while (str[j] && !_is_sep(str[j], sep))
 			arr[i][k++] = str[j++];
 		arr[i][k] = 0;
 	}

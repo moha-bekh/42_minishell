@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 17:47:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/05/15 17:35:33 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/26 16:34:43 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,10 @@ void	free_list(t_list *lst)
 	tmp = lst;
 	while (tmp)
 	{
-		m_free(tmp->value);
+		ft_free(tmp->value);
 		tmp->value = NULL;
 		next = tmp->next;
-		m_free(tmp);
+		ft_free(tmp);
 		tmp = next;
 	}
 	tmp = NULL;

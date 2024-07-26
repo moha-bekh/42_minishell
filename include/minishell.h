@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/24 18:51:32 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/26 18:48:41 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,6 @@ typedef struct s_ev
 	struct s_ev		*prev;
 } t_ev, *t_pev;
 
-struct s_bt_op;
-
-typedef struct s_scop
-{
-	struct s_bt_op	*ptr_op;
-	struct s_scop	*next;
-	struct s_scop	*prev;
-} t_scop, *t_pscop;
-
 typedef struct s_tok
 {
 	char			type;
@@ -79,6 +70,14 @@ typedef struct s_tok
 	struct s_tok	*prev;
 } t_tok, *t_ptok;
 
+struct s_bt_op;
+typedef struct s_scop
+{
+	struct s_bt_op	*ptr_op;
+	struct s_scop	*next;
+	struct s_scop	*prev;
+} t_scop, *t_pscop;
+
 typedef struct s_redir
 {
 	int				fd[2];
@@ -87,14 +86,14 @@ typedef struct s_redir
 	char			*here_name;
 } t_redir, t_predir;
 
-typedef struct s_cmd
-{
-	char			**cmd_a;
-	int				status;
-	t_predir		redir;
-	struct s_cmd	*next;
-	struct s_cmd	*prev;
-} t_cmd, *t_pcmd;
+// typedef struct s_cmd
+// {
+// 	char			**cmd_a;
+// 	int				status;
+// 	t_predir		redir;
+// 	struct s_cmd	*next;
+// 	struct s_cmd	*prev;
+// } t_cmd, *t_pcmd;
 
 typedef struct s_adll
 {
@@ -118,12 +117,12 @@ typedef struct s_adll
 			t_ptok	t_bot;
 			int		t_size;
 		};
-		struct
-		{
-			t_pcmd	c_top;
-			t_pcmd	c_bot;
-			int		c_size;
-		};
+		// struct
+		// {
+		// 	t_pcmd	c_top;
+		// 	t_pcmd	c_bot;
+		// 	int		c_size;
+		// };
 	};
 } u_adll, *u_padll;
 
@@ -136,8 +135,8 @@ typedef struct s_bt_op
 	char			type;
 	int				status;
 	t_ptok			token;
-	u_padll			cmd_left;
-	u_padll			cmd_right;
+	char			**cmd_a;
+	t_redir			redir;
 	struct s_bt_op	*left;
 	struct s_bt_op	*root;
 	struct s_bt_op	*right;
@@ -223,23 +222,16 @@ enum				e_tokens
 # define _SYNTAX_HERE_DOC_ERR "<&|();\n"
 
 // ###########################################################################
-// #  BUILT-IN FUNCTIONS
-// ###########################################################################
-
-int					_env(t_pdata data);
-int					_export(t_pdata data, char **arg);
-void				_export_print(u_padll dll);
-
-// ###########################################################################
 // #  UTILS FUNCTIONS
 // ###########################################################################
 
+// void				ft_free_arr(char **arr);
 int					_alloc(void **target, size_t size);
 void				_clean(void *target, size_t size);
-void				ft_free_arr(char **arr);
-char				**psplit(char *str, char *sep);
-int					_data_init(t_pdata data, int ac, char **av, char **ev);
 void				_cleaner(t_pdata data);
+char				**_psplit(char *str, char *sep);
+int					_data_init(t_pdata data, int ac, char **av, char **ev);
+char				*_get_env_value(u_padll env, char *key);
 
 // ###########################################################################
 // #  ENVIRONMENT FUNCTIONS
@@ -249,6 +241,14 @@ int					_get_start_index(char *str);
 int					_set_env(u_padll *dll_env, char **ev);
 int					_set_senv(u_padll *dll_senv, u_padll dll_env);
 int					_clean_env(t_pdata data, char **arg);
+
+// ###########################################################################
+// #  BUILT-IN FUNCTIONS
+// ###########################################################################
+
+int					_env(t_pdata data);
+int					_export(t_pdata data, char **arg);
+void				_export_print(u_padll dll);
 
 // ###########################################################################
 // #  TOKENS FUNCTIONS
@@ -264,10 +264,22 @@ int					_tok_operator_process(char *input, u_padll token, int *i);
 int					_tok_process(char *input, u_padll *token);
 
 // ###########################################################################
+// #  EXPAND FUNCTIONS
+// ###########################################################################
+
+int					_expand_tokens(t_pdata data);
+
+// ###########################################################################
 // #  OPERATOR FUNCTIONS
 // ###########################################################################
 
-t_pbt_op			_tree_op(t_pdata data);
+t_pbt_op			_tree_process(t_pdata data);
+
+// ###########################################################################
+// #  PARSING FUNCTIONS
+// ###########################################################################
+
+int					_parsing(t_pbt_op tree);
 
 // ###########################################################################
 // #  DATA STRUCTURE FUNCTIONS

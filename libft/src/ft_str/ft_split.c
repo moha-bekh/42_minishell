@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 09:16:28 by moha              #+#    #+#             */
-/*   Updated: 2024/07/24 13:41:35 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/26 16:32:59 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,6 @@ char	**ft_split(char const *str, char c, bool show_sep)
 	if (!arr)
 		return (NULL);
 	if (!splitter(str, c, arr, show_sep))
-		return (m_free_arr(arr), NULL);
+		return (ft_free_arr(arr), NULL);
 	return (arr);
 }

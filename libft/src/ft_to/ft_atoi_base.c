@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   m_atoi_base.c                                      :+:      :+:    :+:   */
+/*   ft_atoi_base.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 08:05:29 by moha              #+#    #+#             */
-/*   Updated: 2024/05/29 13:22:35 by moha             ###   ########.fr       */
+/*   Updated: 2024/07/26 16:32:52 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	if_is_sign(int c, int *sign, int *i)
 	return ;
 }
 
-int	m_atoi_base(const char *str, int base)
+int	ft_atoi_base(const char *str, int base)
 {
 	int	res;
 	int	sign;
@@ -58,9 +58,9 @@ int	m_atoi_base(const char *str, int base)
 		res *= base;
 		if (ft_isdigit(str[i]))
 			res += str[i] - '0';
-		else if (m_ishex_alpha(str[i]))
+		else if (ft_ishex_alpha(str[i]))
 			res += str[i] - 'a' + 10;
-		else if (m_ishexALPHA(str[i]))
+		else if (ft_ishexALPHA(str[i]))
 			res += str[i] - 'A' + 10;
 		i++;
 	}

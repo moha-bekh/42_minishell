@@ -1,38 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   m_free.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/23 22:35:57 by moha              #+#    #+#             */
-/*   Updated: 2024/07/23 22:36:12 by moha             ###   ########.fr       */
+/*   Created: 2024/05/09 17:55:27 by mbekheir          #+#    #+#             */
+/*   Updated: 2024/07/26 16:29:17 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void	ft_free_arr(char **arr)
+void	ft_free(void *ptr)
 {
-	int	i;
-
-	if (!arr)
+	if (!ptr)
 		return ;
-	i = -1;
-	while (arr[++i])
-		free(arr[i]);
-	free(arr);
-}
-
-int	_get_start_index(char *str)
-{
-	int	i;
-
-	i = -1;
-	while (str[++i])
-	{
-		if (str[i] == '=')
-			return (i);
-	}
-	return (i);
+	free(ptr);
+	ptr = NULL;
+	return ;
 }

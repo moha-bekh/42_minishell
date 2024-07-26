@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tree_op.c                                          :+:      :+:    :+:   */
+/*   _tree_op.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:26:15 by moha              #+#    #+#             */
-/*   Updated: 2024/07/24 19:02:05 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/26 18:44:03 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_pbt_op	_ptr_recovery(t_pbt_op tree, u_padll *scop)
 	return (tree);
 }
 
-t_pbt_op	_tree_op(t_pdata data)
+t_pbt_op	_tree_process(t_pdata data)
 {
 	t_ptok	tok;
 

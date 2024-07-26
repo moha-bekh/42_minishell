@@ -8,7 +8,7 @@ AR					=		ar -crs
 FTIS_DIR			:=		ft_is/
 FTIS				:=		ft_isalnum ft_isalpha ft_isascii ft_isdigit\
 							ft_isprint ft_isspace\
-							m_ishex_alpha m_ishexALPHA
+							ft_ishex_alpha ft_ishexALPHA
 
 FTMEM_DIR			:=		ft_mem/
 FTMEM				:=		ft_bzero ft_calloc ft_memchr ft_memcmp ft_memmove\
@@ -19,7 +19,7 @@ FTPUT				:=		ft_putchar_fd ft_putendl_fd ft_putnbr_fd ft_putstr_fd
 
 FTTO_DIR			:=		ft_to/
 FTTO				:=		ft_atoi ft_atol ft_itoa ft_tolower ft_toupper ft_swap\
-							m_atoi_base
+							ft_atoi_base
 
 FTSTR_DIR			:=		ft_str/
 FTSTR				:=		ft_split ft_strchr ft_strcmp ft_strdup ft_striteri ft_strjoin \
@@ -37,8 +37,8 @@ FT_PRINTF			:=		ft_printf ft_print_char ft_print_hex ft_print_nbr \
 							ft_print_ptr ft_print_str ft_print_unsigned ft_putchar \
 							ft_putstr
 
-M_PRINTF_DIR		:=		m_printf/
-M_PRINTF			:=		m_printfd m_print_unsigned m_print_hex\
+M_PRINTF_DIR		:=		ft_printf/
+M_PRINTF			:=		ft_printf ft_print_unsigned ft_print_hex\
 
 GNL_DIR				:=		get_next_line/
 GNL					:=		get_next_line get_next_line_utils
@@ -53,11 +53,11 @@ BTREE_DIR			:=		btree/
 BTREE				:=		btree_create btree_clear btree_join btree_print\
 							btree_size
 
-FREE_DIR			:=		m_free/
-FREE				:=		m_free m_free_arr m_free_arrr m_free_tab
+FREE_DIR			:=		ft_free/
+FREE				:=		ft_free ft_free_arr ft_free_arrr ft_free_tab
 
 SORT_DIR			:=		sort/
-SORT				:=		quick_sort\
+SORT				:=		ft_quick_sort\
 
 SRC_FILES			+=		$(addprefix $(FTIS_DIR),$(FTIS))
 SRC_FILES			+=		$(addprefix $(FTMEM_DIR),$(FTMEM))

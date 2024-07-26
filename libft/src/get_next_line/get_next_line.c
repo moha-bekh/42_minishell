@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 17:47:06 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/05/31 10:43:28 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/26 16:34:37 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ char	*get_next_line(int fd, t_list **lst)
 	if (!line)
 		return (free_list((*lst)), NULL);
 	if (!clean_list(lst))
-		return (m_free(line), NULL);
+		return (ft_free(line), NULL);
 	if (line[0] == '\0')
 	{
 		free_list((*lst));
-		m_free(line);
+		ft_free(line);
 		return (NULL);
 	}
 	return (line);
@@ -49,10 +49,10 @@ void	read_and_stock(int fd, t_list **lst)
 			return ;
 		rd = (int)read(fd, buf, BF);
 		if ((!*lst && rd == 0) || rd == -1)
-			return (m_free(buf));
+			return (ft_free(buf));
 		buf[rd] = '\0';
 		add_to_list(lst, buf, rd);
-		m_free(buf);
+		ft_free(buf);
 	}
 }
 
@@ -67,7 +67,7 @@ void	add_to_list(t_list **lst, char *buf, int rd)
 		return ;
 	new->value = ft_calloc((rd + 1), sizeof(char));
 	if (!new->value)
-		return (m_free(new), m_free(buf));
+		return (ft_free(new), ft_free(buf));
 	i = 0;
 	while (buf[i] && i < rd)
 	{
@@ -158,7 +158,7 @@ int main(void)
 		if (!line)
 			break ;
 		printf("%s\n", line);
-		m_free(line);
+		ft_free(line);
 	}
 	close(fd);
 	return (0);

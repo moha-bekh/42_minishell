@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 09:41:33 by ajordan-          #+#    #+#             */
-/*   Updated: 2024/07/24 13:36:02 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/26 16:31:51 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,10 @@ typedef struct s_dll
 }					t_dll;
 
 // FT_FREE
-void				m_free(void *ptr);
-void				m_free_arr(char **arr);
-void				m_free_arrr(char ***arrr);
-void				m_free_tab(int **tab, int size);
+void				ft_free(void *ptr);
+void				ft_free_arr(char **arr);
+void				ft_free_arrr(char ***arrr);
+void				ft_free_tab(int **tab, int size);
 // FT_IS
 int					ft_isalnum(int c);
 int					ft_isalpha(int c);
@@ -81,8 +81,8 @@ int					ft_isascii(int c);
 int					ft_isdigit(int c);
 int					ft_isprint(int c);
 bool				ft_isspace(int c);
-int					m_ishex_alpha(int c);
-int					m_ishexALPHA(int c);
+int					ft_ishex_alpha(int c);
+int					ft_ishexALPHA(int c);
 // FT_LST
 void				ft_lstadd_back(t_list **lst, t_list *new);
 void				ft_lstadd_front(t_list **lst, t_list *new);
@@ -120,14 +120,14 @@ int					ft_print_unsigned(unsigned int nb);
 void				ft_putchar(char c);
 void				ft_putstr(char *str);
 // M_PRINTF
-int					m_printfd(int fd, const char *format, ...);
-void				m_print_char(int fd, char c, int *len);
-void				m_print_str(int fd, char *str, int *len);
-void				m_print_nbr(int fd, int nbr, int *len);
-void				m_print_unsigned(int fd, unsigned int unbr, int *len);
-void				m_print_hex(int fd, unsigned int unbr, const char format,
-						int *len);
-void				m_print_ptr(int fd, unsigned long long ptr, int *len);
+int					ft_printfd(int fd, const char *format, ...);
+// void				ft_print_char(int fd, char c, int *len);
+// void				ft_print_str(int fd, char *str, int *len);
+// void				ft_print_nbr(int fd, int nbr, int *len);
+// void				ft_print_unsigned(int fd, unsigned int unbr, int *len);
+// void				ft_print_hex(int fd, unsigned int unbr, const char format,
+// 						int *len);
+// void				ft_print_ptr(int fd, unsigned long long ptr, int *len);
 // FT_PUT
 void				ft_putchar_fd(char c, int fd);
 void				ft_putendl_fd(char *s, int fd);
@@ -157,7 +157,7 @@ char				*ft_itoa(int n);
 int					ft_tolower(int c);
 int					ft_toupper(int c);
 void				ft_swap(int *a, int *b);
-int					m_atoi_base(const char *str, int base);
+int					ft_atoi_base(const char *str, int base);
 // SORT
 void				quick_sort(int *tab, int start, int end);
 

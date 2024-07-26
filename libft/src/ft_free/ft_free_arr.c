@@ -1,22 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   m_free.c                                           :+:      :+:    :+:   */
+/*   ft_free_arr.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/09 17:55:27 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/05/09 18:09:15 by mbekheir         ###   ########.fr       */
+/*   Created: 2024/03/29 05:46:07 by mbekheir          #+#    #+#             */
+/*   Updated: 2024/07/26 16:29:03 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	m_free(void *ptr)
+void	ft_free_arr(char **arr)
 {
-	if (!ptr)
+	int	i;
+
+	if (!arr)
 		return ;
-	free(ptr);
-	ptr = NULL;
-	return ;
+	i = -1;
+	while (arr[++i])
+		free(arr[i]);
+	free(arr);
 }

@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   m_free_tab.c                                       :+:      :+:    :+:   */
+/*   _op_bt_create.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/19 01:20:11 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/05/15 16:54:02 by mbekheir         ###   ########.fr       */
+/*   Created: 2024/07/19 20:22:59 by mbekheir          #+#    #+#             */
+/*   Updated: 2024/07/26 18:46:51 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-void	m_free_tab(int **tab, int size)
+t_pbt_op	_op_bt_create(char type, t_ptok token)
 {
-	int	i;
+	t_pbt_op	tree;
 
-	if (!tab || size < 1)
-		return ;
-	i = -1;
-	while (++i < size)
-		m_free(&tab[i]);
-	m_free(tab);
+	tree = NULL;
+	if (_alloc((void **)&tree, sizeof(t_bt_op)))
+		return (NULL);
+	tree->type= type;
+	tree->token = token;
+	tree->cmd_a = NULL;
+	tree->left = NULL;
+	tree->root = NULL;
+	tree->right = NULL;
+	return (tree);
 }

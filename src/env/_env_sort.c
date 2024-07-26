@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _env_sort.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 17:32:05 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/23 21:03:10 by moha             ###   ########.fr       */
+/*   Updated: 2024/07/26 18:31:48 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ u_padll	_env_sort(u_padll dll)
 	while (++i < dll->e_size)
 	{
 		node = dll->e_top;
-		while (node)
+		while (node->next)
 		{
-			if (node->next && ft_strcmp(node->key, node->next->key) > 0)
+			if (ft_strcmp(node->key, node->next->key) > 0)
 			{
-				ft_memswap(node->key, node->next->key, sizeof(char *));
-				ft_memswap(node->value, node->next->value, sizeof(char *));
+				ft_memswap(&node->key, &node->next->key, sizeof(char *));
+				ft_memswap(&node->value, &node->next->value, sizeof(char *));
 			}
 			node = node->next;
 		}

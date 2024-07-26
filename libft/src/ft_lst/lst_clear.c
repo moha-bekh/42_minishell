@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 16:37:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/05/14 18:59:46 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/26 16:33:20 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	lst_clear(t_list *lst)
 		while (lst)
 		{
 			tmp = lst->next;
-			m_free(lst);
+			ft_free(lst);
 			lst = tmp;
 		}
 	}

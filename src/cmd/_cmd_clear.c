@@ -1,33 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _data_cleaner.c                                    :+:      :+:    :+:   */
+/*   _cmd_clear.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/10 15:44:21 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/29 12:28:36 by mbekheir         ###   ########.fr       */
+/*   Created: 2024/07/29 11:16:58 by mbekheir          #+#    #+#             */
+/*   Updated: 2024/07/29 16:59:20 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void _data_clear_builtin(char **builtin)
+u_padll	_cmd_clear(u_padll dll)
 {
-	int i;
-
-	i = -1;
-	while (++i < 7)
-		free(builtin[i]);
-	return ;
-}
-
-void	_cleaner(t_pdata data)
-{
-	_data_clear_builtin(data->built_in);
-	ft_free_arr(data->env.min_ev);
-	free(data->input);
-	data->env.dll_env = _env_clear(data->env.dll_env);
-	data->env.dll_senv = _env_clear(data->env.dll_senv);
-	return ;
+	if (!dll)
+		return (NULL);
+	while (dll)
+		dll = _cmd_pop_back(dll);
+	return (NULL);
 }

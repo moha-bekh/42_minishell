@@ -86,6 +86,10 @@ PARS_DIR := 					parsing/
 PARS_SRCS := 					_parsing
 PARS_OBJS := 					$(addprefix $(PARS_DIR), $(addsuffix .o, $(PARS_SRCS)))
 
+CMD_DIR := 						cmd/
+CMD_SRCS := 					_cmd_push_back _cmd_pop_back _cmd_clear _cmd_print
+CMD_OBJS := 					$(addprefix $(CMD_DIR), $(addsuffix .o, $(CMD_SRCS)))
+
 SRC_DIR =						./src/
 OBJ_DIR =						./obj/
 FILES =							main
@@ -99,6 +103,7 @@ SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(TOKEN_DIR), $(addsuffix .c, 
 SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(EXPAND_DIR), $(addsuffix .c, $(EXPAND_SRCS))))
 SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(OP_TREE_DIR), $(addsuffix .c, $(OP_TREE_SRCS))))
 SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(PARS_DIR), $(addsuffix .c, $(PARS_SRCS))))
+SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(CMD_DIR), $(addsuffix .c, $(CMD_SRCS))))
 OBJS = 							$(SRCS:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
 all:							$(NAME)

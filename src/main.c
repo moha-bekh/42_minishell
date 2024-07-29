@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:53 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/26 18:46:25 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/29 19:06:15 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int	main(int ac, char **av, char **ev)
 		data.input = readline(">$ ");
 		if (!data.input || !ft_strncmp(data.input, "exit", 4))
 			return (_cleaner(&data), EXIT_FAILURE);
+		if (!ft_strncmp(data.input, "\n", 1))
+			continue ;
 		add_history(data.input);
 		if (!ft_strncmp(data.input, "clear", 5))
 		{
@@ -41,7 +43,7 @@ int	main(int ac, char **av, char **ev)
 		printf(BLUE "-------------------------------------- TOKENS --------------------------------------" RESET "\n");
 		_tok_process(data.input, &data.tok);
 		_expand_tokens(&data);
-		_tok_print(data.tok);
+		// _tok_print(data.tok);
 		data.tree = _tree_process(&data);
 		_parsing(data.tree);
 		_op_bt_print(data.tree, true, i);

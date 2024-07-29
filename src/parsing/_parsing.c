@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/26 18:43:22 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/29 19:44:36 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,27 +27,63 @@ int	_count_arg(t_ptok token)
 	return (i);
 }
 
-int	_pars_process(t_pbt_op node)
+int	_pars_redir(t_pcmd cmd, t_ptok token)
 {
-	t_ptok	tmp_tok;
-	char	**cmd_a;
-	int		i;
+	(void)cmd;
+	printf("is redir: %c\n", token->type);
+	return (EXIT_SUCCESS);
+}
 
-	cmd_a = NULL;
-	i = _count_arg(node->token);
+int	_pars_pipe(t_pcmd cmd, t_ptok token)
+{
+	(void)cmd;
+	(void)token;
+	return (EXIT_SUCCESS);
+}
+
+int	_pars_args(t_pcmd cmd, t_ptok token)
+{
+	int	i;
+
+	if (!cmd || !token)
+		return (EXIT_FAILURE);
+	i = _count_arg(token);
 	if (!i)
 		return (EXIT_SUCCESS);
-	if (_alloc((void **)&cmd_a, sizeof(char *) * (i + 1)) || !cmd_a)
+	if (_alloc((void **)&cmd->cmd_a, sizeof(char *) * (i + 1)) || !cmd->cmd_a)
 		return (EXIT_ERROR);
-	tmp_tok = node->token;
-	i = -1;
-	while (tmp_tok && tmp_tok->type == _LITERAL)
+	i = 0;
+	while (token && token->type == _LITERAL)
 	{
-		cmd_a[++i] = ft_strdup(tmp_tok->value);
-		tmp_tok = tmp_tok->next;
+		cmd->cmd_a[i++] = ft_strdup(token->value);
+		token = token->next;
 	}
-	cmd_a[++i] = NULL;
-	node->cmd_a = cmd_a;
+	cmd->cmd_a[i] = NULL;
+	return (EXIT_SUCCESS);
+}
+
+int	_pars_process(t_pbt_op tree, t_ptok token)
+{
+	t_ptok	tmp;
+	t_pcmd	tmp_cmd;
+
+	if (!tree || !token)
+		return (EXIT_SUCCESS);
+	tree->cmd = _cmd_push_back(tree->cmd, token, NULL);
+	tmp = token;
+	while (tmp && !_tok_is(_TREE_SEP, tmp->type))
+	{
+		if (tmp->type == _PIPE)
+			tree->cmd = _cmd_push_back(tree->cmd, tmp->next, NULL);
+		tmp = tmp->next;
+	}
+	_cmd_print(tree->cmd);
+	tmp_cmd = tree->cmd->c_top;
+	while (tmp_cmd)
+	{
+		_pars_args(tmp_cmd, tmp_cmd->token);
+		tmp_cmd = tmp_cmd->next;
+	}
 	return (EXIT_SUCCESS);
 }
 
@@ -55,7 +91,7 @@ int	_parsing(t_pbt_op tree)
 {
 	if (!tree)
 		return (EXIT_SUCCESS);
-	_pars_process(tree);
+	_pars_process(tree, tree->token);
 	if (tree->left)
 		_parsing(tree->left);
 	if (tree->right)

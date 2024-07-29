@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 20:26:47 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/26 19:02:51 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/29 11:37:20 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_pbt_op	_op_bt_clear(t_pbt_op tree)
 	_op_bt_clear(tree->left);
 	_op_bt_clear(tree->right);
 	free(tree->cmd_a);
-	free(tree->redir.here_name);
+	// free(tree->redir.here_name);
 	free(tree);
 	tree = NULL;
 	return (tree);

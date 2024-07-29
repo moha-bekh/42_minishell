@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   operator_tok.c                                     :+:      :+:    :+:   */
+/*   _operator_tok.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:23:00 by moha              #+#    #+#             */
-/*   Updated: 2024/07/23 22:23:28 by moha             ###   ########.fr       */
+/*   Updated: 2024/07/29 11:31:26 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	_tok_or(char *input, u_padll token, int *i)
 {
 	token = _tok_push_back(token, _OR, ft_substr(input, *i, 3));
-	if (_tok_is(_SYNTAX_OR_ERR, token->t_bot->value[2]))
+	if (_tok_is(_STX_ERR_OR, token->t_bot->value[2]))
 		return (_tok_syntax_err(token->t_bot->value[2], 1));
 	token->t_bot->value[2] = '\0';
 	*i += 2;
@@ -25,7 +25,7 @@ int	_tok_or(char *input, u_padll token, int *i)
 int	_tok_and(char *input, u_padll token, int *i)
 {
 	token = _tok_push_back(token, _AND, ft_substr(input, *i, 3));
-	if (_tok_is(_SYNTAX_AND_ERR, token->t_bot->value[2]))
+	if (_tok_is(_STX_ERR_AND, token->t_bot->value[2]))
 		return (_tok_syntax_err(token->t_bot->value[2], 1));
 	token->t_bot->value[2] = '\0';
 	*i += 2;
@@ -35,7 +35,7 @@ int	_tok_and(char *input, u_padll token, int *i)
 int	_tok_pipe(char *input, u_padll token, int *i)
 {
 	token = _tok_push_back(token, _PIPE, ft_substr(input, *i, 3));
-	if (_tok_is(_SYNTAX_PIPE_ERR, token->t_bot->value[1]))
+	if (_tok_is(_STX_ERR_PIPE, token->t_bot->value[1]))
 		return (_tok_syntax_err(token->t_bot->value[1], 1));
 	token->t_bot->value[1] = '\0';
 	token->t_bot->value[2] = '\0';

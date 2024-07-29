@@ -1,51 +1,51 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _env_pop_back.c                                    :+:      :+:    :+:   */
+/*   _cmd_pop_back.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/19 19:05:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/29 18:40:08 by mbekheir         ###   ########.fr       */
+/*   Created: 2024/07/29 11:15:50 by mbekheir          #+#    #+#             */
+/*   Updated: 2024/07/29 18:40:23 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-u_padll	_pop_env(u_padll dll)
+u_padll	_pop_cmd(u_padll dll)
 {
-	t_pev	tmp;
+	t_pcmd	tmp;
 
-	tmp = dll->e_bot;
-	dll->e_bot = dll->e_bot->prev;
-	dll->e_bot->next = NULL;
-	free(tmp->key);
-	tmp->key = NULL;
-	free(tmp->value);
-	tmp->value = NULL;
+	tmp = dll->c_bot;
+	dll->c_bot = dll->c_bot->prev;
+	dll->c_bot->next = NULL;
+	free(tmp->cmd_path);
+	tmp->cmd_path = NULL;
+	ft_free_arr(tmp->cmd_a);
+	tmp->cmd_a = NULL;
 	tmp->prev = NULL;
 	free(tmp);
 	tmp = NULL;
 	return (dll);
 }
 
-u_padll	_env_pop_back(u_padll dll)
+u_padll	_cmd_pop_back(u_padll dll)
 {
 	if (!dll)
 		return (NULL);
-	if ((dll->e_top && dll->e_bot) && dll->e_top == dll->e_bot)
+	if ((dll->c_top && dll->c_bot) && dll->c_top == dll->c_bot)
 	{
-		free(dll->e_top->key);
-		dll->e_top->key = NULL;
-		free(dll->e_top->value);
-		dll->e_top->value = NULL;
-		free(dll->e_top);
-		dll->e_top = NULL;
+		free(dll->c_top->cmd_path);
+		dll->c_top->cmd_path = NULL;
+		ft_free_arr(dll->c_top->cmd_a);
+		dll->c_top->cmd_a = NULL;
+		free(dll->c_top);
+		dll->c_top = NULL;
 		free(dll);
 		dll = NULL;
 		return (NULL);
 	}
-	dll->e_size--;
-	dll = _pop_env(dll);
+	dll->c_size--;
+	dll = _pop_cmd(dll);
 	return (dll);
 }

@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 23:44:34 by moha              #+#    #+#             */
-/*   Updated: 2024/07/26 19:31:29 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/29 12:30:12 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,6 @@ int	_data_init_args(t_pdata data, int ac, char **av, char **ev)
 	data->av = av;
 	data->input = NULL;
 	data->tmp = NULL;
-	data->built_in[0] = NULL;
-	data->built_in[1] = NULL;
-	data->built_in[2] = NULL;
-	data->built_in[3] = NULL;
-	data->built_in[4] = NULL;
-	data->built_in[5] = NULL;
-	data->built_in[6] = NULL;
-	// data->built_in[7] = NULL;
 	data->env.env = ev;
 	data->env.min_ev = NULL;
 	data->env.dll_env = NULL;
@@ -40,7 +32,7 @@ int	_data_init_args(t_pdata data, int ac, char **av, char **ev)
 	return (EXIT_SUCCESS);
 }
 
-int	_data_builtin_name(t_pdata data)
+int	_data_init_builtin(t_pdata data)
 {
 	if (!data)
 		return (EXIT_FAILURE);
@@ -69,7 +61,7 @@ int	_data_init(t_pdata data, int ac, char **av, char **ev)
 {
 	if (!data || _data_init_args(data, ac, av, ev))
 		return (EXIT_FAILURE);
-	if (_data_builtin_name(data))
+	if (_data_init_builtin(data))
 		return (EXIT_FAILURE);
 	if (_data_min_env(data))
 		return (EXIT_FAILURE);

@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/26 19:31:33 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/29 17:14:38 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,19 @@ typedef struct s_redir
 	char			*here_name;
 } t_redir, t_predir;
 
+typedef struct s_cmd
+{
+	t_ptok			token;
+	bool			built_in;
+	char			*cmd_path;
+	char			**cmd_a;
+	t_redir			redir;
+	pid_t			pid;
+	int				status;
+	struct s_cmd	*next;
+	struct s_cmd	*prev;
+} t_cmd, *t_pcmd;
+
 typedef struct s_adll
 {
 	union
@@ -98,15 +111,21 @@ typedef struct s_adll
 		};
 		struct
 		{
+			t_ptok	t_top;
+			t_ptok	t_bot;
+			int		t_size;
+		};
+		struct
+		{
 			t_pscop	s_top;
 			t_pscop	s_bot;
 			int		s_size;
 		};
 		struct
 		{
-			t_ptok	t_top;
-			t_ptok	t_bot;
-			int		t_size;
+			t_pcmd	c_top;
+			t_pcmd	c_bot;
+			int		c_size;
 		};
 	};
 } u_adll, *u_padll;
@@ -118,12 +137,9 @@ typedef struct s_adll
 typedef struct s_bt_op
 {
 	char			type;
-	int				status;
 	t_ptok			token;
-	t_redir			redir;
+	u_padll			cmd;
 	char			**cmd_a;
-	char			*cmd_path;
-	bool			built_in;
 	struct s_bt_op	*left;
 	struct s_bt_op	*root;
 	struct s_bt_op	*right;
@@ -198,16 +214,16 @@ enum				e_tokens
 
 // #  TOKENS SYNTAX ERRORS
 
-# define _SYNTAX_ERR "syntax error near unexpected token `"
-# define _SYNTAX_CLOSE_ERR "syntax error a token field `"
+# define _STX_ERR "syntax error near unexpected token `"
+# define _STX_ERR_CLOSE "syntax error a token field `"
 
-# define _SYNTAX_AND_ERR "&|;"
-# define _SYNTAX_OR_ERR "|&;"
-# define _SYNTAX_PIPE_ERR ";"
-# define _SYNTAX_REDIR_IN_ERR ">|;"
-# define _SYNTAX_REDIR_OUTT_ERR "<;"
-# define _SYNTAX_REDIR_OUTA_ERR "><|&;"
-# define _SYNTAX_HERE_DOC_ERR "<&|();\n"
+# define _STX_ERR_OR "|&;"
+# define _STX_ERR_AND "&|;"
+# define _STX_ERR_PIPE ";"
+# define _STX_ERR_REDIR_IN ">|;"
+# define _STX_ERR_REDIR_OUTT "<;"
+# define _STX_ERR_REDIR_OUTA "><|&;"
+# define _STX_ERR_HERE_DOC "<&|();\n"
 
 // ###########################################################################
 // #  UTILS FUNCTIONS
@@ -226,7 +242,7 @@ char				*_get_env_value(u_padll env, char *key);
 // ###########################################################################
 
 int					_set_env(u_padll *dll_env, char **ev);
-int					_set_senv(u_padll *dll_senv, u_padll dll_env);
+int					_set_senv(u_padll *dll_senv, u_padll env);
 int					_clean_env(t_pdata data, char **arg);
 
 // ###########################################################################
@@ -269,6 +285,10 @@ t_pbt_op			_tree_process(t_pdata data);
 int					_parsing(t_pbt_op tree);
 
 // ###########################################################################
+// #  EXECUTION FUNCTIONS
+// ###########################################################################
+
+// ###########################################################################
 // #  DATA STRUCTURE FUNCTIONS
 // ###########################################################################
 
@@ -282,12 +302,6 @@ u_padll				_env_push_in(u_padll dll, t_pev target, char *key,
 						char *value);
 u_padll				_env_sort(u_padll dll);
 
-// # SCOP
-u_padll				_scp_clear(u_padll dll);
-u_padll				_scp_pop_back(u_padll dll);
-void				_tok_print(u_padll dll);
-u_padll				_scp_push_back(u_padll dll, struct s_bt_op *ptr_op);
-
 // # TOKENS
 u_padll				_tok_clear(u_padll dll);
 u_padll				_tok_pop_back(u_padll dll);
@@ -295,6 +309,12 @@ u_padll				_tok_pop_in(u_padll dll, t_ptok target);
 void				_tok_print(u_padll dll);
 u_padll				_tok_push_back(u_padll dll, char type, char *value);
 u_padll				_tok_sub_struct(t_ptok start, t_ptok end);
+
+// # SCOP
+u_padll				_scp_clear(u_padll dll);
+u_padll				_scp_pop_back(u_padll dll);
+void				_tok_print(u_padll dll);
+u_padll				_scp_push_back(u_padll dll, struct s_bt_op *ptr_op);
 
 // # OPERATIONS
 t_pbt_op			_op_bt_clear(t_pbt_op tree);
@@ -305,6 +325,13 @@ t_pbt_op			_op_bt_push_at(t_pbt_op tree, t_pbt_op node, bool left);
 t_pbt_op			_op_bt_push_root(t_pbt_op tree, t_pbt_op node);
 t_pbt_op			_op_bt_push_right(t_pbt_op tree, t_pbt_op node);
 t_pbt_op			_op_bt_push_left(t_pbt_op tree, t_pbt_op node);
+
+// # COMMANDS
+
+u_padll				_cmd_push_back(u_padll dll, t_ptok token, char **cmd_a);
+u_padll				_cmd_pop_back(u_padll dll);
+void				_cmd_print(u_padll dll);
+u_padll				_cmd_clear(u_padll dll);
 
 // ###########################################################################
 // # COLORS

@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _alloc.c                                           :+:      :+:    :+:   */
+/*   _cmd_foreach.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/09 23:30:53 by moha              #+#    #+#             */
-/*   Updated: 2024/07/30 10:07:36 by mbekheir         ###   ########.fr       */
+/*   Created: 2024/07/30 09:43:46 by mbekheir          #+#    #+#             */
+/*   Updated: 2024/07/30 10:27:15 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "data_struct.h"
+#include "minishell.h"
 
-int _alloc(void **target, size_t size)
+void	_cmd_foreach(u_padll dll, void (*func)(t_pcmd))
 {
-	if (!size)
-		return (EXIT_FAILURE);
-	(*target) = malloc(size);
-	if (!(*target))
-		return (EXIT_FAILURE);
-	ft_memset((*target), 0, size);
-	return (EXIT_SUCCESS);
+	t_pcmd	tmp;
+
+	if (!dll)
+		return ;
+	tmp = dll->c_top;
+	while (tmp)
+	{
+		func(tmp);
+		tmp = tmp->next;
+	}
 }

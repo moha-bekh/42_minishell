@@ -6,11 +6,28 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:53 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/29 19:06:15 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 10:46:39 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	_some_utils(t_pdata data, char *input)
+{
+	if (!ft_strncmp(input, "\n", 1))
+		return (_IS);
+	if (!ft_strncmp(input, "clear", 5))
+	{
+		system("clear");
+		return (_IS);
+	}
+	if (!ft_strncmp(input, "env ", 4))
+	{
+		_env(data);
+		return (_IS);
+	}
+	return (_NOT);
+}
 
 int	main(int ac, char **av, char **ev)
 {
@@ -20,38 +37,24 @@ int	main(int ac, char **av, char **ev)
 	i = 0;
 	(void)i;
 	if (_data_init(&data, ac, av, ev))
-		return (EXIT_FAILURE);
+		return (_FAILURE);
 	while (1)
 	{
 		printf(CYAN "-------------------------------------- PROMPT --------------------------------------" RESET "\n");
 		data.input = readline(">$ ");
 		if (!data.input || !ft_strncmp(data.input, "exit", 4))
-			return (_cleaner(&data), EXIT_FAILURE);
-		if (!ft_strncmp(data.input, "\n", 1))
-			continue ;
+			return (_cleaner(&data), _FAILURE);
 		add_history(data.input);
-		if (!ft_strncmp(data.input, "clear", 5))
-		{
-			system("clear");
-			continue ;
-		}
-		if (!ft_strncmp(data.input, "env ", 4))
-		{
-			_env(&data);
-			continue ;
-		}
-		printf(BLUE "-------------------------------------- TOKENS --------------------------------------" RESET "\n");
+		_some_utils(&data, data.input);
 		_tok_process(data.input, &data.tok);
 		_expand_tokens(&data);
-		// _tok_print(data.tok);
 		data.tree = _tree_process(&data);
 		_parsing(data.tree);
 		_op_bt_print(data.tree, true, i);
-		//  echo $USER > outfile || ( echo $HOME && echo $SHLVL)
 		data.tree = _op_bt_clear(data.tree);
 		data.tok = _tok_clear(data.tok);
 	}
-	return (_cleaner(&data), EXIT_SUCCESS);
+	return (_cleaner(&data), _SUCCESS);
 }
 
 // int	main(void)
@@ -130,7 +133,7 @@ int	main(int ac, char **av, char **ev)
 // 	(void)scop_1;
 // 	(void)scop_2;
 // 	(void)scop_3;
-// 	return (EXIT_SUCCESS);
+// 	return (_SUCCESS);
 // }
 
 // {

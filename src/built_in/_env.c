@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:58 by moha              #+#    #+#             */
-/*   Updated: 2024/07/24 18:37:05 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 10:09:56 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,13 @@ int	_env(t_pdata data)
 {
 	t_pev	tmp;
 
+	if (!data || ! data->env.dll_env)
+		return (_EMPTY);
 	tmp = data->env.dll_env->e_top;
 	while (tmp)
 	{
 		printf("%s=%s\n", tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
-	return (EXIT_SUCCESS);
+	return (_SUCCESS);
 }

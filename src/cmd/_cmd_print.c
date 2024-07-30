@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 12:00:11 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/29 19:36:29 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 11:12:52 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	_cmd_print(u_padll dll)
 	if (!dll)
 		return ;
 	tmp = dll->c_top;
+	printf("\n");
+	printf("cmds: ");
 	while (tmp)
 	{
 		i = -1;
@@ -31,5 +33,8 @@ void	_cmd_print(u_padll dll)
 		}
 		tmp = tmp->next;
 	}
+	printf("\n");
 	return ;
 }
+
+// echo $USER > out $HOME | grep $USER || (cat < in && echo x)

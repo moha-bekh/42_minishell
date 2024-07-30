@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 18:40:21 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/11 15:07:10 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 10:15:31 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	_new_input_len(char *str)
 	int	i;
 	int	len;
 
+	if (!str)
+		return (_EMPTY);
 	i = 0;
 	len = 0;
 	while (str[i] && str[i] == _SPACE)
@@ -74,7 +76,7 @@ int	start_n_end(t_data *data)
 	free(data->blocs->bot->value);
 	data->blocs->bot->value = new;
 	printf("new input: %s\n", new);
-	return (EXIT_SUCCESS);
+	return (_SUCCESS);
 }
 
 int	_clean_input(t_data *data)
@@ -124,5 +126,5 @@ int	_clean_input(t_data *data)
 // 	printf("cleaned input: %s\n", new);
 // 	free(data->blocs->bot->value);
 // 	data->blocs->bot->value = new;
-	return (EXIT_SUCCESS);
+	return (_SUCCESS);
 }

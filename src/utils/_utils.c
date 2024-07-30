@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:35:57 by moha              #+#    #+#             */
-/*   Updated: 2024/07/26 19:04:55 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 10:16:23 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	_get_start_index(char *str)
 {
 	int	i;
 
+	if (!str)
+		return (0);
 	i = -1;
 	while (str[++i])
 	{
@@ -29,6 +31,8 @@ char	*_get_env_value(u_padll env, char *key)
 {
 	t_pev	tmp;
 
+	if (!env || !key)
+		return (ft_strdup(""));
 	tmp = env->e_top;
 	while (tmp)
 	{

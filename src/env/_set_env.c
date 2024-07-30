@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:06:16 by moha              #+#    #+#             */
-/*   Updated: 2024/07/29 12:29:27 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 10:11:53 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,14 @@ int	_set_env(u_padll *env, char **ev)
 	int	j;
 
 	if (!*ev)
-		return (EXIT_SUCCESS);
+		return (_SUCCESS);
 	i = -1;
 	while (ev[++i])
 	{
 		j = _get_start_index(ev[i]);
 		*env = _env_push_back(*env, ft_substr(ev[i], 0, j), ft_substr(ev[i], j + 1, ft_strlen(ev[i])));
 	}
-	return (EXIT_SUCCESS);
+	return (_SUCCESS);
 }
 
 int	_set_senv(u_padll *s_env, u_padll env)
@@ -34,7 +34,7 @@ int	_set_senv(u_padll *s_env, u_padll env)
 	char	*old_value;
 
 	if (!env)
-		return (EXIT_SUCCESS);
+		return (_SUCCESS);
 	tmp = env->e_top;
 	while (tmp)
 	{
@@ -45,7 +45,7 @@ int	_set_senv(u_padll *s_env, u_padll env)
 		tmp = tmp->next;
 	}
 	*s_env = _env_sort(*s_env);
-	return (EXIT_SUCCESS);
+	return (_SUCCESS);
 }
 
 int	_clean_env(t_pdata data, char **arg)
@@ -54,6 +54,8 @@ int	_clean_env(t_pdata data, char **arg)
 	int		i;
 	int		j;
 
+	if (!data || !data->env.dll_env)
+		return (_EMPTY);
 	i = -1;
 	while (arg[++i])
 	{
@@ -74,5 +76,5 @@ int	_clean_env(t_pdata data, char **arg)
 			free(data->tmp);
 		}
 	}
-	return (EXIT_SUCCESS);
+	return (_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/29 17:14:38 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 10:41:09 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,21 @@
 // #  EXIT CODES
 // ###########################################################################
 
-# ifndef EXIT_ERROR
-#  define EXIT_ERROR -1
-# endif // EXIT_ERROR
-# ifndef ALLOC_FAIL
-#  define ALLOC_FAIL "allocation failed\n"
-# endif // ALLOC_FAIL
+enum				e_return
+{
+	_EXT_EXEC = -7,
+	_EXT_DUP = -6,
+	_EXT_PIPE = -5,
+	_EXT_FORK = -4,
+	_EXT_OPEN = -3,
+	_ALLOC = -2,
+	_ERROR = -1,
+	_SUCCESS = 0,
+	_FAILURE = 1,
+	_EMPTY = 2,
+	_IS = 1,
+	_NOT = 0
+};
 
 // ###########################################################################
 // # DOUBLE LINKED LIST
@@ -202,15 +211,17 @@ enum				e_tokens
 	_TREE = 'T',
 };
 
-// # TOKENS GROUPS
 
+// # TOKENS GROUPS
 # define _TOKENS "*'\"()$|&<>"
 # define _OPERATORS "|&"
 # define _PARENTHESIS "()"
 # define _QUOTES "'\""
 # define _REDIRS "<>"
 # define _OTHERS "()$*"
-# define _TREE_SEP "^AO()"
+
+# define _TYPE_SEP "^AO()"
+# define _TYPE_REDIRS "HN<>"
 
 // #  TOKENS SYNTAX ERRORS
 
@@ -332,6 +343,7 @@ u_padll				_cmd_push_back(u_padll dll, t_ptok token, char **cmd_a);
 u_padll				_cmd_pop_back(u_padll dll);
 void				_cmd_print(u_padll dll);
 u_padll				_cmd_clear(u_padll dll);
+void				_cmd_foreach(u_padll dll, void (*func)(t_pcmd));
 
 // ###########################################################################
 // # COLORS

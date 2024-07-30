@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:21:44 by moha              #+#    #+#             */
-/*   Updated: 2024/07/29 11:31:55 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 10:03:34 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,5 @@ int	_tok_redir_process(char *input, u_padll token, int *i)
 		return (_tok_set_redir_outt(input, token, i));
 	else if (input[*i] == '>' && input[*i + 1] == '>')
 		return (_tok_set_redir_outa(input, token, i));
-	return (EXIT_SUCCESS);
+	return (_SUCCESS);
 }

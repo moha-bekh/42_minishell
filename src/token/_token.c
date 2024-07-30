@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:00:11 by moha              #+#    #+#             */
-/*   Updated: 2024/07/29 19:06:28 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 10:05:46 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +67,18 @@ int	_tok_others_process(char *input, u_padll token, int *i)
 int	_tok_token_process(char *input, u_padll token, int *i)
 {
 	if (_tok_is(_OPERATORS, input[*i]) && _tok_operator_process(input, token,
-			i) == EXIT_ERROR)
-		return (EXIT_ERROR);
+			i) == _ERROR)
+		return (_ERROR);
 	else if (_tok_is(_REDIRS, input[*i]) && _tok_redir_process(input, token,
-			i) == EXIT_ERROR)
-		return (EXIT_ERROR);
+			i) == _ERROR)
+		return (_ERROR);
 	else if (_tok_is(_QUOTES, input[*i]) && _tok_quotes_process(input, token,
-			i) == EXIT_ERROR)
-		return (EXIT_ERROR);
+			i) == _ERROR)
+		return (_ERROR);
 	else if (_tok_is(_OTHERS, input[*i]) && _tok_others_process(input, token,
-			i) == EXIT_ERROR)
-		return (EXIT_ERROR);
-	return (EXIT_SUCCESS);
+			i) == _ERROR)
+		return (_ERROR);
+	return (_SUCCESS);
 }
 
 int	_tok_literal_process(char *input, u_padll token, int *i)
@@ -92,7 +92,7 @@ int	_tok_literal_process(char *input, u_padll token, int *i)
 	if (input[*i] && !ft_isspace(input[*i]) && (input[*i] == '"'
 			|| input[*i] == '\''))
 		token->t_bot->join = true;
-	return (EXIT_SUCCESS);
+	return (_SUCCESS);
 }
 
 int	_tok_process(char *input, u_padll *token)
@@ -105,8 +105,8 @@ int	_tok_process(char *input, u_padll *token)
 	{
 		if (input[i] && _tok_is(_TOKENS, input[i]))
 		{
-			if (_tok_token_process(input, *token, &i) == EXIT_ERROR)
-				return (EXIT_ERROR);
+			if (_tok_token_process(input, *token, &i) == _ERROR)
+				return (_ERROR);
 		}
 		else if (input[i] && !ft_isspace(input[i]))
 			_tok_literal_process(input, *token, &i);
@@ -114,5 +114,5 @@ int	_tok_process(char *input, u_padll *token)
 			i++;
 	}
 	_tok_check(*token);
-	return (EXIT_SUCCESS);
+	return (_SUCCESS);
 }

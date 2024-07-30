@@ -29,8 +29,7 @@ DATA_OBJS := 					$(addprefix $(DATA_DIR), $(addsuffix .o, $(DATA_SRCS)))
 UTILS_DIR := 					utils/
 UTILS_SRCS := 					_alloc\
 								_clean\
-								_utils\
-								_psplit
+								_utils
 UTILS_OBJS := 					$(addprefix $(UTILS_DIR), $(addsuffix .o, $(UTILS_SRCS)))
 
 ENV_DIR	:= 						env/
@@ -45,7 +44,9 @@ ENV_SRCS :=						_env_clear\
 ENV_OBJS := 					$(addprefix $(ENV_DIR), $(addsuffix .o, $(ENV_SRCS)))
 
 BULTINS_DIR = 					built_in/
-BULTINS_SRCS = 					_env _export
+BULTINS_SRCS = 					_env\
+								_export\
+								_exit
 BULTINS_OBJS = 					$(addprefix $(BULTINS_DIR), $(addsuffix .o, $(BULTINS_SRCS)))
 
 TOKEN_DIR := 					token/

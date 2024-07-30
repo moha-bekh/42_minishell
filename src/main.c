@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:53 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/30 10:46:39 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 12:59:24 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	main(int ac, char **av, char **ev)
 	int		i;
 
 	i = 0;
-	(void)i;
 	if (_data_init(&data, ac, av, ev))
 		return (_FAILURE);
 	while (1)
@@ -43,7 +42,7 @@ int	main(int ac, char **av, char **ev)
 		printf(CYAN "-------------------------------------- PROMPT --------------------------------------" RESET "\n");
 		data.input = readline(">$ ");
 		if (!data.input || !ft_strncmp(data.input, "exit", 4))
-			return (_cleaner(&data), _FAILURE);
+			return (_data_cleaner(&data), _FAILURE);
 		add_history(data.input);
 		_some_utils(&data, data.input);
 		_tok_process(data.input, &data.tok);
@@ -54,7 +53,7 @@ int	main(int ac, char **av, char **ev)
 		data.tree = _op_bt_clear(data.tree);
 		data.tok = _tok_clear(data.tok);
 	}
-	return (_cleaner(&data), _SUCCESS);
+	return (_data_cleaner(&data), _SUCCESS);
 }
 
 // int	main(void)

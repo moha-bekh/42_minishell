@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 15:44:21 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/29 12:28:36 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 12:59:06 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void _data_clear_builtin(char **builtin)
 	return ;
 }
 
-void	_cleaner(t_pdata data)
+void	_data_cleaner(t_pdata data)
 {
 	_data_clear_builtin(data->built_in);
 	ft_free_arr(data->env.min_ev);

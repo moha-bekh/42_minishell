@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 20:22:59 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/29 12:03:03 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 12:02:26 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@ t_pbt_op	_op_bt_create(char type, t_ptok token)
 	tree = NULL;
 	if (_alloc((void **)&tree, sizeof(t_bt_op)))
 		return (NULL);
-	tree->type= type;
+	tree->type = type;
 	tree->token = token;
-	tree->cmd_a = NULL;
 	tree->cmd = NULL;
 	tree->left = NULL;
 	tree->root = NULL;

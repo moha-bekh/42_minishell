@@ -6,11 +6,38 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/30 11:05:32 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 12:57:35 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	_pars_redirs(t_pcmd cmd, t_ptok token)
+{
+	t_ptok	tmp;
+
+	if (!cmd || !token)
+		return ;
+	tmp = token;
+	while (tmp && tmp->type != _PIPE && !_tok_is(_TYPE_SEP, tmp->type))
+	{
+		if (tmp->type == 'H')
+			cmd->redir.here_name = get_random_name();
+		if (tmp->type == '<')
+			cmd->redir.in_name = tmp->next->value;
+		else if (tmp->type == '>')
+		{
+			cmd->redir.out_name = tmp->next->value;
+			cmd->redir.trunc = true;
+		}
+		else if (tmp->type == 'N')
+		{
+			cmd->redir.out_name = tmp->next->value;
+			cmd->redir.trunc = false;
+		}
+		tmp = tmp->next;
+	}
+}
 
 void	_pars_pipe(t_pbt_op node, t_ptok token)
 {
@@ -26,49 +53,6 @@ void	_pars_pipe(t_pbt_op node, t_ptok token)
 		tmp = tmp->next;
 	}
 	return ;
-}
-
-int	_count_arg(t_ptok token)
-{
-	t_ptok	tmp;
-	int		i;
-
-	if (!token)
-		return (_EMPTY);
-	tmp = token;
-	i = 0;
-	while (tmp && tmp->type != _PIPE && !_tok_is(_TYPE_SEP, tmp->type))
-	{
-		if (_tok_is(_TYPE_REDIRS, tmp->type))
-		{
-			tmp = tmp->next->next;
-			continue ;
-		}
-		i++;
-		tmp = tmp->next;
-	}
-	return (i);
-}
-
-void	_pars_redirs(t_pcmd cmd, t_ptok token)
-{
-	t_ptok	tmp;
-
-	if (!cmd || !token)
-		return ;
-	tmp = token;
-	while (tmp && tmp->type != _PIPE && !_tok_is(_TYPE_SEP, tmp->type))
-	{
-		// if (tmp->type == 'H')
-		// 	_pars_here_doc(cmd, token);
-		// else if (tmp->type == '<')
-		// 	_pars_redir_in(cmd, token);
-		// else if (tmp->type == '>')
-		// 	_pars_redir_outt(cmd, token);
-		// else if (tmp->type == 'N')
-		// 	_pars_redir_outa(cmd, token);
-		tmp = tmp->next;
-	}
 }
 
 int	_pars_args(t_pcmd cmd, t_ptok token)

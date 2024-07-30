@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/30 10:41:09 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 12:59:48 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,9 @@ typedef struct s_scop
 
 typedef struct s_redir
 {
+	char			*in_name;
+	char			*out_name;
+	bool			trunc;
 	int				fd[2];
 	int				*pfd[2];
 	int				here_fd;
@@ -148,7 +151,6 @@ typedef struct s_bt_op
 	char			type;
 	t_ptok			token;
 	u_padll			cmd;
-	char			**cmd_a;
 	struct s_bt_op	*left;
 	struct s_bt_op	*root;
 	struct s_bt_op	*right;
@@ -174,6 +176,7 @@ typedef struct s_data
 	char			*input;
 	char			*tmp;
 	char			*built_in[7];
+	int				_errno;
 	t_env			env;
 	u_padll			tok;
 	u_padll			exp;
@@ -211,7 +214,6 @@ enum				e_tokens
 	_TREE = 'T',
 };
 
-
 // # TOKENS GROUPS
 # define _TOKENS "*'\"()$|&<>"
 # define _OPERATORS "|&"
@@ -242,11 +244,18 @@ enum				e_tokens
 
 int					_alloc(void **target, size_t size);
 void				_clean(void *target, size_t size);
-void				_cleaner(t_pdata data);
-char				**_psplit(char *str, char *sep);
-int					_data_init(t_pdata data, int ac, char **av, char **ev);
+int					is_overflow(char *str);
 int					_get_start_index(char *str);
 char				*_get_env_value(u_padll env, char *key);
+int					_count_arg(t_ptok token);
+char				*get_random_name(void);
+
+// ###########################################################################
+// #  DATA FUNCTIONS
+// ###########################################################################
+
+int					_data_init(t_pdata data, int ac, char **av, char **ev);
+void				_data_cleaner(t_pdata data);
 
 // ###########################################################################
 // #  ENVIRONMENT FUNCTIONS
@@ -263,6 +272,7 @@ int					_clean_env(t_pdata data, char **arg);
 int					_env(t_pdata data);
 int					_export(t_pdata data, char **arg);
 void				_export_print(u_padll dll);
+int					_exit_(t_pdata data, char **arg);
 
 // ###########################################################################
 // #  TOKENS FUNCTIONS
@@ -294,6 +304,7 @@ t_pbt_op			_tree_process(t_pdata data);
 // ###########################################################################
 
 int					_parsing(t_pbt_op tree);
+void				_pars_redirs(t_pcmd cmd, t_ptok token);
 
 // ###########################################################################
 // #  EXECUTION FUNCTIONS

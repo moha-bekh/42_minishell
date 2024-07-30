@@ -6,15 +6,15 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 15:44:21 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/30 12:59:06 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 18:28:32 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void _data_clear_builtin(char **builtin)
+void	_data_clear_builtin(char **builtin)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (++i < 7)

@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:53 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/30 17:53:41 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 18:31:29 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int	main(int ac, char **av, char **ev)
 		_expand_tokens(&data);
 		data.tree = _tree_process(&data);
 		_parsing(data.tree);
+		_execution(data.tree);
 		_op_bt_print(data.tree, true, i);
 		data.tree = _op_bt_clear(data.tree);
 		data.tok = _tok_clear(data.tok);

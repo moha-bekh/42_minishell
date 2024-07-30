@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/30 12:59:48 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 16:27:25 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,9 @@ typedef struct s_redir
 	bool			trunc;
 	int				fd[2];
 	int				*pfd[2];
-	int				here_fd;
 	char			*here_name;
+	int				here_fd;
+	char			*here_limit;
 } t_redir, t_predir;
 
 typedef struct s_cmd
@@ -229,6 +230,7 @@ enum				e_tokens
 
 # define _STX_ERR "syntax error near unexpected token `"
 # define _STX_ERR_CLOSE "syntax error a token field `"
+# define _STX_ERR_REDIR "bash: syntax error near unexpected token `newline'"
 
 # define _STX_ERR_OR "|&;"
 # define _STX_ERR_AND "&|;"

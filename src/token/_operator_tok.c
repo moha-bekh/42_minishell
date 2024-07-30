@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:23:00 by moha              #+#    #+#             */
-/*   Updated: 2024/07/29 11:31:26 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 16:20:24 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	_tok_or(char *input, u_padll token, int *i)
 		return (_tok_syntax_err(token->t_bot->value[2], 1));
 	token->t_bot->value[2] = '\0';
 	*i += 2;
-	return (IT_IS);
+	return (_IS);
 }
 
 int	_tok_and(char *input, u_padll token, int *i)
@@ -29,7 +29,7 @@ int	_tok_and(char *input, u_padll token, int *i)
 		return (_tok_syntax_err(token->t_bot->value[2], 1));
 	token->t_bot->value[2] = '\0';
 	*i += 2;
-	return (IT_IS);
+	return (_IS);
 }
 
 int	_tok_pipe(char *input, u_padll token, int *i)
@@ -40,20 +40,18 @@ int	_tok_pipe(char *input, u_padll token, int *i)
 	token->t_bot->value[1] = '\0';
 	token->t_bot->value[2] = '\0';
 	*i += 1;
-	return (IT_IS);
+	return (_IS);
 }
 
 int	_tok_operator_process(char *input, u_padll token, int *i)
 {
-	if (token->t_top->value[*i] == '&' && token->t_top->value[*i + 1] == '&')
+	if (input[*i] == '&' && input[*i + 1] == '&')
 		return (_tok_and(input, token, i));
-	else if (token->t_top->value[*i] == '|' && token->t_top->value[*i
-		+ 1] == '|')
+	else if (input[*i] == '|' && input[*i + 1] == '|')
 		return (_tok_or(input, token, i));
-	else if (token->t_top->value[*i] == '|' && token->t_top->value[*i
-		+ 1] != '|')
+	else if (input[*i] == '|' && input[*i + 1] != '|')
 		return (_tok_pipe(input, token, i));
 	else
 		*i += 1;
-	return (IS_NT);
+	return (_NOT);
 }

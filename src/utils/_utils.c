@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:35:57 by moha              #+#    #+#             */
-/*   Updated: 2024/07/30 12:57:45 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 16:40:09 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,11 @@ int	_count_arg(t_ptok token)
 	i = 0;
 	while (tmp && tmp->type != _PIPE && !_tok_is(_TYPE_SEP, tmp->type))
 	{
-		if (_tok_is(_TYPE_REDIRS, tmp->type))
-		{
-			tmp = tmp->next->next;
-			continue ;
-		}
+		if (tmp && _tok_is(_TYPE_REDIRS, tmp->type))
+			tmp = tmp->next;
 		i++;
-		tmp = tmp->next;
+		if (tmp)
+			tmp = tmp->next;
 	}
 	return (i);
 }

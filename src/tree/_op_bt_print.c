@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 20:28:49 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/30 11:04:09 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:21:59 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@ void	_op_bt_print(t_pbt_op tree, bool prefix, int i)
 			printf("\t");
 		if (tmp->type == _AND || tmp->type == _OR)
 			printf(" ( %s )", tmp->value);
-		printf("\ttokens: ");
-		while (tmp && !_tok_is(_TYPE_SEP, tmp->type))
-		{
-			printf(" %s", tmp->value);
-			tmp = tmp->next;
-		}
+		// printf("\ttokens: ");
+		// while (tmp && !_tok_is(_TYPE_SEP, tmp->type))
+		// {
+		// 	printf(" %s", tmp->value);
+		// 	tmp = tmp->next;
+		// }
 		_cmd_print(tree->cmd);
 	}
 	else

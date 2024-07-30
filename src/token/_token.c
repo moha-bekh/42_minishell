@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:00:11 by moha              #+#    #+#             */
-/*   Updated: 2024/07/30 10:05:46 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 16:19:28 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	_tok_quotes_process(char *input, u_padll token, int *i)
 			*i += 1;
 			if (input[*i] && !ft_isspace(input[*i]))
 				token->t_bot->join = true;
-			return (IT_IS);
+			return (_IS);
 		}
 	}
 	return (_tok_syntax_close_err(tok));
@@ -41,42 +41,38 @@ int	_tok_others_process(char *input, u_padll token, int *i)
 	{
 		token = _tok_push_back(token, _DOLLAR, ft_substr(input, *i, 1));
 		*i += 1;
-		return (IT_IS);
+		return (_IS);
 	}
 	else if (input[*i] == '*')
 	{
 		token = _tok_push_back(token, _WILDCARD, ft_substr(input, *i, 1));
 		*i += 1;
-		return (IT_IS);
+		return (_IS);
 	}
 	else if (input[*i] == '(')
 	{
 		token = _tok_push_back(token, _OPEN_PAR, ft_substr(input, *i, 1));
 		*i += 1;
-		return (IT_IS);
+		return (_IS);
 	}
 	else if (input[*i] == ')')
 	{
 		token = _tok_push_back(token, _CLOSE_PAR, ft_substr(input, *i, 1));
 		*i += 1;
-		return (IT_IS);
+		return (_IS);
 	}
-	return (IS_NT);
+	return (_NOT);
 }
 
 int	_tok_token_process(char *input, u_padll token, int *i)
 {
-	if (_tok_is(_OPERATORS, input[*i]) && _tok_operator_process(input, token,
-			i) == _ERROR)
+	if (_tok_is(_OPERATORS, input[*i]) && _tok_operator_process(input, token, i) == _ERROR)
 		return (_ERROR);
-	else if (_tok_is(_REDIRS, input[*i]) && _tok_redir_process(input, token,
-			i) == _ERROR)
+	else if (_tok_is(_REDIRS, input[*i]) && _tok_redir_process(input, token, i) == _ERROR)
 		return (_ERROR);
-	else if (_tok_is(_QUOTES, input[*i]) && _tok_quotes_process(input, token,
-			i) == _ERROR)
+	else if (_tok_is(_QUOTES, input[*i]) && _tok_quotes_process(input, token, i) == _ERROR)
 		return (_ERROR);
-	else if (_tok_is(_OTHERS, input[*i]) && _tok_others_process(input, token,
-			i) == _ERROR)
+	else if (_tok_is(_OTHERS, input[*i]) && _tok_others_process(input, token, i) == _ERROR)
 		return (_ERROR);
 	return (_SUCCESS);
 }
@@ -89,8 +85,7 @@ int	_tok_literal_process(char *input, u_padll token, int *i)
 	while (input[*i] && !ft_isspace(input[*i]) && !_tok_is(_TOKENS, input[*i]))
 		*i += 1;
 	token = _tok_push_back(token, _LITERAL, ft_substr(input, j, (*i - j)));
-	if (input[*i] && !ft_isspace(input[*i]) && (input[*i] == '"'
-			|| input[*i] == '\''))
+	if (input[*i] && !ft_isspace(input[*i]) && (input[*i] == '"' || input[*i] == '\''))
 		token->t_bot->join = true;
 	return (_SUCCESS);
 }
@@ -113,6 +108,11 @@ int	_tok_process(char *input, u_padll *token)
 		else if (input[i])
 			i++;
 	}
-	_tok_check(*token);
+	_tok_print(*token);
+	if (_tok_check(*token) == _ERROR)
+	{
+		*token = _tok_clear(*token);
+		return (_ERROR);
+	}
 	return (_SUCCESS);
 }

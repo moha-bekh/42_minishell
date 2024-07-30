@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:53 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/30 12:59:24 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 17:53:41 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	_some_utils(t_pdata data, char *input)
 {
+	if (!*input)
+		return (_IS);
 	if (!ft_strncmp(input, "\n", 1))
 		return (_IS);
 	if (!ft_strncmp(input, "clear", 5))
@@ -44,8 +46,10 @@ int	main(int ac, char **av, char **ev)
 		if (!data.input || !ft_strncmp(data.input, "exit", 4))
 			return (_data_cleaner(&data), _FAILURE);
 		add_history(data.input);
-		_some_utils(&data, data.input);
-		_tok_process(data.input, &data.tok);
+		if (_some_utils(&data, data.input))
+			continue ;
+		if (_tok_process(data.input, &data.tok))
+			continue ;
 		_expand_tokens(&data);
 		data.tree = _tree_process(&data);
 		_parsing(data.tree);

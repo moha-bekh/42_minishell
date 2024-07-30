@@ -6,11 +6,26 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 11:15:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/29 11:29:13 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:19:42 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_pcmd	_set_null(t_pcmd node)
+{
+	if (!node)
+		return (NULL);
+	node->cmd_path = NULL;
+	node->cmd_a = NULL;
+	node->redir.in_name = NULL;
+	node->redir.out_name = NULL;
+	node->redir.here_name = NULL;
+	node->redir.trunc = false;
+	node->next = NULL;
+	node->prev = NULL;
+	return (node);
+}
 
 u_padll	_cmd_push_back(u_padll dll, t_ptok token, char **cmd_a)
 {
@@ -18,10 +33,7 @@ u_padll	_cmd_push_back(u_padll dll, t_ptok token, char **cmd_a)
 
 	if (_alloc((void *)&node, sizeof(t_cmd)) || !node)
 		return (NULL);
-	node->next = NULL;
-	node->prev = NULL;
-	node->cmd_path = NULL;
-	node->cmd_a = NULL;
+	node = _set_null(node);
 	if (!dll)
 	{
 		if (_alloc((void *)&dll, sizeof(u_adll)) || !dll)

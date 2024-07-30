@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _expand.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:41:05 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/30 10:13:50 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 22:09:32 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,10 @@ int	_expand_string(t_pdata data, t_ptok token)
 	char	*tmp_1;
 	t_pev	tmp_2;
 	int		i;
-	int		j;
 
 	if (!data || !token)
 		return (_EMPTY);
 	i = 0;
-	j = 0;
 	while (token->value[i])
 	{
 		if (token->value[i] == _DOLLAR)

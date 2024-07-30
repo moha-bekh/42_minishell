@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _check_tok.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:20:49 by moha              #+#    #+#             */
-/*   Updated: 2024/07/30 15:37:37 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 22:09:08 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,11 @@ int	_tok_check_redir(u_padll tokens)
 
 int	_tok_check(u_padll tokens)
 {
-	t_ptok	tmp;
+	// t_ptok	tmp;
 
 	if (!tokens || !tokens->t_top->next)
 		return (_EMPTY);
-	tmp = tokens->t_top;
+	// tmp = tokens->t_top;
 	if (_tok_check_operator(tokens) == -1 || _tok_check_pipe(tokens) == -1)
 		return (_ERROR);
 	if (_tok_check_redir(tokens) == -1)

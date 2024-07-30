@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _exit.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:43 by moha              #+#    #+#             */
-/*   Updated: 2024/07/30 17:50:21 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 22:08:53 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,6 @@ int	_str_is_digit(char *str)
 
 int	_many_args(t_pdata data, char **arg)
 {
-	int	i;
-
-	i = 0;
 	if (!_str_is_digit(arg[1]) && _str_is_digit(arg[2]))
 	{
 		ft_putstr_fd("exit\nbash: exit: ", STDERR_FILENO);

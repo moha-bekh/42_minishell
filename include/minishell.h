@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/30 18:31:17 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 22:54:48 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,7 @@ typedef struct s_data
 	char			*input;
 	char			*tmp;
 	char			*built_in[7];
+	char			**paths[2];
 	int				_errno;
 	t_env			env;
 	u_padll			tok;
@@ -263,7 +264,7 @@ void				_data_cleaner(t_pdata data);
 // #  ENVIRONMENT FUNCTIONS
 // ###########################################################################
 
-int					_set_env(u_padll *dll_env, char **ev);
+int					_set_env(t_pdata data, u_padll *dll_env, char **ev);
 int					_set_senv(u_padll *dll_senv, u_padll env);
 int					_clean_env(t_pdata data, char **arg);
 
@@ -312,7 +313,9 @@ void				_pars_redirs(t_pcmd cmd, t_ptok token);
 // #  EXECUTION FUNCTIONS
 // ###########################################################################
 
-int					_execution(t_pdata data);
+int					_execution(t_pdata data, t_pbt_op tree);
+int					_check_access(t_pdata data, t_pcmd cmd);
+int					_path_slash(t_pdata data, int idx);
 
 // ###########################################################################
 // #  DATA STRUCTURE FUNCTIONS

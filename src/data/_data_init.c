@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _data_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 23:44:34 by moha              #+#    #+#             */
-/*   Updated: 2024/07/30 10:11:33 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 22:44:01 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int	_data_init_args(t_pdata data, int ac, char **av, char **ev)
 	data->av = av;
 	data->input = NULL;
 	data->tmp = NULL;
+	data->paths[0] = NULL;
+	data->paths[1] = NULL;
 	data->env.env = ev;
 	data->env.min_ev = NULL;
 	data->env.dll_env = NULL;
@@ -48,12 +50,13 @@ int	_data_init_builtin(t_pdata data)
 
 int	_data_min_env(t_pdata data)
 {
-	if (_alloc((void *)&data->env.min_ev, sizeof(char *) * 3)
-		|| !data->env.min_ev)
+	if (_alloc((void *)&data->env.min_ev, sizeof(char *) * 3) || !data->env.min_ev)
 		return (_ALLOC);
 	data->env.min_ev[0] = getcwd(NULL, 0);
 	data->env.min_ev[1] = ft_strdup("PATH=" _PATH);
 	data->env.min_ev[2] = NULL;
+	data->paths[0] = ft_split(_PATH, ':');
+	_path_slash(data, 0);
 	return (_SUCCESS);
 }
 
@@ -65,7 +68,7 @@ int	_data_init(t_pdata data, int ac, char **av, char **ev)
 		return (_FAILURE);
 	if (_data_min_env(data))
 		return (_FAILURE);
-	if (_set_env(&data->env.dll_env, ev))
+	if (_set_env(data, &data->env.dll_env, ev))
 		return (_FAILURE);
 	if (_set_senv(&data->env.dll_senv, data->env.dll_env))
 		return (_FAILURE);

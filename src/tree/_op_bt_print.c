@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _op_bt_print.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 20:28:49 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/30 14:21:59 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 22:09:52 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,11 @@
 void	_op_bt_print(t_pbt_op tree, bool prefix, int i)
 {
 	t_ptok	tmp;
-	t_pcmd	tmp_cmd;
 	int		tab;
-	int		j;
 
 	tab = 0;
-	tmp_cmd = NULL;
 	if (!tree)
 		return ;
-	j = -1;
 	if (tree->root)
 	{
 		tmp = tree->token;

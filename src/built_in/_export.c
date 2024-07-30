@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _export.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:34:32 by moha              #+#    #+#             */
-/*   Updated: 2024/07/30 10:03:18 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 22:08:43 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,12 @@ int	_export(t_pdata data, char **arg)
 		j = _get_start_index(arg[i]);
 		data->env.dll_env = _env_push_back(data->env.dll_env, ft_substr(arg[i],
 					0, j), ft_substr(arg[i], j + 1, ft_strlen(arg[i])));
+		if (!ft_strcmp(data->env.dll_env->e_bot->key, "PATH"))
+		{
+			ft_free_arr(data->paths[1]);
+			data->paths[1] = ft_split(data->env.dll_env->e_bot->value, ':');
+			_path_slash(data, 1);
+		}
 	}
 	data->env.dll_senv = _env_clear(data->env.dll_senv);
 	_set_senv(&data->env.dll_senv, data->env.dll_env);

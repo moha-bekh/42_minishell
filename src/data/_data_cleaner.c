@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _data_cleaner.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 15:44:21 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/30 18:28:32 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 22:44:19 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	_data_cleaner(t_pdata data)
 {
 	_data_clear_builtin(data->built_in);
 	ft_free_arr(data->env.min_ev);
+	ft_free_arr(data->paths[1]);
+	ft_free_arr(data->paths[0]);
 	free(data->input);
 	data->env.dll_env = _env_clear(data->env.dll_env);
 	data->env.dll_senv = _env_clear(data->env.dll_senv);

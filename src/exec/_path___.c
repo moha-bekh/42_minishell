@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _path.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 22:00:46 by moha              #+#    #+#             */
-/*   Updated: 2024/07/31 13:28:57 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 22:40:33 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,14 +85,8 @@ int	_check_access(t_pdata data, t_pcmd cmd)
 	if (!data || !cmd)
 		return (_ERROR);
 	if (_is_path(cmd->cmd_a[0]))
-	{
-		if (_check_path(data, cmd) < 0)
-			return (_ERROR);
-	}
+		_check_path(data, cmd);
 	else
-	{
-		if (_get_path(data, cmd) < 0)
-			return (_ERROR);
-	}
+		_get_path(data, cmd);
 	return (_SUCCESS);
 }

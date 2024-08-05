@@ -33,33 +33,24 @@ UTILS_SRCS := 					_alloc\
 UTILS_OBJS := 					$(addprefix $(UTILS_DIR), $(addsuffix .o, $(UTILS_SRCS)))
 
 ENV_DIR	:= 						env/
-ENV_SRCS :=						_env_clear\
-								_env_pop_back\
-								_env_pop_in\
-								_env_print\
-								_env_push_back\
-								_env_push_in\
-								_env_sort\
-								_set_env
+ENV_SRCS :=						_set_env
 ENV_OBJS := 					$(addprefix $(ENV_DIR), $(addsuffix .o, $(ENV_SRCS)))
 
 BULTINS_DIR = 					built_in/
-BULTINS_SRCS = 					_env\
+BULTINS_SRCS = 					_cd\
+								_echo\
+								_env\
+								_exit\
 								_export\
-								_exit
+								_pwd\
+								_unset
 BULTINS_OBJS = 					$(addprefix $(BULTINS_DIR), $(addsuffix .o, $(BULTINS_SRCS)))
 
 TOKEN_DIR := 					token/
-TOKEN_SRCS :=					_tok_clear\
-								_tok_pop_back\
-								_tok_print\
-								_tok_push_back\
-								_tok_sub_struct\
-								_tok_pop_in\
-								_check_tok\
+TOKEN_SRCS :=					_token\
 								_operator_tok\
 								_redir_tok\
-								_token\
+								_check_tok\
 								_utils_tok
 TOKEN_OBJS := 					$(addprefix $(TOKEN_DIR), $(addsuffix .o, $(TOKEN_SRCS)))
 
@@ -67,7 +58,45 @@ EXPAND_DIR := 					expand/
 EXPAND_SRCS := 					_expand
 EXPAND_OBJS := 					$(addprefix $(EXPAND_DIR), $(addsuffix .o, $(EXPAND_SRCS)))
 
-OP_TREE_DIR := 					tree/
+PARS_DIR := 					parsing/
+PARS_SRCS := 					_parsing
+PARS_OBJS := 					$(addprefix $(PARS_DIR), $(addsuffix .o, $(PARS_SRCS)))
+
+TREE_DIR :=						tree/
+TREE_SRCS :=					_tree_process
+TREE_OBJS :=					$(addprefix $(TREE_DIR), $(addsuffix .o, $(TREE_SRCS)))
+
+EXEC_DIR := 					exec/
+EXEC_SRCS := 					_execution\
+								_path
+EXEC_OBJS := 					$(addprefix $(EXEC_DIR), $(addsuffix .o, $(EXEC_SRCS)))
+
+DLL_DIR := 						_dll/
+DLL_SRCS :=						_cmd_clear\
+								_cmd_foreach\
+								_cmd_pop_back\
+								_cmd_print\
+								_cmd_push_back\
+								_env_clear\
+								_env_pop_back\
+								_env_pop_in\
+								_env_print\
+								_env_push_back\
+								_env_push_in\
+								_env_sort\
+								_scp_clear\
+								_scp_pop_back\
+								_scp_print\
+								_scp_push_back\
+								_tok_clear\
+								_tok_pop_back\
+								_tok_print\
+								_tok_push_back\
+								_tok_sub_struct\
+								_tok_pop_in
+DLL_OBJS :=						$(addprefix $(DLL_DIR), $(addsuffix .o, $(DLL_SRCS)))
+
+OP_TREE_DIR := 					_tree/
 OP_TREE_SRCS :=					_op_bt_clear\
 								_op_bt_create\
 								_op_bt_join\
@@ -75,26 +104,8 @@ OP_TREE_SRCS :=					_op_bt_clear\
 								_op_bt_push_root\
 								_op_bt_push_left\
 								_op_bt_push_right\
-								_op_bt_push_at\
-								_scp_clear\
-								_scp_pop_back\
-								_scp_print\
-								_scp_push_back\
-								_tree_process
+								_op_bt_push_at
 OP_TREE_OBJS := 				$(addprefix $(OP_TREE_DIR), $(addsuffix .o, $(OP_TREE_SRCS)))
-
-PARS_DIR := 					parsing/
-PARS_SRCS := 					_parsing
-PARS_OBJS := 					$(addprefix $(PARS_DIR), $(addsuffix .o, $(PARS_SRCS)))
-
-CMD_DIR := 						cmd/
-CMD_SRCS := 					_cmd_push_back _cmd_pop_back _cmd_clear _cmd_print
-CMD_OBJS := 					$(addprefix $(CMD_DIR), $(addsuffix .o, $(CMD_SRCS)))
-
-EXEC_DIR := 					exec/
-EXEC_SRCS := 					_execution\
-								_path
-EXEC_OBJS := 					$(addprefix $(EXEC_DIR), $(addsuffix .o, $(EXEC_SRCS)))
 
 SRC_DIR =						./src/
 OBJ_DIR =						./obj/
@@ -107,10 +118,11 @@ SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(ENV_DIR), $(addsuffix .c, $(
 SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(BULTINS_DIR), $(addsuffix .c, $(BULTINS_SRCS))))
 SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(TOKEN_DIR), $(addsuffix .c, $(TOKEN_SRCS))))
 SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(EXPAND_DIR), $(addsuffix .c, $(EXPAND_SRCS))))
-SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(OP_TREE_DIR), $(addsuffix .c, $(OP_TREE_SRCS))))
 SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(PARS_DIR), $(addsuffix .c, $(PARS_SRCS))))
-SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(CMD_DIR), $(addsuffix .c, $(CMD_SRCS))))
+SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(TREE_DIR), $(addsuffix .c, $(TREE_SRCS))))
 SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(EXEC_DIR), $(addsuffix .c, $(EXEC_SRCS))))
+SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(DLL_DIR), $(addsuffix .c, $(DLL_SRCS))))
+SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(OP_TREE_DIR), $(addsuffix .c, $(OP_TREE_SRCS))))
 OBJS = 							$(SRCS:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
 all:							$(NAME)

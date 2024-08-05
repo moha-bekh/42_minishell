@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _export.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:34:32 by moha              #+#    #+#             */
-/*   Updated: 2024/07/30 22:08:43 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/05 11:48:46 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ void	_export_print(u_padll dll)
 	tmp = dll->e_top;
 	while (tmp)
 	{
-		printf("export %s=%s", tmp->key, tmp->value);
+		if (tmp->value && tmp->value[1] != '"')
+			printf("export %s=%s\n", tmp->key, tmp->value);
+		else
+			printf("export %s\n", tmp->key);
 		tmp = tmp->next;
 	}
 	return ;
@@ -32,10 +35,13 @@ int	_export(t_pdata data, char **arg)
 	int	i;
 	int	j;
 
-	if (!arg)
+	if (!arg[1])
+	{
+		data->_errno = 0;
 		return (_export_print(data->env.dll_senv), _SUCCESS);
+	}
 	_clean_env(data, arg);
-	i = -1;
+	i = 0;
 	while (arg[++i])
 	{
 		j = _get_start_index(arg[i]);
@@ -50,5 +56,6 @@ int	_export(t_pdata data, char **arg)
 	}
 	data->env.dll_senv = _env_clear(data->env.dll_senv);
 	_set_senv(&data->env.dll_senv, data->env.dll_env);
+	data->_errno = 0;
 	return (_SUCCESS);
 }

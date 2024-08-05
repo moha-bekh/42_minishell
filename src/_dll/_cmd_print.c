@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _cmd_print.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 12:00:11 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/30 22:56:16 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/05 12:13:13 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,4 @@ void	_cmd_print(u_padll dll)
 	return ;
 }
 
-// echo $USER > out $HOME | grep $USER || (cat < in && echo x)
+// echo $USER > out $HOME | grep $USER || (cat < in 'salut $USER' && echo "hello $USER")

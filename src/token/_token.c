@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:00:11 by moha              #+#    #+#             */
-/*   Updated: 2024/07/30 16:19:28 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/05 12:43:30 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ int	_tok_quotes_process(char *input, u_padll token, int *i)
 		*i += 1;
 		if (input[*i] && input[*i] == tok)
 		{
-			token = _tok_push_back(token, tok, ft_substr(input, j, (*i - j + 1)));
+			token = _tok_push_back(token, tok, ft_substr(input, j, (*i - j
+							+ 1)));
 			*i += 1;
 			if (input[*i] && !ft_isspace(input[*i]))
 				token->t_bot->join = true;
@@ -33,7 +34,7 @@ int	_tok_quotes_process(char *input, u_padll token, int *i)
 	}
 	return (_tok_syntax_close_err(tok));
 }
-			// token = _tok_push_back(token, tok, ft_substr(input, j + 1, (*i - j - 1)));
+// token = _tok_push_back(token, tok, ft_substr(input, j + 1, (*i - j - 1)));
 
 int	_tok_others_process(char *input, u_padll token, int *i)
 {
@@ -85,7 +86,8 @@ int	_tok_literal_process(char *input, u_padll token, int *i)
 	while (input[*i] && !ft_isspace(input[*i]) && !_tok_is(_TOKENS, input[*i]))
 		*i += 1;
 	token = _tok_push_back(token, _LITERAL, ft_substr(input, j, (*i - j)));
-	if (input[*i] && !ft_isspace(input[*i]) && (input[*i] == '"' || input[*i] == '\''))
+	if (input[*i] && !ft_isspace(input[*i]) && (input[*i] == '"'
+			|| input[*i] == '\''))
 		token->t_bot->join = true;
 	return (_SUCCESS);
 }
@@ -95,6 +97,8 @@ int	_tok_process(char *input, u_padll *token)
 	int	i;
 
 	i = 0;
+	if (!input)
+		return (_EMPTY);
 	*token = _tok_push_back(*token, _TOP, ft_strdup(input));
 	while (input[i] && input[i] != _NEWLINE)
 	{
@@ -104,15 +108,14 @@ int	_tok_process(char *input, u_padll *token)
 				return (_ERROR);
 		}
 		else if (input[i] && !ft_isspace(input[i]))
-			_tok_literal_process(input, *token, &i);
+		{
+			if (_tok_literal_process(input, *token, &i))
+				return (_ERROR);
+		}
 		else if (input[i])
 			i++;
 	}
-	_tok_print(*token);
-	if (_tok_check(*token) == _ERROR)
-	{
-		*token = _tok_clear(*token);
-		return (_ERROR);
-	}
+	// if (_tok_check(*token) == _ERROR)
+	// 	return (_ERROR);
 	return (_SUCCESS);
 }

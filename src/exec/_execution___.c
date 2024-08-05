@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _execution.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:53:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/31 15:39:26 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/07/30 23:49:50 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,51 +105,29 @@ int	_exec_redir_out(t_pdata data, t_pcmd tmp)
 	return (_SUCCESS);
 }
 
-int	_execution_child(t_pdata data, t_pcmd cmd)
+int	_execution_child(t_pdata data, t_pbt_op node)
 {
-	if (!data || !cmd)
+	if (!data || !node)
 		return (_ERROR);
-	return (_SUCCESS);
 }
 
-int	_exec_child_process(t_pdata data, t_pcmd cmd)
+int	_exec_child_process(t_pdata data, t_pcmd tmp)
 {
-	if (!data || !cmd)
+	if (!data || !tmp)
 		return (_ERROR);
-	if (cmd->prev)
-		_set_prev_pipe(data, cmd->prev);
+	if (tmp->prev)
+		_set_prev_pipe(data, tmp->prev);
 	else
-		_exec_redir_int(data, cmd);
-	if (cmd->next)
+		_exec_redir_int(data, tmp);
+	if (tmp->next)
 	{
-		if (dup2(cmd->redir.pfd[1], STDOUT_FILENO) < 0)
+		if (dup2(tmp->redir.pfd[1], STDOUT_FILENO) < 0)
 			return (_EXT_PIPE);
-		close(cmd->redir.pfd[1]);
+		close(tmp->redir.pfd[1]);
 	}
 	else
-		_exec_redir_out(data, cmd);
-	_execution_child(data, cmd);
-	return (_SUCCESS);
-}
-
-int _exec_builtin(t_pdata data , t_pcmd cmd)
-{
-	if (!data || !cmd)
-		return (_ERROR);
-	if (!ft_strcmp(cmd->cmd_a[0], "pwd"))
-		_pwd(data);
-	// else if (!ft_strcmp(cmd->cmd_a[0], "echo"))
-	// 	_echo(data, cmd);
-	// else if (!ft_strcmp(cmd->cmd_a[0], "cd"))
-	// 	_cd(data, cmd);
-	else if (!ft_strcmp(cmd->cmd_a[0], "export"))
-		_export(data, cmd->cmd_a);
-	else if (!ft_strcmp(cmd->cmd_a[0], "unset"))
-		_unset(data, cmd->cmd_a);
-	else if (!ft_strcmp(cmd->cmd_a[0], "env"))
-		_env(data, cmd->cmd_a);
-	else if (!ft_strcmp(cmd->cmd_a[0], "exit"))
-		_exit_(data, cmd->cmd_a);
+		_exec_redir_out(data, tmp);
+	_execution_child(data, tmp);
 	return (_SUCCESS);
 }
 
@@ -174,7 +152,7 @@ int	_exec_process(t_pdata data, t_pbt_op node)
 			else if (tmp->pid == 0)
 				_exec_child_process(data, tmp);
 			else
-				waitpid(tmp->pid, &tmp->status, 0);
+				waitpid(tmp->pid, &tmp->status, NULL);
 		}
 		tmp = tmp->next;
 	}
@@ -185,11 +163,8 @@ int	_execution(t_pdata data, t_pbt_op tree)
 {
 	if (!data || !tree)
 		return (_ERROR);
-	if (!tree->root || (tree->root && tree->root->cmd->c_bot->status))
-	{
-		_resolve_path(data, tree);
-		_exec_process(data, tree);
-	}
+	_resolve_path(data, tree);
+	_exec_process(data, tree);
 	if (tree->left)
 		_execution(data, tree->left);
 	if (tree->right)

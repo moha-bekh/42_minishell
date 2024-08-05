@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/30 22:54:48 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/05 11:48:12 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ typedef struct s_redir
 	char			*out_name;
 	bool			trunc;
 	int				fd[2];
-	int				*pfd[2];
+	int				pfd[2];
 	char			*here_name;
 	int				here_fd;
 	char			*here_limit;
@@ -272,10 +272,11 @@ int					_clean_env(t_pdata data, char **arg);
 // #  BUILT-IN FUNCTIONS
 // ###########################################################################
 
-int					_env(t_pdata data);
-int					_export(t_pdata data, char **arg);
-void				_export_print(u_padll dll);
+int					_env(t_pdata data, char **arg);
 int					_exit_(t_pdata data, char **arg);
+int					_export(t_pdata data, char **arg);
+void				_pwd(t_pdata data);
+void				_unset(t_pdata data, char **arg);
 
 // ###########################################################################
 // #  TOKENS FUNCTIONS

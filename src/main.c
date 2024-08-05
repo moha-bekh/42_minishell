@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:53 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/30 22:54:34 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/05 12:34:14 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	_some_utils(t_pdata data, char *input)
 {
+	(void)data;
 	if (!*input)
 		return (_IS);
 	if (!ft_strncmp(input, "\n", 1))
@@ -21,11 +22,6 @@ int	_some_utils(t_pdata data, char *input)
 	if (!ft_strncmp(input, "clear", 5))
 	{
 		system("clear");
-		return (_IS);
-	}
-	if (!ft_strncmp(input, "env ", 4))
-	{
-		_env(data);
 		return (_IS);
 	}
 	return (_NOT);
@@ -38,25 +34,26 @@ int	main(int ac, char **av, char **ev)
 
 	i = 0;
 	if (_data_init(&data, ac, av, ev))
-		return (_FAILURE);
+		return (_data_cleaner(&data), _FAILURE);
 	while (1)
 	{
-		printf(CYAN "-------------------------------------- PROMPT --------------------------------------" RESET "\n");
 		data.input = readline(">$ ");
-		if (!data.input || !ft_strncmp(data.input, "exit", 4))
+		if (!data.input)
 			return (_data_cleaner(&data), _FAILURE);
 		add_history(data.input);
 		if (_some_utils(&data, data.input))
 			continue ;
 		if (_tok_process(data.input, &data.tok))
-			continue ;
-		_expand_tokens(&data);
-		data.tree = _tree_process(&data);
-		_parsing(data.tree);
-		_execution(&data, data.tree);
-		_op_bt_print(data.tree, true, i);
-		data.tree = _op_bt_clear(data.tree);
-		data.tok = _tok_clear(data.tok);
+			return (_data_cleaner(&data), _FAILURE);
+		_tok_print(data.tok);
+		// _expand_tokens(&data);
+		// data.tree = _tree_process(&data);
+		// _parsing(data.tree);
+		// _execution(&data, data.tree);
+		// _op_bt_print(data.tree, true, i);
+		// data.tree = _op_bt_clear(data.tree);
+		// data.tok = _tok_clear(data.tok);
+		data.tok = _tok_clear(data.tok); 
 	}
 	return (_data_cleaner(&data), _SUCCESS);
 }

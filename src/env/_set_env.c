@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:06:16 by moha              #+#    #+#             */
-/*   Updated: 2024/07/30 22:46:52 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/06 07:17:58 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ int	_set_env(t_pdata data, u_padll *env, char **ev)
 	int	j;
 
 	if (!*ev)
+	{
+		*env = _env_push_back(*env, ft_strdup("PWD"), data->env.min_ev[0]);
 		return (_SUCCESS);
+	}
 	i = -1;
 	while (ev[++i])
 	{
@@ -33,7 +36,6 @@ int	_set_env(t_pdata data, u_padll *env, char **ev)
 				_path_slash(data, 1);
 			}
 		}
-		(void)data;
 	}
 	return (_SUCCESS);
 }
@@ -66,7 +68,7 @@ int	_clean_env(t_pdata data, char **arg)
 	int		j;
 
 	if (!data || !data->env.dll_env)
-		return (_EMPTY);
+		return (_FAILURE);
 	i = -1;
 	while (arg[++i])
 	{

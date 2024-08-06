@@ -3,119 +3,139 @@
 /*                                                        :::      ::::::::   */
 /*   _token.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/23 22:00:11 by moha              #+#    #+#             */
-/*   Updated: 2024/08/05 12:43:30 by mbekheir         ###   ########.fr       */
+/*   Created: 2024/08/05 15:24:25 by mbekheir          #+#    #+#             */
+/*   Updated: 2024/08/06 06:36:16 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	_tok_quotes_process(char *input, u_padll token, int *i)
+int	_quote_proc(t_pdata data, int *i)
 {
-	char	tok;
+	char	type_quote;
 	int		j;
 
-	tok = input[*i];
+	type_quote = data->input[*i];
 	j = *i;
-	while (input[*i] && input[*i] != _NEWLINE)
+	while (data->input[*i] && data->input[*i] != '\n')
 	{
 		*i += 1;
-		if (input[*i] && input[*i] == tok)
+		if (data->input[*i] && data->input[*i] == type_quote)
 		{
-			token = _tok_push_back(token, tok, ft_substr(input, j, (*i - j
-							+ 1)));
+			data->tok = _tok_push_back(data->tok, type_quote,
+					ft_substr(data->input, j, (*i - j + 1)));
 			*i += 1;
-			if (input[*i] && !ft_isspace(input[*i]))
-				token->t_bot->join = true;
-			return (_IS);
+			if (data->input[*i] && !ft_isspace(data->input[*i]))
+				data->tok->t_bot->join = true;
+			return (_SUCCESS);
 		}
 	}
-	return (_tok_syntax_close_err(tok));
+	return (_tok_stx_close_err(type_quote));
 }
-// token = _tok_push_back(token, tok, ft_substr(input, j + 1, (*i - j - 1)));
 
-int	_tok_others_process(char *input, u_padll token, int *i)
+int	_other_proc(char *input, u_padll tok, int *i)
 {
 	if (input[*i] == '$')
 	{
-		token = _tok_push_back(token, _DOLLAR, ft_substr(input, *i, 1));
+		tok = _tok_push_back(tok, '$', ft_substr(input, *i, 1));
 		*i += 1;
-		return (_IS);
+		return (_SUCCESS);
 	}
 	else if (input[*i] == '*')
 	{
-		token = _tok_push_back(token, _WILDCARD, ft_substr(input, *i, 1));
+		tok = _tok_push_back(tok, '*', ft_substr(input, *i, 1));
 		*i += 1;
-		return (_IS);
+		return (_SUCCESS);
 	}
 	else if (input[*i] == '(')
 	{
-		token = _tok_push_back(token, _OPEN_PAR, ft_substr(input, *i, 1));
+		tok = _tok_push_back(tok, '(', ft_substr(input, *i, 1));
 		*i += 1;
-		return (_IS);
+		return (_SUCCESS);
 	}
 	else if (input[*i] == ')')
 	{
-		token = _tok_push_back(token, _CLOSE_PAR, ft_substr(input, *i, 1));
+		tok = _tok_push_back(tok, ')', ft_substr(input, *i, 1));
 		*i += 1;
-		return (_IS);
+		return (_SUCCESS);
 	}
-	return (_NOT);
+	return (_FAILURE);
 }
 
-int	_tok_token_process(char *input, u_padll token, int *i)
+int	_tok_proc(t_pdata data, int *i)
 {
-	if (_tok_is(_OPERATORS, input[*i]) && _tok_operator_process(input, token, i) == _ERROR)
+	if (_tok_is(_OPERATORS, data->input[*i]) && _op_proc(data, i))
 		return (_ERROR);
-	else if (_tok_is(_REDIRS, input[*i]) && _tok_redir_process(input, token, i) == _ERROR)
+	else if (_tok_is(_REDIRS, data->input[*i]) && _redir_proc(data, i))
 		return (_ERROR);
-	else if (_tok_is(_QUOTES, input[*i]) && _tok_quotes_process(input, token, i) == _ERROR)
+	else if (_tok_is(_QUOTES, data->input[*i]) && _quote_proc(data, i))
 		return (_ERROR);
-	else if (_tok_is(_OTHERS, input[*i]) && _tok_others_process(input, token, i) == _ERROR)
+	else if (_tok_is(_OTHERS, data->input[*i]) && _other_proc(data->input,
+			data->tok, i))
 		return (_ERROR);
 	return (_SUCCESS);
 }
 
-int	_tok_literal_process(char *input, u_padll token, int *i)
+int	_tok_word(t_pdata data, int *i)
 {
 	int	j;
 
 	j = *i;
-	while (input[*i] && !ft_isspace(input[*i]) && !_tok_is(_TOKENS, input[*i]))
+	while (data->input[*i] && !ft_isspace(data->input[*i]) && !_tok_is(_TOKENS,
+			data->input[*i]))
 		*i += 1;
-	token = _tok_push_back(token, _LITERAL, ft_substr(input, j, (*i - j)));
-	if (input[*i] && !ft_isspace(input[*i]) && (input[*i] == '"'
-			|| input[*i] == '\''))
-		token->t_bot->join = true;
+	data->tok = _tok_push_back(data->tok, _WORD, ft_substr(data->input, j, (*i
+					- j)));
+	if (data->input[*i] && !ft_isspace(data->input[*i])
+		&& (data->input[*i] == '"' || data->input[*i] == '\''))
+		data->tok->t_bot->join = true;
 	return (_SUCCESS);
 }
 
-int	_tok_process(char *input, u_padll *token)
+int	_token(t_pdata data)
 {
 	int	i;
 
 	i = 0;
-	if (!input)
-		return (_EMPTY);
-	*token = _tok_push_back(*token, _TOP, ft_strdup(input));
-	while (input[i] && input[i] != _NEWLINE)
+	if (!data || !data->input)
+		return (_FAILURE);
+	while (data->input[i] && data->input[i] != '\n')
 	{
-		if (input[i] && _tok_is(_TOKENS, input[i]))
+		if (data->input[i] && _tok_is(_TOKENS, data->input[i]))
 		{
-			if (_tok_token_process(input, *token, &i) == _ERROR)
+			if (_tok_proc(data, &i))
 				return (_ERROR);
 		}
-		else if (input[i] && !ft_isspace(input[i]))
+		else if (data->input[i] && !ft_isspace(data->input[i]))
 		{
-			if (_tok_literal_process(input, *token, &i))
+			if (_tok_word(data, &i))
 				return (_ERROR);
 		}
-		else if (input[i])
+		else if (data->input[i])
 			i++;
 	}
-	// if (_tok_check(*token) == _ERROR)
-	// 	return (_ERROR);
-	return (_SUCCESS);
+	return (_tok_check(data));
 }
+
+// int	_token(t_pdata data)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	if (!data || !data->input)
+// 		return (_FAILURE);
+// 	while (data->input[i] && data->input[i] != '\n')
+// 	{
+// 		if ((data->input[i] && _tok_is(_TOKENS, data->input[i]))
+// && _tok_proc(data, &i))
+// 			return (_ERROR);
+// 		else if ((data->input[i] && !ft_isspace(data->input[i]))
+// && _tok_word(data, &i))
+// 			return (_ERROR);
+// 		else if (data->input[i])
+// 			i++;
+// 	}
+// 	return (_tok_check(data));
+// }

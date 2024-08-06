@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _data_cleaner.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 15:44:21 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/05 12:40:16 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/06 07:33:05 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,14 @@ void	_data_clear_builtin(char **builtin)
 	return ;
 }
 
+void _data_clear_lists(t_pdata data)
+{
+	data->tok = _tok_clear(data->tok);
+	data->exp = _env_clear(data->exp);
+	data->scp = _scp_clear(data->scp);
+	data->tree = _op_bt_clear(data->tree);
+}
+
 void	_data_cleaner(t_pdata data)
 {
 	_data_clear_builtin(data->built_in);
@@ -31,9 +39,6 @@ void	_data_cleaner(t_pdata data)
 	free(data->input);
 	data->env.dll_env = _env_clear(data->env.dll_env);
 	data->env.dll_senv = _env_clear(data->env.dll_senv);
-	data->tok = _tok_clear(data->tok);
-	data->exp = _env_clear(data->exp);
-	data->scop = _scp_clear(data->scop);
-	data->tree = _op_bt_clear(data->tree);
+	_data_clear_lists(data);
 	return ;
 }

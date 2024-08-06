@@ -6,15 +6,33 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 20:28:49 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/30 22:09:52 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/06 07:38:25 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	_op_bt_print(t_pbt_op tree, bool prefix, int i)
+void _print_tokens(t_ptok tok)
 {
 	t_ptok	tmp;
+
+	tmp = tok;
+	if (tmp->type == _AND || tmp->type == _OR)
+		printf("( %s )", tmp->value);
+	else
+	{
+		printf("toks: ");
+		while (tmp && !_tok_is(_TYP_SEP, tmp->type))
+		{
+			printf("( %s )", tmp->value);
+			tmp = tmp->next;
+		}
+	}
+	printf("\n");
+}
+
+void	_op_bt_print(t_pbt_op tree, bool prefix, int i)
+{
 	int		tab;
 
 	tab = 0;
@@ -22,17 +40,9 @@ void	_op_bt_print(t_pbt_op tree, bool prefix, int i)
 		return ;
 	if (tree->root)
 	{
-		tmp = tree->token;
 		while (tab++ < i)
 			printf("\t");
-		if (tmp->type == _AND || tmp->type == _OR)
-			printf(" ( %s )", tmp->value);
-		// printf("\ttokens: ");
-		// while (tmp && !_tok_is(_TYPE_SEP, tmp->type))
-		// {
-		// 	printf(" %s", tmp->value);
-		// 	tmp = tmp->next;
-		// }
+		// _print_tokens(tree->token);
 		_cmd_print(tree->cmd);
 	}
 	else

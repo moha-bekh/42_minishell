@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _cmd_print.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 12:00:11 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/05 12:13:13 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/06 07:34:15 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,27 +17,30 @@ void	_cmd_print(u_padll dll)
 	t_pcmd	tmp;
 	int		i;
 
-	if (!dll)
+	if (!dll || !dll->c_top)
 		return ;
 	tmp = dll->c_top;
-	printf("\n");
-	printf("cmds: ");
-	while (tmp)
+	if (tmp->cmd_arg)
 	{
-		i = -1;
-		while (tmp->cmd_a && tmp->cmd_a[++i])
-			printf(" %s ", tmp->cmd_a[i]);
-		if (tmp->cmd_path)
-			printf(" cmd_path: %s\n", tmp->cmd_path);
-		if (tmp->redir.in_name)
-			printf("\t\tredir: %s\n", tmp->redir.in_name);
-		if (tmp->redir.out_name)
-			printf("\t\tredir: %s\n", tmp->redir.out_name);
-		if (tmp->redir.here_name)
-			printf("\t\tredir: << %s\n", tmp->redir.here_name);
-		tmp = tmp->next;
+		printf("\n");
+		printf("cmds: ");
+		while (tmp)
+		{
+			i = -1;
+			while (tmp->cmd_arg && tmp->cmd_arg[++i])
+				printf(" %s ", tmp->cmd_arg[i]);
+			if (tmp->cmd_path)
+				printf(" cmd_path: %s\n", tmp->cmd_path);
+			if (tmp->redir.in_name)
+				printf("\t\tredir: %s\n", tmp->redir.in_name);
+			if (tmp->redir.out_name)
+				printf("\t\tredir: %s\n", tmp->redir.out_name);
+			if (tmp->redir.here_name)
+				printf("\t\tredir: << %s\n", tmp->redir.here_name);
+			tmp = tmp->next;
+		}
+		printf("\n");
 	}
-	printf("\n");
 	return ;
 }
 

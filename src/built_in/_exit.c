@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _exit.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:43 by moha              #+#    #+#             */
-/*   Updated: 2024/08/05 11:49:03 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/06 08:05:15 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	_exit_(t_pdata data, char **arg)
 	int	i;
 
 	if (!data)
-		return (_EMPTY);
+		return (_FAILURE);
 	i = 0;
 	while (arg[i])
 		i++;

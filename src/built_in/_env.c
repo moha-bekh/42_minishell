@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _env.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:58 by moha              #+#    #+#             */
-/*   Updated: 2024/08/05 11:49:12 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/06 07:10:08 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	_env(t_pdata data, char **arg)
 	t_pev	tmp;
 
 	if (!data || !data->env.dll_env)
-		return (_EMPTY);
+		return (_FAILURE);
 	if (arg[1])
 	{
 		ft_putstr_fd("env: ", STDERR_FILENO);

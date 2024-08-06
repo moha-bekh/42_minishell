@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 23:44:34 by moha              #+#    #+#             */
-/*   Updated: 2024/07/30 22:44:01 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/06 07:14:02 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 int	_data_init_args(t_pdata data, int ac, char **av, char **ev)
 {
-	if (!data)
-		return (_EMPTY);
 	ft_memset(data, 0, sizeof(t_data));
 	data->ac = ac;
 	data->av = av;
@@ -29,15 +27,13 @@ int	_data_init_args(t_pdata data, int ac, char **av, char **ev)
 	data->env.dll_senv = NULL;
 	data->tok = NULL;
 	data->exp = NULL;
-	data->scop = NULL;
+	data->scp = NULL;
 	data->tree = NULL;
 	return (_SUCCESS);
 }
 
 int	_data_init_builtin(t_pdata data)
 {
-	if (!data)
-		return (_EMPTY);
 	data->built_in[0] = ft_strdup("cd");
 	data->built_in[1] = ft_strdup("echo");
 	data->built_in[2] = ft_strdup("env");
@@ -62,6 +58,8 @@ int	_data_min_env(t_pdata data)
 
 int	_data_init(t_pdata data, int ac, char **av, char **ev)
 {
+	if (!data || !*av || !*ev)
+		return (_FAILURE);
 	if (!data || _data_init_args(data, ac, av, ev))
 		return (_FAILURE);
 	if (_data_init_builtin(data))
@@ -74,3 +72,4 @@ int	_data_init(t_pdata data, int ac, char **av, char **ev)
 		return (_FAILURE);
 	return (_SUCCESS);
 }
+

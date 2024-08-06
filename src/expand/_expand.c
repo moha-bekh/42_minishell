@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:41:05 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/30 22:09:32 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/06 07:19:37 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ int	_var_process(t_pdata data, t_ptok token, int *i)
 	char	*tmp;
 	int		j;
 
-	if (!data || !token)
-		return (_EMPTY);
 	*i += 1;
 	j = *i;
 	while (token->value[*i] && ft_isalnum(token->value[*i]))
@@ -36,13 +34,12 @@ int	_str_process(t_pdata data, t_ptok token, int *i)
 	char	*tmp;
 	int		j;
 
-	if (!data || !token)
-		return (_EMPTY);
 	j = *i;
-	while (token->value[*i + 1] && token->value[*i + 1] != _DOLLAR)
+	while (token->value[*i + 1] && token->value[*i + 1] != '$')
 		*i += 1;
 	tmp = ft_substr(token->value, j, *i - j + 1);
 	data->exp = _env_push_back(data->exp, NULL, ft_strdup(tmp));
+	free(tmp);
 	*i += 1;
 	return (_SUCCESS);
 }
@@ -53,12 +50,10 @@ int	_expand_string(t_pdata data, t_ptok token)
 	t_pev	tmp_2;
 	int		i;
 
-	if (!data || !token)
-		return (_EMPTY);
 	i = 0;
 	while (token->value[i])
 	{
-		if (token->value[i] == _DOLLAR)
+		if (token->value[i] == '$')
 			_var_process(data, token, &i);
 		else
 			_str_process(data, token, &i);
@@ -78,17 +73,17 @@ int	_expand_string(t_pdata data, t_ptok token)
 	return (_SUCCESS);
 }
 
-int	_expand_tokens(t_pdata data)
+int	_expand(t_pdata data)
 {
-	t_ptok tmp;
-	char *value;
+	t_ptok	tmp;
+	char	*value;
 
 	if (!data || !data->tok)
-		return (_EMPTY);
-	tmp = data->tok->t_top->next;
+		return (_FAILURE);
+	tmp = data->tok->t_top;
 	while (tmp)
 	{
-		if (tmp->type == _DOLLAR && tmp->next)
+		if (tmp->type == '$' && tmp->next)
 		{
 			tmp = tmp->next;
 			data->tok = _tok_pop_in(data->tok, tmp->prev);
@@ -96,7 +91,7 @@ int	_expand_tokens(t_pdata data)
 			free(tmp->value);
 			tmp->value = value;
 		}
-		if (tmp->type == _DQUOTE)
+		if (tmp->type == '"')
 			_expand_string(data, tmp);
 		tmp = tmp->next;
 	}

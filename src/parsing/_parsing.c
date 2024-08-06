@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _parsing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/30 16:40:34 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/06 08:05:29 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	_pars_redirs(t_pcmd cmd, t_ptok token)
 	if (!cmd || !token)
 		return ;
 	tmp = token;
-	while (tmp && tmp->type != _PIPE && !_tok_is(_TYPE_SEP, tmp->type))
+	while (tmp && tmp->type != _PIPE && !_tok_is(_TYP_SEP, tmp->type))
 	{
 		if (tmp->type == 'H')
 			cmd->redir.here_name = get_random_name();
@@ -60,25 +60,25 @@ int	_pars_args(t_pcmd cmd, t_ptok token)
 	int	i;
 
 	if (!cmd || !token)
-		return (_EMPTY);
+		return (_FAILURE);
 	i = _count_arg(token);
 	if (!i)
 		return (_SUCCESS);
-	if (_alloc((void **)&cmd->cmd_a, sizeof(char *) * (i + 1)) || !cmd->cmd_a)
+	if (_alloc((void **)&cmd->cmd_arg, sizeof(char *) * (i + 1)) || !cmd->cmd_arg)
 		return (_ALLOC);
 	i = 0;
-	while (token && token->type != _PIPE && !_tok_is(_TYPE_SEP, token->type))
+	while (token && token->type != _PIPE && !_tok_is(_TYP_SEP, token->type))
 	{
-		if (_tok_is(_TYPE_REDIRS, token->type))
+		if (_tok_is(_TYP_REDIRS, token->type))
 		{
 			_pars_redirs(cmd, token);
 			token = token->next->next;
 			continue ;
 		}
-		cmd->cmd_a[i++] = ft_strdup(token->value);
+		cmd->cmd_arg[i++] = ft_strdup(token->value);
 		token = token->next;
 	}
-	cmd->cmd_a[i] = NULL;
+	cmd->cmd_arg[i] = NULL;
 	return (_SUCCESS);
 }
 
@@ -87,7 +87,7 @@ int	_pars_process(t_pbt_op tree_node, t_ptok token)
 	t_pcmd	tmp;
 
 	if (!tree_node || !token)
-		return (_EMPTY);
+		return (_FAILURE);
 	tree_node->cmd = _cmd_push_back(tree_node->cmd, token, NULL);
 	_pars_pipe(tree_node, token);
 	tmp = tree_node->cmd->c_top;
@@ -102,7 +102,7 @@ int	_pars_process(t_pbt_op tree_node, t_ptok token)
 int	_parsing(t_pbt_op tree)
 {
 	if (!tree)
-		return (_EMPTY);
+		return (_FAILURE);
 	_pars_process(tree, tree->token);
 	if (tree->left)
 		_parsing(tree->left);

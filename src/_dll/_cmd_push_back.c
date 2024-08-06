@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _cmd_push_back.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 11:15:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/30 14:19:42 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/06 06:44:00 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_pcmd	_set_null(t_pcmd node)
 	if (!node)
 		return (NULL);
 	node->cmd_path = NULL;
-	node->cmd_a = NULL;
+	node->cmd_arg = NULL;
 	node->redir.in_name = NULL;
 	node->redir.out_name = NULL;
 	node->redir.here_name = NULL;
@@ -27,7 +27,7 @@ t_pcmd	_set_null(t_pcmd node)
 	return (node);
 }
 
-u_padll	_cmd_push_back(u_padll dll, t_ptok token, char **cmd_a)
+u_padll	_cmd_push_back(u_padll dll, t_ptok token, char **cmd_arg)
 {
 	t_pcmd	node;
 
@@ -48,7 +48,7 @@ u_padll	_cmd_push_back(u_padll dll, t_ptok token, char **cmd_a)
 		dll->c_bot = node;
 	}
 	node->token = token;
-	node->cmd_a = cmd_a;
+	node->cmd_arg = cmd_arg;
 	dll->c_size++;
 	return (dll);
 }

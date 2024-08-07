@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/08/07 16:10:00 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/07 19:44:30 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@ int	main(int ac, char **av, char **ev)
 			continue ;
 		}
 		_expand(&data);
+		_tok_print(data.tok);
 		_join_strings(&data);
+		_tok_print(data.tok);
 		data.tree = _tree(&data);
 		_parsing(data.tree);
 		_exec(&data, data.tree);

@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:26:15 by moha              #+#    #+#             */
-/*   Updated: 2024/08/07 11:58:12 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/07 19:10:50 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,11 @@ t_pbt_op	_tree(t_pdata data)
 		if (tok->type == _AND)
 		{
 			data->tree = _op_bt_push_root(data->tree, _op_bt_create(tok->type, tok));
-			// data->tree->status = 0;
 			data->tree->status = 1;
 		}
 		else if (tok->type == _OR)
 		{
 			data->tree = _op_bt_push_root(data->tree, _op_bt_create(tok->type, tok));
-			// data->tree->status = 1;
 			data->tree->status = 0;
 		}
 		else if (tok->type == '(')

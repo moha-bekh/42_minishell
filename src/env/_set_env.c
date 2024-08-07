@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:06:16 by moha              #+#    #+#             */
-/*   Updated: 2024/08/07 16:21:50 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/07 19:59:12 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ int	_set_env(t_pdata data, u_padll *env, char **ev)
 	while (ev[++i])
 	{
 		j = _get_start_index(ev[i]);
-		*env = _env_push_back(*env, ft_substr(ev[i], 0, j), ft_substr(ev[i], j
-					+ 1, ft_strlen(ev[i])));
+		*env = _env_push_back(*env, ft_substr(ev[i], 0, j), ft_substr(ev[i], j + 1, ft_strlen(ev[i])));
 		if (!ft_strcmp((*env)->e_bot->key, "PATH"))
 		{
 			if ((*env)->e_bot->value)
@@ -50,8 +49,7 @@ int	_set_senv(u_padll *s_env, u_padll env)
 	tmp = env->e_top;
 	while (tmp)
 	{
-		*s_env = _env_push_back(*s_env, ft_strdup(tmp->key), ft_strjoin("\"",
-					tmp->value));
+		*s_env = _env_push_back(*s_env, ft_strdup(tmp->key), ft_strjoin("\"", tmp->value));
 		old_value = (*s_env)->e_bot->value;
 		(*s_env)->e_bot->value = ft_strjoin((*s_env)->e_bot->value, "\"");
 		free(old_value);

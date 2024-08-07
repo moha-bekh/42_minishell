@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/07 17:03:15 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/07 19:17:46 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,7 @@ int					_clean_env(t_pdata data, char **arg);
 /* ###########################################################################
 BUILT-IN FUNCTIONS */
 
+int					_echo(t_pdata data, char **arg);
 int					_env(t_pdata data, char **arg);
 int					_exit_(t_pdata data, char **arg);
 int					_export(t_pdata data, char **arg);
@@ -261,6 +262,9 @@ TOKENS SYNTAX ERRORS */
 # define _STX_ERR_REDIR_OUTT "<;&|"
 # define _STX_ERR_REDIR_OUTA "><|&;"
 # define _STX_ERR_HERE_DOC "<&|();\n"
+/* ###########################################################################
+OTHERS ERRORS */
+# define _CMD_NOT_FOUND "bash: %s: command not found\n"
 /* ###########################################################################
 PATH */
 # define _PATH "/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"

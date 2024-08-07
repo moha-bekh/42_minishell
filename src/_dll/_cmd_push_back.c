@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _cmd_push_back.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 11:15:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/06 06:44:00 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/07 18:41:08 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ t_pcmd	_set_null(t_pcmd node)
 		return (NULL);
 	node->cmd_path = NULL;
 	node->cmd_arg = NULL;
+	node->redir.here_name = NULL;
+	node->redir.here_limit = NULL;
 	node->redir.in_name = NULL;
 	node->redir.out_name = NULL;
-	node->redir.here_name = NULL;
-	node->redir.trunc = false;
 	node->next = NULL;
 	node->prev = NULL;
 	return (node);

@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 18:36:15 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/19 19:17:14 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/07 18:36:13 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ u_padll	_tok_pop_back(u_padll dll)
 	tmp = dll->t_bot;
 	dll->t_bot = dll->t_bot->prev;
 	dll->t_bot->next = NULL;
+	tmp->prev = NULL;
 	free(tmp->value);
 	tmp->value = NULL;
-	tmp->prev = NULL;
 	free(tmp);
 	tmp = NULL;
 	dll->t_size--;

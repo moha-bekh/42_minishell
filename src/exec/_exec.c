@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 07:36:01 by moha              #+#    #+#             */
-/*   Updated: 2024/08/07 17:09:34 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/07 19:28:04 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ int	_exec_builtin(t_pdata data, t_pcmd cmd)
 		return (_ERROR);
 	if (!ft_strcmp(cmd->cmd_arg[0], "pwd"))
 		return (_pwd());
-	// else if (!ft_strcmp(cmd->cmd_arg[0], "echo"))
-	// 	_echo(data, cmd);
+	else if (!ft_strcmp(cmd->cmd_arg[0], "echo"))
+		return (_echo(data, cmd->cmd_arg));
 	// else if (!ft_strcmp(cmd->cmd_arg[0], "cd"))
 	// 	_cd(data, cmd);
 	else if (!ft_strcmp(cmd->cmd_arg[0], "export"))
@@ -68,6 +68,7 @@ int	_set_next_pipe(t_pcmd cmd)
 
 int	_set_redir_in(t_pcmd cmd)
 {
+	printf("infile: %s\n", cmd->redir.in_name);
 	cmd->redir.fd[0] = open(cmd->redir.in_name, O_RDONLY);
 	if (cmd->redir.fd[0] < 0)
 		return (_EXT_OPEN);
@@ -81,29 +82,32 @@ int	_exec_child_process(t_pdata data, t_pcmd cmd)
 {
 	// if (cmd->prev && !cmd->redir.in_name)
 	// 	_set_prev_pipe(cmd);
-	// else if (cmd->redir.in_name)
-	// 	_set_redir_in(cmd);
+	if (cmd->redir.in_name)
+		_set_redir_in(cmd);
 	// if (cmd->next && !cmd->redir.out_name)
 	// {
 	// 	if (dup2(cmd->redir.pfd[1], STDOUT_FILENO) < 0)
 	// 		return (_EXT_DUP2);
 	// 	close(cmd->redir.pfd[1]);
 	// }
-	// else if (cmd->redir.out_name)
-	// {
-	// 	if (dup2(cmd->redir.fd[1], STDOUT_FILENO) < 0)
-	// 		return (_EXT_DUP2);
-	// 	close(cmd->redir.fd[1]);
-	// }
+	if (cmd->redir.out_name)
+	{
+		if (dup2(cmd->redir.fd[1], STDOUT_FILENO) < 0)
+			return (_EXT_DUP2);
+		close(cmd->redir.fd[1]);
+	}
 	execve(cmd->cmd_path, cmd->cmd_arg, data->env.env);
-	perror("execve");
+	ft_putstr_fd("bash: ", STDERR_FILENO);
+	ft_putstr_fd(cmd->cmd_arg[0], STDERR_FILENO);
+	ft_putstr_fd(": command not found\n", STDERR_FILENO);
+	exit(127);
 	return (_FAILURE);
 }
 
 int	_exec_proc(t_pdata data, t_pbt_op node)
 {
 	t_pcmd	tmp;
-	int		i;
+	// int		i;
 
 	if (!data || !node)
 		return (_FAILURE);
@@ -111,36 +115,41 @@ int	_exec_proc(t_pdata data, t_pbt_op node)
 	tmp = node->cmd->c_top;
 	while (tmp)
 	{
-		if (tmp->cmd_arg)
-		{
-			i = -1;
-			printf("Args: ");
-			while (tmp->cmd_arg[++i])
-				printf("%s ", tmp->cmd_arg[i]);
-			printf("\n");
-		}
+		// if (tmp->cmd_arg)
+		// {
+		// 	i = -1;
+		// 	printf("Args: ");
+		// 	while (tmp->cmd_arg[++i])
+		// 		printf("%s ", tmp->cmd_arg[i]);
+		// 	printf("\n");
+		// }
 		if (tmp->built_in)
 		{
 			data->_errno = _exec_builtin(data, tmp);
+			tmp->status = data->_errno;
 			node->status = data->_errno;
 		}
-		// else
-		// {
-		// 	if (!tmp->redir.out_name && tmp->next)
-		// 		_set_next_pipe(tmp);
-		// 	tmp->pid = fork();
-		// 	if (tmp->pid < 0)
-		// 		return (_EXT_FORK);
-		// 	else if (tmp->pid == 0)
-		// 		_exec_child_process(data, tmp);
-		// 	else
-		// 	{
-		// 		waitpid(tmp->pid, &tmp->status, 0);
-		// 		if (WIFEXITED(tmp->status))
-		// 			data->_errno = WEXITSTATUS(tmp->status);
-		// 		close(tmp->redir.pfd[1]);
-		// 	}
-		// }
+		else
+		{
+			// if (tmp->next && !tmp->redir.out_name)
+			// 	_set_next_pipe(tmp);
+			tmp->pid = fork();
+			if (tmp->pid < 0)
+				return (_EXT_FORK);
+			else if (tmp->pid == 0)
+				_exec_child_process(data, tmp);
+			else
+			{
+				waitpid(tmp->pid, &tmp->status, 0);
+				if (WIFEXITED(tmp->status))
+				{
+					data->_errno = WEXITSTATUS(tmp->status);
+					node->status = data->_errno;
+					// printf("Exit status: %d\n", data->_errno);
+				}
+				// close(tmp->redir.pfd[1]);
+			}
+		}
 		tmp = tmp->next;
 	}
 	return (_SUCCESS);
@@ -153,16 +162,10 @@ int	_exec_cmd_line(t_pdata data, t_pbt_op tree)
 	else if (tree->root && tree == tree->root->left)
 	{
 		_exec_proc(data, tree);
-		if (tree->root && tree->cmd->c_bot->status == 1)
-			tree->root->status ^= 1;
+		tree->root->status = tree->status;
 	}
-	else if (tree->root && tree == tree->root->right
-		&& ((tree->root->type == _AND && tree->root->status == 1) || (tree->root->type == _OR && tree->root->status == 0)))
-	{
+	else if (tree->root && tree == tree->root->right && ((tree->root->type == _AND && tree->root->status == 0) || (tree->root->type == _OR && tree->root->status != 0)))
 		_exec_proc(data, tree);
-		if (tree->root && tree->cmd->c_bot->status == 0)
-			tree->root->status ^= 1;
-	}
 	return (_SUCCESS);
 }
 
@@ -176,10 +179,9 @@ int	_exec(t_pdata data, t_pbt_op tree)
 		_exec_cmd_line(data, tree);
 	else
 	{
-		if (tree->left && tree->left->type == _AND && tree->left->status == 0)
+		if (tree->type == _AND && tree->status != 0)
 			return (_SUCCESS);
-		else if (tree->left && tree->left->type == _OR
-			&& tree->left->status == 1)
+		else if (tree->type == _OR && tree->status == 0)
 			return (_SUCCESS);
 	}
 	if (tree->right)

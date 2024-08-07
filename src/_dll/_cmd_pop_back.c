@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 11:15:50 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/05 13:05:55 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/07 18:44:26 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ u_padll	_pop_cmd(u_padll dll)
 	tmp->cmd_path = NULL;
 	ft_free_arr(tmp->cmd_arg);
 	tmp->cmd_arg = NULL;
+	free(tmp->redir.here_name);
+	tmp->redir.here_name = NULL;
 	tmp->prev = NULL;
 	free(tmp);
 	tmp = NULL;
@@ -39,6 +41,8 @@ u_padll	_cmd_pop_back(u_padll dll)
 		dll->c_top->cmd_path = NULL;
 		ft_free_arr(dll->c_top->cmd_arg);
 		dll->c_top->cmd_arg = NULL;
+		free(dll->c_top->redir.here_name);
+		dll->c_top->redir.here_name = NULL;
 		free(dll->c_top);
 		dll->c_top = NULL;
 		free(dll);

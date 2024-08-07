@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/07 13:07:27 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/07 18:21:01 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,7 @@ int	_pars_args(t_pcmd cmd, t_ptok token)
 	if (!cmd || !token)
 		return (_FAILURE);
 	i = _count_arg(token);
-	if (!i)
-		return (_SUCCESS);
-	if (_alloc((void **)&cmd->cmd_arg, sizeof(char *) * (i + 1))
-		|| !cmd->cmd_arg)
+	if (i && _alloc((void **)&cmd->cmd_arg, sizeof(char *) * (i + 1)))
 		return (_ALLOC);
 	i = 0;
 	while (token && token->type != _PIPE && !_tok_is(_TYP_SEP, token->type))
@@ -36,7 +33,8 @@ int	_pars_args(t_pcmd cmd, t_ptok token)
 		cmd->cmd_arg[i++] = ft_strdup(token->value);
 		token = token->next;
 	}
-	cmd->cmd_arg[i] = NULL;
+	if (cmd->cmd_arg)
+		cmd->cmd_arg[i] = NULL;
 	return (_SUCCESS);
 }
 

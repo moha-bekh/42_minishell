@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 12:00:11 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/07 11:37:50 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/07 17:11:51 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ void	_cmd_print(u_padll dll)
 			if (tmp->redir.out_name)
 				printf("\t\tredir: %s\n", tmp->redir.out_name);
 			if (tmp->redir.here_name)
+			{
 				printf("\t\tredir: << %s\n", tmp->redir.here_name);
+				printf("\t\tredir: %s\n", tmp->redir.here_limit);
+			}
 			tmp = tmp->next;
 		}
 		printf("\n");

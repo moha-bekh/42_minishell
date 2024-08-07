@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 13:02:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/07 13:43:55 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/07 17:11:03 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,11 @@ void	_pars_redirs(t_pcmd cmd, t_ptok token)
 	while (tmp && tmp->type != _PIPE && !_tok_is(_TYP_SEP, tmp->type))
 	{
 		if (tmp->type == 'H')
+		{
 			cmd->redir.here_name = get_random_name();
+			cmd->redir.here_limit = tmp->next->value;
+			tmp = tmp->next;
+		}
 		if (tmp->type == '<')
 			_pars_redir_in(cmd, tmp->next);
 		else if (tmp->type == '>')

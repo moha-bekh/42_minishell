@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/07 13:45:47 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/07 17:03:15 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,6 +197,8 @@ char				*_get_env_value(u_padll env, char *key);
 int					_count_arg(t_ptok token);
 char				*get_random_name(void);
 int					is_overflow(char *str);
+
+int					_join_strings(t_pdata data);
 /* ###########################################################################
 DLL FUNCTIONS */
 u_padll				_cmd_clear(u_padll dll);
@@ -255,8 +257,8 @@ TOKENS SYNTAX ERRORS */
 # define _STX_ERR_REDIR "bash: syntax error near unexpected token `newline'\n"
 # define _STX_ERR_OP "|&;"
 # define _STX_ERR_PIPE ";"
-# define _STX_ERR_REDIR_IN ">|;"
-# define _STX_ERR_REDIR_OUTT "<;"
+# define _STX_ERR_REDIR_IN ">;&|"
+# define _STX_ERR_REDIR_OUTT "<;&|"
 # define _STX_ERR_REDIR_OUTA "><|&;"
 # define _STX_ERR_HERE_DOC "<&|();\n"
 /* ###########################################################################

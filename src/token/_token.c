@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/07 13:44:30 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/07 16:47:31 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ int	_quote_proc(t_pdata data, int *i)
 		*i += 1;
 		if (data->input[*i] && data->input[*i] == type_quote)
 		{
-			data->tok = _tok_push_back(data->tok, type_quote,
-					ft_substr(data->input, j, (*i - j + 1)));
+			data->tok = _tok_push_back(data->tok, type_quote, ft_substr(data->input, j + 1, (*i - j - 1)));
 			*i += 1;
 			if (data->input[*i] && !ft_isspace(data->input[*i]))
 				data->tok->t_bot->join = true;
@@ -86,8 +85,7 @@ int	_tok_word(t_pdata data, int *i)
 	while (data->input[*i] && !ft_isspace(data->input[*i]) && !_tok_is(_TOKENS,
 			data->input[*i]))
 		*i += 1;
-	data->tok = _tok_push_back(data->tok, _WORD, ft_substr(data->input, j, (*i
-					- j)));
+	data->tok = _tok_push_back(data->tok, _WORD, ft_substr(data->input, j, (*i - j)));
 	if (data->input[*i] && !ft_isspace(data->input[*i])
 		&& (data->input[*i] == '"' || data->input[*i] == '\''))
 		data->tok->t_bot->join = true;
@@ -116,5 +114,5 @@ int	_token(t_pdata data)
 		else if (data->input[i])
 			i++;
 	}
-	return (_tok_check(data));
+	return (_SUCCESS);
 }

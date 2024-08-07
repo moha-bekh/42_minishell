@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/08/07 13:56:44 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/07 16:10:00 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	_skip(char *input)
 int	main(int ac, char **av, char **ev)
 {
 	t_data	data;
-	int		ret;
 
 	if (_data_init(&data, ac, av, ev))
 		return (_data_cleaner(&data), _FAILURE);
@@ -44,15 +43,19 @@ int	main(int ac, char **av, char **ev)
 			_data_clear_lists(&data);
 			continue ;
 		}
-		ret = _token(&data);
-		if (ret > 0 && ret < 3)
+		if (_token(&data))
 			return (_data_cleaner(&data), _FAILURE);
+		if (_tok_check(&data))
+		{
+			_data_clear_lists(&data);
+			continue ;
+		}
 		_expand(&data);
-		// _tok_print(data.tok);
+		_join_strings(&data);
 		data.tree = _tree(&data);
 		_parsing(data.tree);
 		_exec(&data, data.tree);
-		// _op_bt_print(data.tree, true, 0);
+		_op_bt_print(data.tree, true, 0);
 		_data_clear_lists(&data);
 	}
 	return (_data_cleaner(&data), _SUCCESS);

@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 07:36:01 by moha              #+#    #+#             */
-/*   Updated: 2024/08/07 14:00:39 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/07 17:09:34 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,48 +96,72 @@ int	_exec_child_process(t_pdata data, t_pcmd cmd)
 	// 	close(cmd->redir.fd[1]);
 	// }
 	execve(cmd->cmd_path, cmd->cmd_arg, data->env.env);
+	perror("execve");
 	return (_FAILURE);
 }
 
 int	_exec_proc(t_pdata data, t_pbt_op node)
 {
 	t_pcmd	tmp;
+	int		i;
 
-	// int		i;
 	if (!data || !node)
 		return (_FAILURE);
 	_resolve_path(data, node);
 	tmp = node->cmd->c_top;
 	while (tmp)
 	{
-		// i = -1;
-		// printf("Args: ");
-		// while (tmp->cmd_arg[++i])
-		// 	printf("%s ", tmp->cmd_arg[i]);
-		// printf("\n");
+		if (tmp->cmd_arg)
+		{
+			i = -1;
+			printf("Args: ");
+			while (tmp->cmd_arg[++i])
+				printf("%s ", tmp->cmd_arg[i]);
+			printf("\n");
+		}
 		if (tmp->built_in)
 		{
 			data->_errno = _exec_builtin(data, tmp);
 			node->status = data->_errno;
 		}
-		else
-		{
-			if (!tmp->redir.out_name && tmp->next)
-				_set_next_pipe(tmp);
-			tmp->pid = fork();
-			if (tmp->pid < 0)
-				return (_EXT_FORK);
-			else if (tmp->pid == 0)
-				_exec_child_process(data, tmp);
-			else
-			{
-				waitpid(tmp->pid, &tmp->status, 0);
-				if (WIFEXITED(tmp->status))
-					data->_errno = WEXITSTATUS(tmp->status);
-				close(tmp->redir.pfd[1]);
-			}
-		}
+		// else
+		// {
+		// 	if (!tmp->redir.out_name && tmp->next)
+		// 		_set_next_pipe(tmp);
+		// 	tmp->pid = fork();
+		// 	if (tmp->pid < 0)
+		// 		return (_EXT_FORK);
+		// 	else if (tmp->pid == 0)
+		// 		_exec_child_process(data, tmp);
+		// 	else
+		// 	{
+		// 		waitpid(tmp->pid, &tmp->status, 0);
+		// 		if (WIFEXITED(tmp->status))
+		// 			data->_errno = WEXITSTATUS(tmp->status);
+		// 		close(tmp->redir.pfd[1]);
+		// 	}
+		// }
 		tmp = tmp->next;
+	}
+	return (_SUCCESS);
+}
+
+int	_exec_cmd_line(t_pdata data, t_pbt_op tree)
+{
+	if (tree && !tree->root)
+		_exec_proc(data, tree);
+	else if (tree->root && tree == tree->root->left)
+	{
+		_exec_proc(data, tree);
+		if (tree->root && tree->cmd->c_bot->status == 1)
+			tree->root->status ^= 1;
+	}
+	else if (tree->root && tree == tree->root->right
+		&& ((tree->root->type == _AND && tree->root->status == 1) || (tree->root->type == _OR && tree->root->status == 0)))
+	{
+		_exec_proc(data, tree);
+		if (tree->root && tree->cmd->c_bot->status == 0)
+			tree->root->status ^= 1;
 	}
 	return (_SUCCESS);
 }
@@ -149,24 +173,7 @@ int	_exec(t_pdata data, t_pbt_op tree)
 	if (tree->left)
 		_exec(data, tree->left);
 	if (tree->type != _AND && tree->type != _OR)
-	{
-		if (!tree->root)
-			_exec_proc(data, tree);
-		else if (tree->root && tree == tree->root->left)
-		{
-			_exec_proc(data, tree);
-			if (tree->root && tree->cmd->c_bot->status == 1)
-				tree->root->status ^= 1;
-		}
-		else if ((tree->root && tree->root->type == _AND
-				&& tree->root->status == 1) || (tree->root
-				&& tree->root->type == _OR && tree->root->status == 0))
-		{
-			_exec_proc(data, tree);
-			if (tree->root && tree->cmd->c_bot->status == 0)
-				tree->root->status ^= 1;
-		}
-	}
+		_exec_cmd_line(data, tree);
 	else
 	{
 		if (tree->left && tree->left->type == _AND && tree->left->status == 0)

@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 11:19:04 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/07 12:10:57 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/07 16:21:29 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	_path_slash(t_pdata data, int idx)
 		data->tmp = data->paths[idx][i];
 		data->paths[idx][i] = ft_strjoin(data->paths[idx][i], "/");
 		free(data->tmp);
+		data->tmp = NULL;
 	}
 	return (_SUCCESS);
 }
@@ -44,7 +45,7 @@ int	_get_path(t_pdata data, t_pcmd cmd)
 	if (!data || !cmd || !data->paths[0])
 		return (_FAILURE);
 	i = -1;
-	if (data->paths[0])
+	if (data->paths[0][0])
 	{
 		while (data->paths[0][++i])
 		{
@@ -52,9 +53,10 @@ int	_get_path(t_pdata data, t_pcmd cmd)
 			if (!access(cmd->cmd_path, F_OK | X_OK))
 				return (_SUCCESS);
 			free(cmd->cmd_path);
+			cmd->cmd_path = NULL;
 		}
 	}
-	if (data->paths[1])
+	if (data->paths[1][0])
 	{
 		i = -1;
 		while (data->paths[0][++i])
@@ -63,6 +65,7 @@ int	_get_path(t_pdata data, t_pcmd cmd)
 			if (!access(cmd->cmd_path, F_OK | X_OK))
 				return (_SUCCESS);
 			free(cmd->cmd_path);
+			cmd->cmd_path = NULL;
 		}
 	}
 	return (_FAILURE);

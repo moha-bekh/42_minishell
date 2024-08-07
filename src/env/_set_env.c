@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _set_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:06:16 by moha              #+#    #+#             */
-/*   Updated: 2024/08/06 07:17:58 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/07 16:21:50 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	_set_senv(u_padll *s_env, u_padll env)
 		old_value = (*s_env)->e_bot->value;
 		(*s_env)->e_bot->value = ft_strjoin((*s_env)->e_bot->value, "\"");
 		free(old_value);
+		old_value = NULL;
 		tmp = tmp->next;
 	}
 	*s_env = _env_sort(*s_env);
@@ -87,6 +88,7 @@ int	_clean_env(t_pdata data, char **arg)
 				tmp = tmp->next;
 			}
 			free(data->tmp);
+			data->tmp = NULL;
 		}
 	}
 	return (_SUCCESS);

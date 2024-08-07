@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _op_bt_print.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 20:28:49 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/06 07:38:25 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/07 15:42:37 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	_op_bt_print(t_pbt_op tree, bool prefix, int i)
 		while (tab++ < i)
 			printf("\t");
 		printf("root: ( %s )\n", tree->token->value);
+		_cmd_print(tree->cmd);
 	}
 	if (prefix)
 	{

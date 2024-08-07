@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:18:25 by moha              #+#    #+#             */
-/*   Updated: 2024/08/06 06:33:06 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/07 15:35:06 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,6 @@ int	_tok_check(t_pdata data)
 	else if (bot == _PIPE)
 		return (_tok_stx_err(top, 1));
 	if (bot == _HERE_DOC || bot == _REDIR_OUTA || bot == '>' || bot == '<')
-		return (ft_putstr_fd(_STX_ERR_REDIR, STDERR_FILENO), _ERROR);
+		return (ft_putstr_fd(_STX_ERR_REDIR, STDERR_FILENO), _FAILURE);
 	return (_SUCCESS);
 }

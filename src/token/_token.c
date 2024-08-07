@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _token.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/06 06:36:16 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/07 13:44:30 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,24 +118,3 @@ int	_token(t_pdata data)
 	}
 	return (_tok_check(data));
 }
-
-// int	_token(t_pdata data)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	if (!data || !data->input)
-// 		return (_FAILURE);
-// 	while (data->input[i] && data->input[i] != '\n')
-// 	{
-// 		if ((data->input[i] && _tok_is(_TOKENS, data->input[i]))
-// && _tok_proc(data, &i))
-// 			return (_ERROR);
-// 		else if ((data->input[i] && !ft_isspace(data->input[i]))
-// && _tok_word(data, &i))
-// 			return (_ERROR);
-// 		else if (data->input[i])
-// 			i++;
-// 	}
-// 	return (_tok_check(data));
-// }

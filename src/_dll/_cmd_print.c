@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _cmd_print.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 12:00:11 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/06 07:34:15 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/07 11:37:50 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	_cmd_print(u_padll dll)
 				printf(" %s ", tmp->cmd_arg[i]);
 			if (tmp->cmd_path)
 				printf(" cmd_path: %s\n", tmp->cmd_path);
+			else
+				printf(" no path\n");
 			if (tmp->redir.in_name)
 				printf("\t\tredir: %s\n", tmp->redir.in_name);
 			if (tmp->redir.out_name)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _export.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:34:32 by moha              #+#    #+#             */
-/*   Updated: 2024/08/06 07:13:38 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/07 11:47:29 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,7 @@ int	_export(t_pdata data, char **arg)
 	int	j;
 
 	if (!arg[1])
-	{
-		data->_errno = 0;
 		return (_export_print(data->env.dll_senv), _SUCCESS);
-	}
 	_clean_env(data, arg);
 	i = 0;
 	while (arg[++i])
@@ -56,6 +53,5 @@ int	_export(t_pdata data, char **arg)
 	}
 	data->env.dll_senv = _env_clear(data->env.dll_senv);
 	_set_senv(&data->env.dll_senv, data->env.dll_env);
-	data->_errno = 0;
 	return (_SUCCESS);
 }

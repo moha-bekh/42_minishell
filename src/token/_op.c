@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _op.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:25:28 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/06 06:31:07 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/07 13:44:43 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ int	_op_proc(t_pdata data, int *i)
 			return (_tok_stx_err('|', 1));
 		else if (data->input[*i + 1] != '|')
 		{
-			data->tok = _tok_push_back(data->tok, _PIPE, ft_substr(data->input, *i, 1));
+			data->tok = _tok_push_back(data->tok, _PIPE, ft_substr(data->input,
+						*i, 1));
 			*i += 1;
 		}
 		else

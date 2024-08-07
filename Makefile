@@ -59,7 +59,8 @@ EXPAND_SRCS := 					_expand
 EXPAND_OBJS := 					$(addprefix $(EXPAND_DIR), $(addsuffix .o, $(EXPAND_SRCS)))
 
 PARS_DIR := 					parsing/
-PARS_SRCS := 					_parsing
+PARS_SRCS := 					_parsing\
+								_redirs
 PARS_OBJS := 					$(addprefix $(PARS_DIR), $(addsuffix .o, $(PARS_SRCS)))
 
 TREE_DIR :=						tree/
@@ -67,7 +68,8 @@ TREE_SRCS :=					_tree
 TREE_OBJS :=					$(addprefix $(TREE_DIR), $(addsuffix .o, $(TREE_SRCS)))
 
 EXEC_DIR := 					exec/
-EXEC_SRCS := 					_exec
+EXEC_SRCS := 					_exec\
+								_path
 EXEC_OBJS := 					$(addprefix $(EXEC_DIR), $(addsuffix .o, $(EXEC_SRCS)))
 
 DLL_DIR := 						_dll/

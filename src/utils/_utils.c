@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _utils.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:35:57 by moha              #+#    #+#             */
-/*   Updated: 2024/08/06 08:05:05 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/07 11:04:59 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,14 @@ int	_count_arg(t_ptok token)
 	while (tmp && tmp->type != _PIPE && !_tok_is(_TYP_SEP, tmp->type))
 	{
 		if (tmp && _tok_is(_TYP_REDIRS, tmp->type))
+		{
 			tmp = tmp->next;
+			if (tmp)
+				tmp = tmp->next;
+			continue ;
+		}
 		i++;
-		if (tmp)
-			tmp = tmp->next;
+		tmp = tmp->next;
 	}
 	return (i);
 }
@@ -96,4 +100,3 @@ int	is_overflow(char *str)
 	}
 	return (0);
 }
-

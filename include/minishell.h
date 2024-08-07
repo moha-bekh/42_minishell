@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/06 07:59:33 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/07 13:45:47 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct s_redir
 	char			*here_name;
 	char			*here_limit;
 	char			*in_name;
+	bool			_access;
 	char			*out_name;
 	bool			trunc;
 	int				fd[2];
@@ -154,11 +155,12 @@ int					_set_senv(u_padll *s_env, u_padll env);
 int					_clean_env(t_pdata data, char **arg);
 /* ###########################################################################
 BUILT-IN FUNCTIONS */
+
 int					_env(t_pdata data, char **arg);
 int					_exit_(t_pdata data, char **arg);
 int					_export(t_pdata data, char **arg);
-void				_pwd(t_pdata data);
-void				_unset(t_pdata data, char **arg);
+int					_pwd(void);
+int					_unset(t_pdata data, char **arg);
 /* ###########################################################################
 TOKEN FUNCTIONS */
 int					_token(t_pdata data);
@@ -178,9 +180,13 @@ t_pbt_op			_tree(t_pdata data);
 /* ###########################################################################
 PARSING FUNCTIONS */
 int					_parsing(t_pbt_op tree);
+void				_pars_redirs(t_pcmd cmd, t_ptok token);
 /* ###########################################################################
 EXECUTION FUNCTIONS */
-
+int					_exec(t_pdata data, t_pbt_op tree);
+int					_is_builtin(t_pdata data, char *str);
+int					_path_slash(t_pdata data, int idx);
+int					_resolve_path(t_pdata data, t_pbt_op node);
 /* ###########################################################################
 UTILS FUNCTIONS */
 int					_alloc(void **target, size_t size);
@@ -191,9 +197,6 @@ char				*_get_env_value(u_padll env, char *key);
 int					_count_arg(t_ptok token);
 char				*get_random_name(void);
 int					is_overflow(char *str);
-
-int					_path_slash(t_pdata data, int idx);
-int					_is_path(char *str);
 /* ###########################################################################
 DLL FUNCTIONS */
 u_padll				_cmd_clear(u_padll dll);
@@ -264,8 +267,9 @@ PATH */
 EXIT CODES */
 enum				e_return
 {
-	_EXT_EXEC = -7,
-	_EXT_DUP = -6,
+	_EXT_DUP2 = -8,
+	_EXT_DUP = -7,
+	_EXT_EXEC = -6,
 	_EXT_PIPE = -5,
 	_EXT_FORK = -4,
 	_EXT_OPEN = -3,

@@ -6,22 +6,19 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 21:55:55 by moha              #+#    #+#             */
-/*   Updated: 2024/08/05 11:48:25 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/07 11:48:31 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	_unset(t_pdata data, char **arg)
+int	_unset(t_pdata data, char **arg)
 {
 	t_pev	tmp;
 	int		i;
 
 	if (!data || !arg)
-	{
-		data->_errno = 0;
-		return ;
-	}
+		return (_SUCCESS);
 	tmp = data->env.dll_env->e_top;
 	while (tmp)
 	{
@@ -36,5 +33,5 @@ void	_unset(t_pdata data, char **arg)
 	}
 	data->env.dll_senv = _env_clear(data->env.dll_senv);
 	_set_senv(&data->env.dll_senv, data->env.dll_env);
-	data->_errno = 0;
+	return (_SUCCESS);
 }

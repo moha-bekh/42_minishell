@@ -6,19 +6,19 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:02:08 by moha              #+#    #+#             */
-/*   Updated: 2024/07/31 12:07:54 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/07 11:47:51 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	_pwd(t_pdata data)
+int	_pwd(void)
 {
 	char	*pwd;
 
 	pwd = getcwd(NULL, 0);
 	ft_putstr_fd(pwd, STDOUT_FILENO);
 	ft_putstr_fd("\n", STDOUT_FILENO);
-	data->_errno = 0;
 	free(pwd);
+	return (_SUCCESS);
 }

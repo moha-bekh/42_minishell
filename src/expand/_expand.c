@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   _expand.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:41:05 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/08 10:32:39 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/08 13:40:06 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	_varchr_conv(char c)
+{
+	if (!ft_isalnum(c) && c != '_')
+		return (_FAILURE);
+	return (_SUCCESS);
+}
 
 int	_var_process(t_pdata data, t_ptok token, int *i)
 {
@@ -19,7 +26,7 @@ int	_var_process(t_pdata data, t_ptok token, int *i)
 
 	*i += 1;
 	j = *i;
-	while (token->value[*i] && ft_isalnum(token->value[*i]))
+	while (token->value[*i] && _varchr_conv(token->value[*i]))
 		*i += 1;
 	tmp = ft_substr(token->value, j, *i - j);
 	data->tmp = _get_env_value(data->env.dll_env, tmp);
@@ -53,7 +60,7 @@ int	_expand_string(t_pdata data, t_ptok token)
 	i = 0;
 	while (token->value[i])
 	{
-		if (token->value[i] == '$')
+		if (token->value[i] == '$' && _varchr_conv(token->value[i + 1]))
 			_var_process(data, token, &i);
 		else
 			_str_process(data, token, &i);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/08/08 10:43:13 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/08 14:38:31 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	main(int ac, char **av, char **ev)
 		data.tree = _tree(&data);
 		_parsing(data.tree);
 		_exec(&data, data.tree);
-		_op_bt_print(data.tree, true, 0);
+		// _op_bt_print(data.tree, true, 0);
 		_data_clear_lists(&data);
 	}
 	return (_data_cleaner(&data), _SUCCESS);

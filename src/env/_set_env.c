@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _set_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:06:16 by moha              #+#    #+#             */
-/*   Updated: 2024/08/08 10:48:01 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/08 14:02:06 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ int	_set_env(t_pdata data, u_padll *env, char **ev)
 	while (ev[++i])
 	{
 		j = _get_start_index(ev[i]);
-		*env = _env_push_back(*env, ft_substr(ev[i], 0, j), ft_substr(ev[i], j
-					+ 1, ft_strlen(ev[i])));
+		*env = _env_push_back(*env, ft_substr(ev[i], 0, j), ft_substr(ev[i], j + 1, ft_strlen(ev[i])));
 		if (!ft_strcmp((*env)->e_bot->key, "PATH"))
 		{
 			if ((*env)->e_bot->value)

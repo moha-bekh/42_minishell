@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/07 19:17:46 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/08 10:06:23 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ void				_data_cleaner(t_pdata data);
 ENVIRONMENT FUNCTIONS */
 int					_set_env(t_pdata data, u_padll *env, char **ev);
 int					_set_senv(u_padll *s_env, u_padll env);
-int					_clean_env(t_pdata data, char **arg);
+int					_delete_from_env(t_pdata data, char **arg);
 /* ###########################################################################
 BUILT-IN FUNCTIONS */
 

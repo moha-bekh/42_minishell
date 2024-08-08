@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr_in.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 20:27:12 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/07 20:44:37 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/08 10:16:31 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*ft_strchr_in(char *str, char *to_ad, char target)
 	i = -1;
 	while (str[++i])
 	{
-		if (str[i] == target)
+		if (str[i] == target && str[i - 1] != '\\')
 		{
 			tmp = ft_substr(str, 0, i);
 			tmp2 = ft_substr(str, i + 1, ft_strlen(str));

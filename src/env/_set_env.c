@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _set_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:06:16 by moha              #+#    #+#             */
-/*   Updated: 2024/08/07 19:59:12 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/08 10:48:01 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int	_set_env(t_pdata data, u_padll *env, char **ev)
 	while (ev[++i])
 	{
 		j = _get_start_index(ev[i]);
-		*env = _env_push_back(*env, ft_substr(ev[i], 0, j), ft_substr(ev[i], j + 1, ft_strlen(ev[i])));
+		*env = _env_push_back(*env, ft_substr(ev[i], 0, j), ft_substr(ev[i], j
+					+ 1, ft_strlen(ev[i])));
 		if (!ft_strcmp((*env)->e_bot->key, "PATH"))
 		{
 			if ((*env)->e_bot->value)
@@ -60,7 +61,7 @@ int	_set_senv(u_padll *s_env, u_padll env)
 	return (_SUCCESS);
 }
 
-int	_clean_env(t_pdata data, char **arg)
+int	_delete_from_env(t_pdata data, char **arg)
 {
 	t_pev	tmp;
 	int		i;
@@ -71,23 +72,20 @@ int	_clean_env(t_pdata data, char **arg)
 	i = -1;
 	while (arg[++i])
 	{
-		if (strchr(arg[i], '='))
+		j = _get_start_index(arg[i]);
+		data->tmp = ft_substr(arg[i], 0, j);
+		tmp = data->env.dll_env->e_top;
+		while (tmp)
 		{
-			j = _get_start_index(arg[i]);
-			data->tmp = ft_substr(arg[i], 0, j);
-			tmp = data->env.dll_env->e_top;
-			while (tmp)
+			if (!ft_strcmp(tmp->key, data->tmp))
 			{
-				if (!ft_strcmp(tmp->key, data->tmp))
-				{
-					data->env.dll_env = _env_pop_in(data->env.dll_env, tmp);
-					break ;
-				}
-				tmp = tmp->next;
+				data->env.dll_env = _env_pop_in(data->env.dll_env, tmp);
+				break ;
 			}
-			free(data->tmp);
-			data->tmp = NULL;
+			tmp = tmp->next;
 		}
+		free(data->tmp);
+		data->tmp = NULL;
 	}
 	return (_SUCCESS);
 }

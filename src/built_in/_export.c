@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _export.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:34:32 by moha              #+#    #+#             */
-/*   Updated: 2024/08/07 20:43:46 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/08 10:47:08 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,53 +30,64 @@ void	_export_print(u_padll dll)
 	return ;
 }
 
-char	*_quote_slash(char *value)
+int	_var_conv(char *str)
 {
-	char	*tmp;
-	char	*tmp2;
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (_NOT);
+		i++;
+	}
+	return (_IS);
+}
+
+int	_replace_value(t_pdata data, char **arg)
+{
+	t_pev	tmp;
 	int		i;
 
 	i = -1;
-	while (value[++i])
+	while (arg[++i])
 	{
-		if (value[i] == '"')
+		if (!_var_conv(arg[i]))
 		{
-			tmp = ft_substr(value, 0, i);
-			printf("tmp: %s\n", tmp);
-			tmp2 = ft_strjoin(tmp, "\\");
-			free(tmp);
-			printf("tmp 2: %s\n", tmp2);
-			tmp = ft_strjoin(tmp2, value + i);
-			printf("tmp: %s\n", tmp);
+			ft_putstr_fd("bash: export: `", 2);
+			ft_putstr_fd(arg[i], 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
+		}
+		else
+		{
+			data->tmp = ft_substr(arg[i], 0, _get_start_index(arg[i]));
+			tmp = data->env.dll_env->e_top;
+			while (tmp)
+			{
+				if (!ft_strcmp(tmp->key, data->tmp))
+				{
+					free(data->tmp);
+					data->tmp = tmp->value;
+					tmp->value = ft_substr(arg[i], _get_start_index(arg[i]) + 1,
+							ft_strlen(arg[i]));
+					free(data->tmp);
+					data->tmp = NULL;
+					break ;
+				}
+				tmp = tmp->next;
+			}
+			free(data->tmp);
+			data->tmp = NULL;
 		}
 	}
-	return (value);
+	return (_SUCCESS);
 }
 
 int	_export(t_pdata data, char **arg)
 {
-	int		i;
-	int		j;
-	char	*value;
-
 	if (!arg[1])
 		return (_export_print(data->env.dll_senv), _SUCCESS);
-	_clean_env(data, arg);
-	i = 0;
-	while (arg[++i])
-	{
-		j = _get_start_index(arg[i]);
-		value = ft_substr(arg[i], j + 1, ft_strlen(arg[i]));
-		value = ft_strchr_in(value, "\\\"", '"');
-		data->env.dll_env = _env_push_back(data->env.dll_env, ft_substr(arg[i],
-					0, j), value);
-		if (!ft_strcmp(data->env.dll_env->e_bot->key, "PATH"))
-		{
-			ft_free_arr(data->paths[1]);
-			data->paths[1] = ft_split(data->env.dll_env->e_bot->value, ':');
-			_path_slash(data, 1);
-		}
-	}
+	_replace_value(data, arg);
 	data->env.dll_senv = _env_clear(data->env.dll_senv);
 	_set_senv(&data->env.dll_senv, data->env.dll_env);
 	return (_SUCCESS);

@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 07:36:01 by moha              #+#    #+#             */
-/*   Updated: 2024/08/07 19:28:04 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/08 16:49:30 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,24 @@ int	_set_next_pipe(t_pcmd cmd)
 
 int	_set_redir_in(t_pcmd cmd)
 {
-	printf("infile: %s\n", cmd->redir.in_name);
+	// printf("infile: %s\n", cmd->redir.in_name);
 	cmd->redir.fd[0] = open(cmd->redir.in_name, O_RDONLY);
 	if (cmd->redir.fd[0] < 0)
 		return (_EXT_OPEN);
+	printf("fd: %d\n", cmd->redir.fd[0]);
 	if (dup2(cmd->redir.fd[0], STDIN_FILENO) < 0)
 		return (_EXT_DUP2);
 	close(cmd->redir.fd[0]);
+	return (_SUCCESS);
+}
+
+int	_set_redir_out(t_pcmd cmd)
+{
+	if (cmd->redir.trunc)
+		cmd->redir.fd[1] = open(cmd->redir.out_name, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	else
+		cmd->redir.fd[1] = open(cmd->redir.out_name, O_RDWR | O_CREAT | O_APPEND, 0644);
+	printf("fd: %d\n", cmd->redir.fd[1]);
 	return (_SUCCESS);
 }
 
@@ -82,6 +93,7 @@ int	_exec_child_process(t_pdata data, t_pcmd cmd)
 {
 	// if (cmd->prev && !cmd->redir.in_name)
 	// 	_set_prev_pipe(cmd);
+	printf("in_name: %s\n", cmd->redir.in_name);
 	if (cmd->redir.in_name)
 		_set_redir_in(cmd);
 	// if (cmd->next && !cmd->redir.out_name)
@@ -90,12 +102,9 @@ int	_exec_child_process(t_pdata data, t_pcmd cmd)
 	// 		return (_EXT_DUP2);
 	// 	close(cmd->redir.pfd[1]);
 	// }
+	printf("out_name: %s\n", cmd->redir.out_name);
 	if (cmd->redir.out_name)
-	{
-		if (dup2(cmd->redir.fd[1], STDOUT_FILENO) < 0)
-			return (_EXT_DUP2);
-		close(cmd->redir.fd[1]);
-	}
+		_set_redir_out(cmd);
 	execve(cmd->cmd_path, cmd->cmd_arg, data->env.env);
 	ft_putstr_fd("bash: ", STDERR_FILENO);
 	ft_putstr_fd(cmd->cmd_arg[0], STDERR_FILENO);
@@ -107,8 +116,8 @@ int	_exec_child_process(t_pdata data, t_pcmd cmd)
 int	_exec_proc(t_pdata data, t_pbt_op node)
 {
 	t_pcmd	tmp;
-	// int		i;
 
+	// int		i;
 	if (!data || !node)
 		return (_FAILURE);
 	_resolve_path(data, node);
@@ -164,7 +173,9 @@ int	_exec_cmd_line(t_pdata data, t_pbt_op tree)
 		_exec_proc(data, tree);
 		tree->root->status = tree->status;
 	}
-	else if (tree->root && tree == tree->root->right && ((tree->root->type == _AND && tree->root->status == 0) || (tree->root->type == _OR && tree->root->status != 0)))
+	else if (tree->root && tree == tree->root->right
+		&& ((tree->root->type == _AND && tree->root->status == 0)
+			|| (tree->root->type == _OR && tree->root->status != 0)))
 		_exec_proc(data, tree);
 	return (_SUCCESS);
 }

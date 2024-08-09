@@ -1,40 +1,14 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _echo.c                                            :+:      :+:    :+:   */
+/*   _signal.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/16 22:01:54 by moha              #+#    #+#             */
-/*   Updated: 2024/08/09 17:08:31 by moha             ###   ########.fr       */
+/*   Created: 2024/08/09 16:17:44 by moha              #+#    #+#             */
+/*   Updated: 2024/08/09 17:15:20 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	_echo(t_pdata data, char **arg)
-{
-	int		i;
-	bool	new_line;
-
-	i = 0;
-	new_line = true;
-	if (arg[1][0] == '-' && arg[1][1] == 'n' && !arg[1][2])
-	{
-		new_line = false;
-		i++;
-	}
-	while (arg[++i])
-	{
-		if (!strcmp(arg[i], "$?"))
-			printf("%d", data->_errno);
-		else
-			printf("%s", arg[i]);
-		if (arg[i + 1])
-			printf(" ");
-	}
-	if (new_line)
-		printf("\n");
-	(void)data;
-	return (_SUCCESS);
-}

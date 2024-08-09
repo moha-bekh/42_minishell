@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _tree.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:26:15 by moha              #+#    #+#             */
-/*   Updated: 2024/08/07 19:10:50 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/09 12:29:33 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,11 @@ t_pbt_op	_tree(t_pdata data)
 	while (tok)
 	{
 		if (tok->type == _AND)
-		{
-			data->tree = _op_bt_push_root(data->tree, _op_bt_create(tok->type, tok));
-			data->tree->status = 1;
-		}
+			data->tree = _op_bt_push_root(data->tree, _op_bt_create(tok->type,
+						tok));
 		else if (tok->type == _OR)
-		{
-			data->tree = _op_bt_push_root(data->tree, _op_bt_create(tok->type, tok));
-			data->tree->status = 0;
-		}
+			data->tree = _op_bt_push_root(data->tree, _op_bt_create(tok->type,
+						tok));
 		else if (tok->type == '(')
 		{
 			data->scp = _scp_push_back(data->scp, data->tree);
@@ -59,26 +55,27 @@ t_pbt_op	_tree(t_pdata data)
 	return (data->tree);
 }
 
-// t_pbt_op	_operator(t_pdata data, t_ptok tok)
+// t_pbt_op	_tree(t_pdata data, t_ptok token)
 // {
-// 	if (!data || !tok)
+// 	if (!data || !token)
 // 		return (NULL);
-// 	if (tok->type == _AND)
+// 	if (token->type == _AND || token->type == _OR)
 // 	{
-// 		data->tree = _op_bt_push_root(data->tree, _op_bt_create(tok->type,
-// tok));
-// 		data->tree->status = 0;
-// 		return (data->tree);
+// 		data->tree = _op_bt_push_root(data->tree, _op_bt_create(token->type,
+// 					token));
+// 		_tree(data, token->next);
 // 	}
-// 	data->tree = _op_bt_push_root(data->tree, _op_bt_create(tok->type, tok));
-// 	data->tree->status = 1;
-// 	return (data->tree);
-// }
-
-// t_pbt_op	_cmd_arg(t_pdata data, t_ptok tok)
-// {
-// 	data->tree = _op_bt_push_right(data->tree, _op_bt_create(tok->type, tok));
-// 	while (tok->next && !_tok_is(_TYP_SEP, tok->next->type))
-// 		tok = tok->next;
+// 	else if (token->type == _WORD)
+// 	{
+// 		data->tree = _op_bt_push_right(data->tree, _op_bt_create(token->type,
+// 					token));
+// 		while (token->next && !_tok_is(_TYP_SEP, token->next->type))
+// 			token = token->next;
+// 		_tree(data, token->next);
+// 	}
+// 	else if (token->type == '(')
+// 		_tree(data, token->next);
+// 	else if (token->type == ')')
+// 		return (data->tree);
 // 	return (data->tree);
 // }

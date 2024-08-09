@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:43 by moha              #+#    #+#             */
-/*   Updated: 2024/08/06 08:05:15 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/09 12:33:04 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,7 @@ int	_many_args(t_pdata data, char **arg)
 		_data_cleaner(data);
 		exit(2);
 	}
-	else
-	{
-		ft_putstr_fd("exit\nbash: exit: too many arguments\n", STDERR_FILENO);
-		data->_errno = 1;
-	}
+	ft_putstr_fd("exit\nbash: exit: too many arguments\n", STDERR_FILENO);
 	return (_FAILURE);
 }
 
@@ -89,6 +85,5 @@ int	_exit_(t_pdata data, char **arg)
 	}
 	else if (i > 1)
 		_many_args(data, arg);
-	data->_errno = 0;
 	return (_SUCCESS);
 }

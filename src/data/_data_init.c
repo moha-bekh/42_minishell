@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 23:44:34 by moha              #+#    #+#             */
-/*   Updated: 2024/08/06 07:14:02 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/09 17:14:30 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ int	_data_init_builtin(t_pdata data)
 
 int	_data_min_env(t_pdata data)
 {
-	if (_alloc((void *)&data->env.min_ev, sizeof(char *) * 3) || !data->env.min_ev)
+	if (_alloc((void *)&data->env.min_ev, sizeof(char *) * 3)
+		|| !data->env.min_ev)
 		return (_ALLOC);
 	data->env.min_ev[0] = getcwd(NULL, 0);
 	data->env.min_ev[1] = ft_strdup("PATH=" _PATH);
@@ -70,6 +71,7 @@ int	_data_init(t_pdata data, int ac, char **av, char **ev)
 		return (_FAILURE);
 	if (_set_senv(&data->env.dll_senv, data->env.dll_env))
 		return (_FAILURE);
+	if (_set_signals(data))
+		return (_FAILURE);
 	return (_SUCCESS);
 }
-

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _parsing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/07 18:21:01 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/09 13:10:24 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int	_pars_args(t_pcmd cmd, t_ptok token)
 	{
 		if (_tok_is(_TYP_REDIRS, token->type))
 		{
-			_pars_redirs(cmd, token);
+			if (_pars_redirs(cmd, token))
+				return (_FAILURE);
 			token = token->next->next;
 			continue ;
 		}
@@ -65,7 +66,8 @@ int	_pars_process(t_pbt_op tree_node, t_ptok token)
 	tmp = tree_node->cmd->c_top;
 	while (tmp)
 	{
-		_pars_args(tmp, tmp->token);
+		if (_pars_args(tmp, tmp->token))
+			return (_FAILURE);
 		tmp = tmp->next;
 	}
 	return (_SUCCESS);
@@ -75,7 +77,8 @@ int	_parsing(t_pbt_op tree)
 {
 	if (!tree)
 		return (_FAILURE);
-	_pars_process(tree, tree->token);
+	if (_pars_process(tree, tree->token))
+		return (_FAILURE);
 	if (tree->left)
 		_parsing(tree->left);
 	if (tree->right)

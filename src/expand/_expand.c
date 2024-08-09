@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _expand.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:41:05 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/08 13:40:06 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/09 17:22:34 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,11 +92,20 @@ int	_expand(t_pdata data)
 	{
 		if (tmp->type == '$' && tmp->next)
 		{
-			tmp = tmp->next;
-			data->tok = _tok_pop_in(data->tok, tmp->prev);
-			value = _get_env_value(data->env.dll_env, tmp->value);
-			free(tmp->value);
-			tmp->value = value;
+			// if (tmp->next->value[0] == '?')
+			// {
+			// 	data->tmp = tmp->value;
+			// 	tmp->value = ft_strjoin(tmp->value, tmp->next->value);
+			// 	free(data->tmp);
+			// 	data->tmp = NULL;
+			// 	data->tok = _tok_pop_in(data->tok, tmp->next);
+			// }
+			// else
+				tmp = tmp->next;
+				data->tok = _tok_pop_in(data->tok, tmp->prev);
+				value = _get_env_value(data->env.dll_env, tmp->value);
+				free(tmp->value);
+				tmp->value = value;
 		}
 		if (tmp->type == '"' && tmp->value[0])
 			_expand_string(data, tmp);

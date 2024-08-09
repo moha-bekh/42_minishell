@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _token.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/07 16:47:31 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/09 18:04:39 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ int	_quote_proc(t_pdata data, int *i)
 		*i += 1;
 		if (data->input[*i] && data->input[*i] == type_quote)
 		{
-			data->tok = _tok_push_back(data->tok, type_quote, ft_substr(data->input, j + 1, (*i - j - 1)));
+			data->tok = _tok_push_back(data->tok, type_quote,
+					ft_substr(data->input, j + 1, (*i - j - 1)));
 			*i += 1;
 			if (data->input[*i] && !ft_isspace(data->input[*i]))
 				data->tok->t_bot->join = true;
@@ -32,6 +33,11 @@ int	_quote_proc(t_pdata data, int *i)
 		}
 	}
 	return (_tok_stx_close_err(type_quote));
+}
+
+int _dollar_proc(char *input, u_padll tok, int *i)
+{
+	
 }
 
 int	_other_proc(char *input, u_padll tok, int *i)
@@ -71,6 +77,10 @@ int	_tok_proc(t_pdata data, int *i)
 		return (_ERROR);
 	else if (_tok_is(_QUOTES, data->input[*i]) && _quote_proc(data, i))
 		return (_ERROR);
+
+	else if (_tok_is("$", data->input[*i]) && _dollar_proc(data, i))
+		return (_ERROR);
+
 	else if (_tok_is(_OTHERS, data->input[*i]) && _other_proc(data->input,
 			data->tok, i))
 		return (_ERROR);
@@ -85,7 +95,8 @@ int	_tok_word(t_pdata data, int *i)
 	while (data->input[*i] && !ft_isspace(data->input[*i]) && !_tok_is(_TOKENS,
 			data->input[*i]))
 		*i += 1;
-	data->tok = _tok_push_back(data->tok, _WORD, ft_substr(data->input, j, (*i - j)));
+	data->tok = _tok_push_back(data->tok, _WORD, ft_substr(data->input, j, (*i
+					- j)));
 	if (data->input[*i] && !ft_isspace(data->input[*i])
 		&& (data->input[*i] == '"' || data->input[*i] == '\''))
 		data->tok->t_bot->join = true;

@@ -6,90 +6,11 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 07:36:01 by moha              #+#    #+#             */
-/*   Updated: 2024/08/12 20:09:32 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/12 20:55:03 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	_is_builtin(t_pdata data, char *str)
-{
-	int	i;
-
-	if (!data || !str)
-		return (_ERROR);
-	i = -1;
-	while (++i < 7)
-	{
-		if (!ft_strcmp(data->built_in[i], str))
-			return (_IS);
-	}
-	return (_NOT);
-}
-
-int	_exec_builtin(t_pdata data, t_pcmd cmd)
-{
-	if (!data || !cmd)
-		return (_ERROR);
-	if (!ft_strcmp(cmd->cmd_arg[0], "pwd"))
-		return (_pwd());
-	else if (!ft_strcmp(cmd->cmd_arg[0], "echo"))
-		return (_echo(data, cmd->cmd_arg));
-	// else if (!ft_strcmp(cmd->cmd_arg[0], "cd"))
-	// 	_cd(data, cmd);
-	else if (!ft_strcmp(cmd->cmd_arg[0], "export"))
-		return (_export(data, cmd->cmd_arg));
-	else if (!ft_strcmp(cmd->cmd_arg[0], "unset"))
-		return (_unset(data, cmd->cmd_arg));
-	else if (!ft_strcmp(cmd->cmd_arg[0], "env"))
-		return (_env(data, cmd->cmd_arg));
-	else if (!ft_strcmp(cmd->cmd_arg[0], "exit"))
-		return (_exit_(data, cmd->cmd_arg));
-	return (_SUCCESS);
-}
-
-int	_set_redir_in(t_pcmd cmd)
-{
-	printf("cmd->redir.in_name = %s\n", cmd->redir.in_name);
-	cmd->redir.fd[0] = open(cmd->redir.in_name, O_RDONLY);
-	if (cmd->redir.fd[0] < 0)
-		return (_EXT_OPEN);
-	if (dup2(cmd->redir.fd[0], STDIN_FILENO) < 0)
-		return (perror("dup2 in: "), _EXT_DUP2);
-	close(cmd->redir.fd[0]);
-	return (_SUCCESS);
-}
-
-int	_set_redir_out(t_pcmd cmd)
-{
-	printf("cmd->redir.out_name = %s\n", cmd->redir.out_name);
-	if (cmd->redir.trunc)
-		cmd->redir.fd[1] = open(cmd->redir.out_name, O_RDWR | O_CREAT | O_TRUNC, 0644);
-	else
-		cmd->redir.fd[1] = open(cmd->redir.out_name, O_RDWR | O_CREAT | O_APPEND, 0644);
-	if (dup2(cmd->redir.fd[1], STDOUT_FILENO) < 0)
-		return (perror("dup2 out: "), _EXT_DUP2);
-	close(cmd->redir.fd[1]);
-	return (_SUCCESS);
-}
-
-int	_read_from_pipe(t_pcmd cmd)
-{
-	close(cmd->prev->redir.pfd[1]);
-	if (dup2(cmd->prev->redir.pfd[0], STDIN_FILENO) < 0)
-		return (perror("dup2 prev"), _EXT_DUP2);
-	close(cmd->prev->redir.pfd[0]);
-	return (_SUCCESS);
-}
-
-int	_write_to_pipe(t_pcmd cmd)
-{
-	close(cmd->redir.pfd[0]);
-	if (dup2(cmd->redir.pfd[1], STDOUT_FILENO) < 0)
-		return (perror("dup2 next"), _EXT_DUP2);
-	close(cmd->redir.pfd[1]);
-	return (_SUCCESS);
-}
 
 int	_exec_cmd_fail(t_pdata data, t_pcmd cmd)
 {
@@ -98,22 +19,6 @@ int	_exec_cmd_fail(t_pdata data, t_pcmd cmd)
 	ft_putstr_fd(": command not found\n", STDERR_FILENO);
 	_data_cleaner(data);
 	exit(127);
-	return (_FAILURE);
-}
-
-int	_exec_child_proc(t_pdata data, t_pcmd cmd)
-{
-	data->sa.sa_handler = child_hndl;
-	if (cmd->prev)
-		_read_from_pipe(cmd);
-	if (cmd->next)
-		_write_to_pipe(cmd);
-	if (cmd->redir.in_name)
-		_set_redir_in(cmd);
-	if (cmd->redir.out_name)
-		_set_redir_out(cmd);
-	execve(cmd->cmd_path, cmd->cmd_arg, data->env.env);
-	_exec_cmd_fail(data, cmd);
 	return (_FAILURE);
 }
 
@@ -140,7 +45,6 @@ int	_exec_proc(t_pdata data, t_pbt_op node)
 	tmp = node->cmd->c_top;
 	while (tmp)
 	{
-		
 		if (tmp->built_in)
 			data->_errno = _exec_builtin(data, tmp);
 		else

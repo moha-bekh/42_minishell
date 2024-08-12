@@ -70,12 +70,14 @@ TREE_OBJS :=					$(addprefix $(TREE_DIR), $(addsuffix .o, $(TREE_SRCS)))
 
 EXEC_DIR := 					exec/
 EXEC_SRCS := 					_exec\
+								_exec_child\
+								_exec_builtin\
 								_path
 EXEC_OBJS := 					$(addprefix $(EXEC_DIR), $(addsuffix .o, $(EXEC_SRCS)))
 
-SIG_DIR :=						signal/
-SIG_SRCS :=						_signal
-SIG_OBJS :=						$(addprefix $(SIG_DIR), $(addsuffix .o, $(SIG_SRCS)))
+# SIG_DIR :=						signal/
+# SIG_SRCS :=						_signal
+# SIG_OBJS :=						$(addprefix $(SIG_DIR), $(addsuffix .o, $(SIG_SRCS)))
 
 DLL_DIR := 						_dll/
 DLL_SRCS :=						_cmd_clear\
@@ -122,7 +124,7 @@ SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(EXPAND_DIR), $(addsuffix .c,
 SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(PARS_DIR), $(addsuffix .c, $(PARS_SRCS))))
 SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(TREE_DIR), $(addsuffix .c, $(TREE_SRCS))))
 SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(EXEC_DIR), $(addsuffix .c, $(EXEC_SRCS))))
-SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(SIG_DIR), $(addsuffix .c, $(SIG_SRCS))))
+# SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(SIG_DIR), $(addsuffix .c, $(SIG_SRCS))))
 SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(DLL_DIR), $(addsuffix .c, $(DLL_SRCS))))
 SRCS +=							$(addprefix $(SRC_DIR), $(addprefix $(OP_TREE_DIR), $(addsuffix .c, $(OP_TREE_SRCS))))
 OBJS = 							$(SRCS:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)

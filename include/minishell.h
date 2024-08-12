@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/12 19:48:58 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/12 20:55:35 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,6 +187,9 @@ int						_pars_redirs(t_pcmd cmd, t_ptok token);
 /* ###########################################################################
 EXECUTION FUNCTIONS */
 int						_exec(t_pdata data, t_pbt_op tree);
+int						_exec_child_proc(t_pdata data, t_pcmd cmd);
+int						_exec_cmd_fail(t_pdata data, t_pcmd cmd);
+int						_exec_builtin(t_pdata data, t_pcmd cmd);
 int						_is_builtin(t_pdata data, char *str);
 int						_path_slash(t_pdata data, int idx);
 int						_resolve_path(t_pdata data, t_pbt_op node);

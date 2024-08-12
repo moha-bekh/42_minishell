@@ -55,7 +55,8 @@ TOKEN_SRCS :=					_token\
 TOKEN_OBJS := 					$(addprefix $(TOKEN_DIR), $(addsuffix .o, $(TOKEN_SRCS)))
 
 EXPAND_DIR := 					expand/
-EXPAND_SRCS := 					_expand
+EXPAND_SRCS := 					_expand\
+								_exp_str
 EXPAND_OBJS := 					$(addprefix $(EXPAND_DIR), $(addsuffix .o, $(EXPAND_SRCS)))
 
 PARS_DIR := 					parsing/
@@ -79,6 +80,7 @@ SIG_OBJS :=						$(addprefix $(SIG_DIR), $(addsuffix .o, $(SIG_SRCS)))
 DLL_DIR := 						_dll/
 DLL_SRCS :=						_cmd_clear\
 								_cmd_pop_back\
+								_cmd_pop_in\
 								_cmd_print\
 								_cmd_push_back\
 								_env_clear\

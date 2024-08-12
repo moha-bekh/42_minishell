@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _echo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:54 by moha              #+#    #+#             */
-/*   Updated: 2024/08/09 17:08:31 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/12 16:35:52 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int	_echo(t_pdata data, char **arg)
 
 	i = 0;
 	new_line = true;
+	if (!arg[1])
+		return (printf("\n"), _SUCCESS);
 	if (arg[1][0] == '-' && arg[1][1] == 'n' && !arg[1][2])
 	{
 		new_line = false;
@@ -35,6 +37,5 @@ int	_echo(t_pdata data, char **arg)
 	}
 	if (new_line)
 		printf("\n");
-	(void)data;
 	return (_SUCCESS);
 }

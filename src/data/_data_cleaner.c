@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _data_cleaner.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 15:44:21 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/06 07:33:05 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/12 17:14:55 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ void	_data_clear_builtin(char **builtin)
 
 	i = -1;
 	while (++i < 7)
+	{
 		free(builtin[i]);
+		builtin[i] = NULL;
+	}
 	return ;
 }
 

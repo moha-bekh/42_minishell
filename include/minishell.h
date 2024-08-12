@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/09 17:46:24 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/12 17:16:55 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,8 +145,9 @@ typedef struct s_data
 /* ###########################################################################
 DATA FUNCTIONS */
 int						_data_init(t_pdata data, int ac, char **av, char **ev);
-void					_data_clear_lists(t_pdata data);
 void					_data_cleaner(t_pdata data);
+void					_data_clear_lists(t_pdata data);
+// void					_data_clear_builtin(char **builtin);
 /* ###########################################################################
 ENVIRONMENT FUNCTIONS */
 int						_set_env(t_pdata data, u_padll *env, char **ev);
@@ -174,6 +175,8 @@ int						_tok_check(t_pdata data);
 /* ###########################################################################
 EXPAND FUNCTIONS */
 int						_expand(t_pdata data);
+int						_expand_string(t_pdata data, t_ptok token);
+int						_varchr_conv(char c);
 /* ###########################################################################
 TREE FUNCTIONS */
 t_pbt_op				_tree(t_pdata data);
@@ -207,6 +210,7 @@ int						_join_strings(t_pdata data);
 DLL FUNCTIONS */
 u_padll					_cmd_clear(u_padll dll);
 u_padll					_cmd_pop_back(u_padll dll);
+u_padll					_cmd_pop_in(u_padll dll, t_pcmd target);
 void					_cmd_print(u_padll dll);
 u_padll					_cmd_push_back(u_padll dll, t_ptok token,
 							char **cmd_arg);

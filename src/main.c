@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/08/12 16:51:05 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/12 20:11:20 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	_skip(t_pdata data, char *input)
 	return (_NOT);
 }
 
-int *_ptr_errno;
+int		*_ptr_errno;
 
 void	sa_hndl(int sig)
 {
@@ -39,11 +39,25 @@ void	sa_hndl(int sig)
 	else if (sig == SIGINT)
 	{
 		*_ptr_errno = 130;
-		printf("\n>$ ");
+		printf("\n");
 		return ;
 	}
 	else if (sig == SIGQUIT)
 		return ;
+}
+
+void child_hndl(int sig)
+{
+	if (sig == SIGTERM)
+	{
+		printf("%d\n", sig);
+		exit(0);
+	}
+	else if (sig == SIGINT)
+	{
+		printf("%d\n", sig);
+		exit(0);
+	}
 }
 
 int	_set_signals(t_pdata data)
@@ -63,7 +77,6 @@ int	_set_signals(t_pdata data)
 	}
 	return (_SUCCESS);
 }
-
 
 int	main(int ac, char **av, char **ev)
 {

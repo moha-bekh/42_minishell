@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/12 17:16:55 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/12 19:48:58 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,7 @@ int						_resolve_path(t_pdata data, t_pbt_op node);
 SIGNAL FUNCTIONS */
 int						_set_signals(t_pdata data);
 void					sa_hndl(int sig);
+void					child_hndl(int sig);
 /* ###########################################################################
 UTILS FUNCTIONS */
 int						_alloc(void **target, size_t size);

@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 11:19:04 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/12 16:56:35 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/12 19:39:39 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	_get_path(t_pdata data, t_pcmd cmd)
 			cmd->cmd_path = NULL;
 		}
 	}
+	cmd->cmd_path = ft_strdup(cmd->cmd_arg[0]);
 	return (_FAILURE);
 }
 

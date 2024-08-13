@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 07:36:01 by moha              #+#    #+#             */
-/*   Updated: 2024/08/12 20:55:03 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/13 13:14:42 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,12 @@ int	_exec_cmd_fail(t_pdata data, t_pcmd cmd)
 	return (_FAILURE);
 }
 
-int	_exec_parent_proc(t_pdata data, t_pcmd cmd)
+int	_exec_parent_proc(t_pcmd cmd)
 {
-	waitpid(cmd->pid, &data->_errno, 0);
-	if (WIFEXITED(data->_errno))
-		data->_errno = WEXITSTATUS(data->_errno);
 	if (cmd->prev)
 	{
-		close(cmd->prev->redir.pfd[0]);
 		close(cmd->prev->redir.pfd[1]);
+		close(cmd->prev->redir.pfd[0]);
 	}
 	return (_SUCCESS);
 }
@@ -61,8 +58,16 @@ int	_exec_proc(t_pdata data, t_pbt_op node)
 					return (_FAILURE);
 			}
 			else
-				_exec_parent_proc(data, tmp);
+				_exec_parent_proc(tmp);
 		}
+		tmp = tmp->next;
+	}
+	tmp = node->cmd->c_top;
+	while (tmp)
+	{
+		waitpid(tmp->pid, &data->_errno, 0);
+		if (WIFEXITED(data->_errno))
+			data->_errno = WEXITSTATUS(data->_errno);
 		tmp = tmp->next;
 	}
 	return (_SUCCESS);
@@ -74,9 +79,7 @@ int	_exec_cmd_line(t_pdata data, t_pbt_op tree)
 		_exec_proc(data, tree);
 	else if (tree->root && tree == tree->root->left)
 		_exec_proc(data, tree);
-	else if (tree->root && tree == tree->root->right
-		&& ((tree->root->type == _AND && data->_errno == 0)
-			|| (tree->root->type == _OR && data->_errno != 0)))
+	else if (tree->root && tree == tree->root->right && ((tree->root->type == _AND && data->_errno == 0) || (tree->root->type == _OR && data->_errno != 0)))
 		_exec_proc(data, tree);
 	return (_SUCCESS);
 }

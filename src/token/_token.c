@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/12 15:09:59 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/14 14:03:51 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,29 +36,29 @@ int	_quote_proc(t_pdata data, int *i)
 }
 
 
-int	_other_proc(char *input, u_padll tok, int *i)
+int	_other_proc(t_pdata data, int *i)
 {
-	if (input[*i] == '$')
+	if (data->input[*i] == '$')
 	{
-		tok = _tok_push_back(tok, '$', ft_substr(input, *i, 1));
+		data->tok = _tok_push_back(data->tok, '$', ft_substr(data->input, *i, 1));
 		*i += 1;
 		return (_SUCCESS);
 	}
-	else if (input[*i] == '*')
+	else if (data->input[*i] == '*')
 	{
-		tok = _tok_push_back(tok, '*', ft_substr(input, *i, 1));
+		data->tok = _tok_push_back(data->tok, '*', ft_substr(data->input, *i, 1));
 		*i += 1;
 		return (_SUCCESS);
 	}
-	else if (input[*i] == '(')
+	else if (data->input[*i] == '(')
 	{
-		tok = _tok_push_back(tok, '(', ft_substr(input, *i, 1));
+		data->tok = _tok_push_back(data->tok, '(', ft_substr(data->input, *i, 1));
 		*i += 1;
 		return (_SUCCESS);
 	}
-	else if (input[*i] == ')')
+	else if (data->input[*i] == ')')
 	{
-		tok = _tok_push_back(tok, ')', ft_substr(input, *i, 1));
+		data->tok = _tok_push_back(data->tok, ')', ft_substr(data->input, *i, 1));
 		*i += 1;
 		return (_SUCCESS);
 	}
@@ -73,8 +73,7 @@ int	_tok_proc(t_pdata data, int *i)
 		return (_ERROR);
 	else if (_tok_is(_QUOTES, data->input[*i]) && _quote_proc(data, i))
 		return (_ERROR);
-	else if (_tok_is(_OTHERS, data->input[*i]) && _other_proc(data->input,
-			data->tok, i))
+	else if (_tok_is(_OTHERS, data->input[*i]) && _other_proc(data, i))
 		return (_ERROR);
 	return (_SUCCESS);
 }
@@ -87,11 +86,8 @@ int	_tok_word(t_pdata data, int *i)
 	while (data->input[*i] && !ft_isspace(data->input[*i]) && !_tok_is(_TOKENS,
 			data->input[*i]))
 		*i += 1;
-	data->tok = _tok_push_back(data->tok, _WORD, ft_substr(data->input, j, (*i
-					- j)));
-	if (data->input[*i] && !ft_isspace(data->input[*i])
-		&& (data->input[*i] == '"' || data->input[*i] == '\''
-			|| data->input[*i] == '$'))
+	data->tok = _tok_push_back(data->tok, _WORD, ft_substr(data->input, j, (*i - j)));
+	if (data->input[*i] && !ft_isspace(data->input[*i]) && (data->input[*i] == '"' || data->input[*i] == '\'' || data->input[*i] == '$'))
 		data->tok->t_bot->join = true;
 	return (_SUCCESS);
 }

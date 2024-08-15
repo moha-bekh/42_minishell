@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _exp_var.c                                         :+:      :+:    :+:   */
+/*   _expand.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 16:22:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/12 16:25:41 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/15 13:17:08 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	_expand(t_pdata data)
 	if (!data || !data->tok)
 		return (_FAILURE);
 	tmp = data->tok->t_top;
-	while (tmp)
+	while (tmp && tmp->type != '|')
 	{
 		if (tmp->type == '$' && tmp->next)
 		{
@@ -60,7 +60,7 @@ int	_expand(t_pdata data)
 			else
 				_expand_env_var(data, tmp);
 		}
-		if (tmp->type == '"' && tmp->value[0])
+		else if (tmp->type == '"' && tmp->value[0])
 			_expand_string(data, tmp);
 		tmp = tmp->next;
 	}

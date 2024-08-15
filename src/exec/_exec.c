@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 07:36:01 by moha              #+#    #+#             */
-/*   Updated: 2024/08/13 13:14:42 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/15 14:06:08 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,13 @@ int	_exec_proc(t_pdata data, t_pbt_op node)
 
 	if (!data || !node)
 		return (_FAILURE);
-	_resolve_path(data, node);
+	// _resolve_path(data, node);
 	tmp = node->cmd->c_top;
 	while (tmp)
 	{
+		_expand(data);
+		_pars_process(node, node->token);
+		_resoleve_path_(data, tmp);
 		if (tmp->built_in)
 			data->_errno = _exec_builtin(data, tmp);
 		else

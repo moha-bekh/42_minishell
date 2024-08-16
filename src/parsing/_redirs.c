@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _redirs.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 13:02:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/15 12:45:48 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/16 07:45:27 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,12 @@ int	_pars_redir_in(t_pcmd cmd, t_ptok token)
 int	_pars_redir_outt(t_pcmd cmd, t_ptok token)
 {
 	cmd->redir.out_name = token->value;
-	cmd->redir.fd[1] = open(cmd->redir.out_name, O_RDWR | O_CREAT | O_TRUNC,
-			0644);
-	if (cmd->redir.fd[1] == -1)
+	cmd->redir.fd[1] = open(cmd->redir.out_name, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	if (cmd->redir.fd[1] < 0)
 	{
 		ft_putstr_fd("bash: ", STDERR_FILENO);
 		ft_putstr_fd(cmd->redir.out_name, STDERR_FILENO);
-		ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
+		ft_putstr_fd(" : Is a directory\n", STDERR_FILENO);
 		return (_FAILURE);
 	}
 	cmd->redir.trunc = true;
@@ -47,13 +46,12 @@ int	_pars_redir_outt(t_pcmd cmd, t_ptok token)
 int	_pars_redir_outa(t_pcmd cmd, t_ptok token)
 {
 	cmd->redir.out_name = token->value;
-	cmd->redir.fd[1] = open(cmd->redir.out_name, O_RDWR | O_CREAT | O_APPEND,
-			0644);
-	if (cmd->redir.fd[1] == -1)
+	cmd->redir.fd[1] = open(cmd->redir.out_name, O_RDWR | O_CREAT | O_APPEND, 0644);
+	if (cmd->redir.fd[1] < 0)
 	{
 		ft_putstr_fd("bash: ", STDERR_FILENO);
 		ft_putstr_fd(cmd->redir.out_name, STDERR_FILENO);
-		ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
+		ft_putstr_fd(" : Is a directory\n", STDERR_FILENO);
 		return (_FAILURE);
 	}
 	cmd->redir.trunc = false;

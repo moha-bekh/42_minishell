@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/08/15 14:01:20 by mbekheir         ###   ########.fr       */
-=======
-/*   Updated: 2024/08/12 20:11:20 by mbekheir         ###   ########.fr       */
->>>>>>> parent of 2d7250c (PIPE 2024-08-13)
+/*   Updated: 2024/08/16 07:53:51 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	*_ptr_errno;
 
 int	_skip(t_pdata data, char *input)
 {
@@ -31,15 +29,6 @@ int	_skip(t_pdata data, char *input)
 	return (_NOT);
 }
 
-int		*_ptr_errno;
-
-t_pdata	get_data_addr(void)
-{
-	static t_data	data;
-
-	return (&data);
-}
-
 void	sa_hndl(int sig)
 {
 	if (sig == SIGTERM)
@@ -50,15 +39,17 @@ void	sa_hndl(int sig)
 	else if (sig == SIGINT)
 	{
 		*_ptr_errno = 130;
-		get_data_addr()->_errno = 130;
 		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
 		return ;
 	}
 	else if (sig == SIGQUIT)
 		return ;
 }
 
-void child_hndl(int sig)
+void	child_hndl(int sig)
 {
 	if (sig == SIGTERM)
 	{
@@ -78,21 +69,15 @@ int	_set_signals(t_pdata data)
 	sigemptyset(&data->sa.sa_mask);
 	data->sa.sa_flags = 0;
 	if (sigaction(SIGINT, &data->sa, NULL) == -1)
-	{
-		perror("sigaction");
-		return (_FAILURE);
-	}
+		return (perror("sigaction"), _FAILURE);
 	if (sigaction(SIGQUIT, &data->sa, NULL) == -1)
-	{
-		perror("sigaction");
-		return (_FAILURE);
-	}
+		return (perror("sigaction"), _FAILURE);
 	return (_SUCCESS);
 }
 
 int	main(int ac, char **av, char **ev)
 {
-	static t_data	data;
+	t_data	data;
 
 	if (_data_init(&data, ac, av, ev))
 		return (_data_cleaner(&data), _FAILURE);
@@ -119,14 +104,16 @@ int	main(int ac, char **av, char **ev)
 			_data_clear_lists(&data);
 			continue ;
 		}
+		// _tok_print(data.tok);
 		_expand(&data);
 		_join_strings(&data);
 		data.tree = _tree(&data);
-		// if (_parsing(data.tree))
-		// {
-		// 	_data_clear_lists(&data);
-		// 	continue ;
-		// }
+		if (_parsing(&data, data.tree))
+		{
+			_data_clear_lists(&data);
+			continue ;
+		}
+		// _tok_print(data.tok);
 		// _op_bt_print(data.tree, true, 0);
 		_exec(&data, data.tree);
 		_data_clear_lists(&data);

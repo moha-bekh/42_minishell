@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:11:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/15 14:03:49 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/16 07:52:27 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,10 +182,8 @@ TREE FUNCTIONS */
 t_pbt_op				_tree(t_pdata data);
 /* ###########################################################################
 PARSING FUNCTIONS */
-int						_parsing(t_pbt_op tree);
+int						_parsing(t_pdata data, t_pbt_op tree);
 int						_pars_redirs(t_pcmd cmd, t_ptok token);
-
-int						_pars_process(t_pbt_op tree_node, t_ptok token);
 /* ###########################################################################
 EXECUTION FUNCTIONS */
 int						_exec(t_pdata data, t_pbt_op tree);
@@ -195,8 +193,6 @@ int						_exec_builtin(t_pdata data, t_pcmd cmd);
 int						_is_builtin(t_pdata data, char *str);
 int						_path_slash(t_pdata data, int idx);
 int						_resolve_path(t_pdata data, t_pbt_op node);
-
-int						_resoleve_path_(t_pdata data, t_pcmd cmd);
 /* ###########################################################################
 SIGNAL FUNCTIONS */
 int						_set_signals(t_pdata data);

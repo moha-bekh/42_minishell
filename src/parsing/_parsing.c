@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/09 13:10:24 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/16 07:53:01 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,15 +73,18 @@ int	_pars_process(t_pbt_op tree_node, t_ptok token)
 	return (_SUCCESS);
 }
 
-int	_parsing(t_pbt_op tree)
+int	_parsing(t_pdata data, t_pbt_op tree)
 {
 	if (!tree)
 		return (_FAILURE);
 	if (_pars_process(tree, tree->token))
+	{
+		data->_errno = 1;
 		return (_FAILURE);
+	}
 	if (tree->left)
-		_parsing(tree->left);
+		_parsing(data, tree->left);
 	if (tree->right)
-		_parsing(tree->right);
+		_parsing(data, tree->right);
 	return (_SUCCESS);
 }

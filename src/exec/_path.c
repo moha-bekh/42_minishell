@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 11:19:04 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/15 14:03:36 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/12 19:39:39 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	_resolve_path(t_pdata data, t_pbt_op node)
 {
 	t_pcmd	tmp;
 
-	if (!data || !node || !node->cmd->c_top)
+	if (!data || !node)
 		return (_ERROR);
 	tmp = node->cmd->c_top;
 	while (tmp)
@@ -107,14 +107,5 @@ int	_resolve_path(t_pdata data, t_pbt_op node)
 			_check_access(data, tmp);
 		tmp = tmp->next;
 	}
-	return (_SUCCESS);
-}
-
-int _resoleve_path_(t_pdata data, t_pcmd cmd)
-{
-	if (cmd->cmd_arg && _is_builtin(data, cmd->cmd_arg[0]))
-		cmd->built_in = true;
-	else if (cmd->cmd_arg)
-		_check_access(data, cmd);
 	return (_SUCCESS);
 }

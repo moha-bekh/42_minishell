@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _token.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/14 14:03:51 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/16 07:35:05 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,11 @@ int	_tok_word(t_pdata data, int *i)
 	while (data->input[*i] && !ft_isspace(data->input[*i]) && !_tok_is(_TOKENS,
 			data->input[*i]))
 		*i += 1;
-	data->tok = _tok_push_back(data->tok, _WORD, ft_substr(data->input, j, (*i - j)));
-	if (data->input[*i] && !ft_isspace(data->input[*i]) && (data->input[*i] == '"' || data->input[*i] == '\'' || data->input[*i] == '$'))
+	data->tok = _tok_push_back(data->tok, _WORD, ft_substr(data->input, j, (*i
+					- j)));
+	if (data->input[*i] && !ft_isspace(data->input[*i])
+		&& (data->input[*i] == '"' || data->input[*i] == '\''
+			|| data->input[*i] == '$'))
 		data->tok->t_bot->join = true;
 	return (_SUCCESS);
 }

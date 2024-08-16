@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _exp_str.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:41:05 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/12 16:25:37 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/16 07:31:17 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ int	_var_env_proc(t_pdata data)
 
 int	_var_proc(t_pdata data, t_ptok token, int *i)
 {
-	char	*tmp;
+	// char	*tmp;
 	int		j;
 
-	tmp = NULL;
+	// tmp = NULL;
 	*i += 1;
 	j = *i;
 	while (token->value[*i] && _varchr_conv(token->value[*i]))

@@ -6,7 +6,11 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/08/15 14:01:20 by mbekheir         ###   ########.fr       */
+=======
+/*   Updated: 2024/08/12 20:11:20 by mbekheir         ###   ########.fr       */
+>>>>>>> parent of 2d7250c (PIPE 2024-08-13)
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,16 +52,13 @@ void	sa_hndl(int sig)
 		*_ptr_errno = 130;
 		get_data_addr()->_errno = 130;
 		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
 		return ;
 	}
 	else if (sig == SIGQUIT)
 		return ;
 }
 
-void	child_hndl(int sig)
+void child_hndl(int sig)
 {
 	if (sig == SIGTERM)
 	{
@@ -77,9 +78,15 @@ int	_set_signals(t_pdata data)
 	sigemptyset(&data->sa.sa_mask);
 	data->sa.sa_flags = 0;
 	if (sigaction(SIGINT, &data->sa, NULL) == -1)
-		return (perror("sigaction"), _FAILURE);
+	{
+		perror("sigaction");
+		return (_FAILURE);
+	}
 	if (sigaction(SIGQUIT, &data->sa, NULL) == -1)
-		return (perror("sigaction"), _FAILURE);
+	{
+		perror("sigaction");
+		return (_FAILURE);
+	}
 	return (_SUCCESS);
 }
 

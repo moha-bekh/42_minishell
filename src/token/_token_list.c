@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/25 00:30:18 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/25 21:56:18 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,14 +123,12 @@ int	_sub_proc(t_pdata data, int *i)
 {
 	if (data->prompt[*i] == '(')
 	{
-		_dllst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL,
-			'(');
+		_dllst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL, '(');
 		data->args._stdin++;
 	}
 	else if (data->prompt[*i] == ')')
 	{
-		_dllst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL,
-			')');
+		_dllst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL, ')');
 		data->args._stdout++;
 	}
 	*i += 1;

@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/08/25 12:58:07 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/25 21:55:32 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ void	_wait_pids(t_pdata data, u_padllst cmd_line, t_pcmd limit)
 		if (WIFEXITED(data->_errno))
 		{
 			data->_errno = WEXITSTATUS(data->_errno);
-			printf("pid: %d\terrno: %d\n", tmp->pid, data->_errno);
+			// printf("pid: %d\terrno: %d\n", tmp->pid, data->_errno);
 		}
-		else
-			printf("pid: %d\texit abnormaly\n", tmp->pid);
+		// else
+		// printf("pid: %d\texit abnormaly\n", tmp->pid);
 		// if (tmp == limit)
 		// 	break ;
 		tmp = tmp->next;
@@ -217,7 +217,7 @@ int	_exec(t_pdata data, t_pbtree *node)
 		if (!(*node)->cmd_line->c_top->pid)
 			_exec(data, &(*node)->right);
 		else
-			_wait_pids(data, (*node)->cmd_line, (*node)->cmd_line->c_top);
+			waitpid((*node)->cmd_line->c_top->pid, &data->_errno, 0);
 		return (_SUCCESS);
 	}
 	else if ((*node)->token->x != _AND && (*node)->token->x != _OR)
@@ -252,8 +252,6 @@ int	main(int ac, char **av, char **ev)
 		if (_exec(&data, &data.tree) && !_data_structs_clear(&data))
 			continue ;
 		_data_structs_clear(&data);
-		_dllst_print_tokens(data.tokens);
-		_bt_print(data.tree, 0);
 	}
 	return (_data_clear(&data), _SUCCESS);
 }

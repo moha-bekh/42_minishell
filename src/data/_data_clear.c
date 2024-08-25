@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _data_cleaner.c                                    :+:      :+:    :+:   */
+/*   _data_clear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 15:44:21 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/23 13:08:20 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/25 21:32:17 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	_data_clear(t_pdata data)
 
 int	_data_structs_clear(t_pdata data)
 {
+	data->_errno = 0;
 	free(data->prompt);
 	data->prompt = NULL;
 	_dllst_clear(&data->tokens);

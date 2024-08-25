@@ -13,7 +13,8 @@
 
 int main(int ac, char **av, char **ev)
 {
-    int out, _fd_stdout;
+
+    // int out, _fd_stdout;
 
     // char str[13] = "Hello World!\n";
 
@@ -25,24 +26,24 @@ int main(int ac, char **av, char **ev)
 
     // free(str2);
 
-    out = open("out", O_CREAT | O_RDWR | O_TRUNC, 0644);
-    if (out < 0)
-        return (perror("open"), 1);
+    // out = open("out", O_CREAT | O_RDWR | O_TRUNC, 0644);
+    // if (out < 0)
+    //     return (perror("open"), 1);
 
-    // CREATING A BACKUP OF STDOUT (COPY OF FD STDOUT)
-    _fd_stdout = dup(STDOUT_FILENO);
+    // // CREATING A BACKUP OF STDOUT (COPY OF FD STDOUT)
+    // _fd_stdout = dup(STDOUT_FILENO);
 
-    dprintf(STDOUT_FILENO, "Ya pas de Lezard!\n");
+    // dprintf(STDOUT_FILENO, "Ya pas de Lezard!\n");
 
-    // REDIRECTING STDOUT TO OUT FILE
-    dup2(out, STDOUT_FILENO);
-    close(out);
-    dprintf(STDOUT_FILENO, "Ya un Lezard!\n");
+    // // REDIRECTING STDOUT TO OUT FILE
+    // dup2(out, STDOUT_FILENO);
+    // close(out);
+    // dprintf(STDOUT_FILENO, "Ya un Lezard!\n");
 
-    // RESTORING STDOUT
-    dup2(_fd_stdout, STDOUT_FILENO);
-    close(_fd_stdout);
-    dprintf(STDOUT_FILENO, "dprintf: 0 Lezard!\n");
+    // // RESTORING STDOUT
+    // dup2(_fd_stdout, STDOUT_FILENO);
+    // close(_fd_stdout);
+    // dprintf(STDOUT_FILENO, "dprintf: 0 Lezard!\n");
     
     return 0;
 }

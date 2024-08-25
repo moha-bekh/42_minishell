@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:35:57 by moha              #+#    #+#             */
-/*   Updated: 2024/08/09 16:53:33 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/25 00:30:39 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,44 +27,40 @@ int	_get_start_index(char *str)
 	return (i);
 }
 
-char	*_get_env_value(u_padll env, char *key)
+int	_path_slash(t_pdata data)
 {
-	t_pev	tmp;
-
-	if (!env || !key)
-		return (ft_strdup(""));
-	tmp = env->e_top;
-	while (tmp)
-	{
-		if (!ft_strcmp(tmp->key, key))
-			return (ft_strdup(tmp->value));
-		tmp = tmp->next;
-	}
-	return (ft_strdup(""));
-}
-
-int	_count_arg(t_ptok token)
-{
-	t_ptok	tmp;
+	char	**path;
+	char	*tmp;
 	int		i;
 
-	if (!token)
-		return (_FAILURE);
-	tmp = token;
-	i = 0;
-	while (tmp && tmp->type != _PIPE && !_tok_is(_TYP_SEP, tmp->type))
+	if (data->args.env_path)
+		path = data->args.env_path;
+	else
+		path = data->args.hard_path;
+	i = -1;
+	while (path[++i])
 	{
-		if (tmp && _tok_is(_TYP_REDIRS, tmp->type))
-		{
-			tmp = tmp->next;
-			if (tmp)
-				tmp = tmp->next;
-			continue ;
-		}
-		i++;
-		tmp = tmp->next;
+		tmp = path[i];
+		path[i] = ft_strjoin(path[i], "/");
+		free(tmp);
+		tmp = NULL;
 	}
-	return (i);
+	return (_SUCCESS);
+}
+
+int	is_overflow(char *str)
+{
+	if (str[0] == '-' && (ft_strlen(str) <= 20))
+	{
+		if (ft_strncmp(str, "-9223372036854775808", 20) > 0)
+			return (1);
+	}
+	else if (ft_strlen(str) <= 19)
+	{
+		if (ft_strncmp(str, "9223372036854775807", 19) > 0)
+			return (1);
+	}
+	return (0);
 }
 
 char	*get_random_name(void)
@@ -86,17 +82,40 @@ char	*get_random_name(void)
 	return ((char *)buf);
 }
 
-int	is_overflow(char *str)
+int	_count_args(t_pnlst token)
 {
-	if (str[0] == '-' && (ft_strlen(str) <= 20))
+	t_pnlst	tmp;
+	int		i;
+
+	tmp = token;
+	i = 0;
+	while (tmp && tmp->x != _PIPE && !_token_id(tmp->x, _TYP_SEP))
 	{
-		if (ft_strncmp(str, "-9223372036854775808", 20) > 0)
-			return (1);
+		if (tmp && _token_id(tmp->x, _TYP_REDIRS))
+		{
+			tmp = tmp->next;
+			if (tmp)
+				tmp = tmp->next;
+			continue ;
+		}
+		i++;
+		tmp = tmp->next;
 	}
-	else if (ft_strlen(str) <= 19)
-	{
-		if (ft_strncmp(str, "9223372036854775807", 19) > 0)
-			return (1);
-	}
-	return (0);
+	return (i);
 }
+
+// char	*_get_env_value(u_padll env, char *key)
+// {
+// 	t_pev	tmp;
+
+// 	if (!env || !key)
+// 		return (ft_strdup(""));
+// 	tmp = env->e_top;
+// 	while (tmp)
+// 	{
+// 		if (!ft_strcmp(tmp->key, key))
+// 			return (ft_strdup(tmp->value));
+// 		tmp = tmp->next;
+// 	}
+// 	return (ft_strdup(""));
+// }

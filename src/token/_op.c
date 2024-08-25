@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _op.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:25:28 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/07 13:44:43 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/24 02:17:59 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,41 +14,66 @@
 
 int	_tok_or(t_pdata data, int *i)
 {
-	if (!data->input[*i + 2] || _tok_is(_STX_ERR_OP, data->input[*i + 2]))
-		return (_tok_stx_err('|', 1));
-	data->tok = _tok_push_back(data->tok, _OR, ft_substr(data->input, *i, 2));
+	_dllst_push_back(&data->tokens, ft_substr(data->prompt, *i, 2), NULL, _OR);
 	*i += 2;
+	if (!data->tokens->d_bot->prev || (data->tokens->d_bot->prev
+			&& _token_id(data->tokens->d_bot->prev->x, _STX_OP)))
+	{
+		ft_dprintf(2, _ERR_TOKEN, "||");
+		return (_SYNTAX);
+	}
 	return (_SUCCESS);
 }
 
 int	_tok_and(t_pdata data, int *i)
 {
-	if (!data->input[*i + 2] || _tok_is(_STX_ERR_OP, data->input[*i + 2]))
-		return (_tok_stx_err('&', 1));
-	data->tok = _tok_push_back(data->tok, _AND, ft_substr(data->input, *i, 2));
+	int	count;
+
+	count = 0;
+	while (data->prompt[*i + count] == '&' && count < 2)
+		count++;
+	_dllst_push_back(&data->tokens, ft_substr(data->prompt, *i, 2), NULL, _AND);
 	*i += 2;
+	if (count == 1)
+	{
+		ft_dprintf(2, _ERR_TOKEN, "&");
+		return (_SYNTAX);
+	}
+	else if (!data->tokens->d_bot->prev || (data->tokens->d_bot->prev
+			&& _token_id(data->tokens->d_bot->prev->x, _STX_OP)))
+	{
+		ft_dprintf(2, _ERR_TOKEN, "&&");
+		return (_SYNTAX);
+	}
+	return (_SUCCESS);
+}
+
+int	_tok_pipe(t_pdata data, int *i)
+{
+	_dllst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL,
+		_PIPE);
+	*i += 1;
+	if (!data->tokens->d_bot->prev || (data->tokens->d_bot->prev && _token_id(data->tokens->d_bot->prev->x, _STX_OP)))
+	{
+		ft_dprintf(2, _ERR_TOKEN, "|");
+		return (_SYNTAX);
+	}
 	return (_SUCCESS);
 }
 
 int	_op_proc(t_pdata data, int *i)
 {
-	if (data->input[*i] == '&')
+	int	count;
+
+	count = 0;
+	if (data->prompt[*i] == '&')
+		return (_tok_and(data, i));
+	else if (data->prompt[*i] == '|')
 	{
-		if (!data->input[*i + 1])
-			return (_tok_stx_err('&', 1));
-		else
-			return (_tok_and(data, i));
-	}
-	else if (data->input[*i] == '|')
-	{
-		if (!data->input[*i + 1])
-			return (_tok_stx_err('|', 1));
-		else if (data->input[*i + 1] != '|')
-		{
-			data->tok = _tok_push_back(data->tok, _PIPE, ft_substr(data->input,
-						*i, 1));
-			*i += 1;
-		}
+		while (data->prompt[*i + count] == '|' && count < 2)
+			count++;
+		if (count == 1)
+			return (_tok_pipe(data, i));
 		else
 			return (_tok_or(data, i));
 	}

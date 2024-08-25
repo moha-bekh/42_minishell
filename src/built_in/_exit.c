@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _exit.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:43 by moha              #+#    #+#             */
-/*   Updated: 2024/08/09 12:33:04 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/23 19:26:57 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,11 @@ int	_many_args(t_pdata data, char **arg)
 {
 	if (!_str_is_digit(arg[1]) && _str_is_digit(arg[2]))
 	{
-		ft_putstr_fd("exit\nbash: exit: ", STDERR_FILENO);
-		ft_putstr_fd(arg[1], STDERR_FILENO);
-		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
-		_data_cleaner(data);
+		ft_dprintf(2, "exit: %s: numeric argument required\n", arg[1]);
+		_data_clear(data);
 		exit(2);
 	}
-	ft_putstr_fd("exit\nbash: exit: too many arguments\n", STDERR_FILENO);
+	ft_dprintf(2, "exit: bash: exit: too many arguments\n");
 	return (_FAILURE);
 }
 
@@ -48,42 +46,38 @@ int	_exit_arg(t_pdata data, char **arg)
 	if (is_overflow(arg[1]))
 	{
 		str = ft_strdup(arg[1]);
-		ft_putstr_fd("exit\nbash: exit: ", STDERR_FILENO);
-		ft_putstr_fd(str, STDERR_FILENO);
-		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+		ft_dprintf(2, "exit: %s: numeric argument required\n", str);
 		free(str);
-		_data_cleaner(data);
+		_data_clear(data);
 		exit(2);
 		return (_FAILURE);
 	}
-	ft_putstr_fd("exit\n", STDOUT_FILENO);
-	_data_cleaner(data);
+	ft_dprintf(STDERR_FILENO, "exit\n");
+	_data_clear(data);
 	exit(ft_atoi(arg[1]) % 256);
 	return (_FAILURE);
 }
 
-int	_exit_(t_pdata data, char **arg)
+int	_exit_(t_pdata data, t_pcmd *cmd)
 {
 	int	i;
 
-	if (!data)
-		return (_FAILURE);
 	i = 0;
-	while (arg[i])
+	while ((*cmd)->args[i])
 		i++;
 	i--;
 	if (!i)
 	{
-		ft_putstr_fd("exit\n", STDOUT_FILENO);
-		_data_cleaner(data);
+		ft_dprintf(STDERR_FILENO, "exit\n");
+		_data_clear(data);
 		exit(0);
 	}
 	if (i == 1)
 	{
-		_exit_arg(data, arg);
+		_exit_arg(data, (*cmd)->args);
 		return (_FAILURE);
 	}
 	else if (i > 1)
-		_many_args(data, arg);
+		_many_args(data, (*cmd)->args);
 	return (_SUCCESS);
 }

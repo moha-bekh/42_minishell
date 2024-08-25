@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   m_free_tab.c                                       :+:      :+:    :+:   */
+/*   ft_free_tab.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 01:20:11 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/26 16:29:26 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/21 16:20:31 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@ void	ft_free_tab(int **tab, int size)
 		return ;
 	i = -1;
 	while (++i < size)
-		ft_free(&tab[i]);
-	ft_free(tab);
+	{
+		free(&tab[i]);
+		tab[i] = NULL;
+	}
+	free(tab);
+	tab = NULL;
 }

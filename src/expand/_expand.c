@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _exp_var.c                                         :+:      :+:    :+:   */
+/*   _expand.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 16:22:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/12 16:25:41 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/23 17:42:39 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 int	_varchr_conv(char c)
 {
 	if (ft_isalnum(c) || c == '_' || c == '?')
-		return (_IS);
-	return (_NOT);
+		return (1);
+	return (0);
 }
 
 int	_expand_env_var(t_pdata data, t_ptok token)

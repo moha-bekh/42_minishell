@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 14:53:46 by ajordan-          #+#    #+#             */
-/*   Updated: 2024/07/26 16:33:07 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/21 16:16:53 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 			ft_lstdelone(*lst, del);
 			*lst = tmp;
 		}
-		ft_free(*lst);
+		free(*lst);
 		*lst = NULL;
 	}
 }

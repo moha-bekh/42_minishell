@@ -3,34 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   _env.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:58 by moha              #+#    #+#             */
-/*   Updated: 2024/08/07 11:46:35 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/24 14:13:54 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	_env(t_pdata data, char **arg)
+int	_env(t_pdata data, t_pcmd *cmd)
 {
-	t_pev	tmp;
-
-	if (!data || !data->env.dll_env)
+	if (!data || !data->env)
 		return (_SUCCESS);
-	if (arg[1])
+	if ((*cmd)->args[1])
 	{
-		ft_putstr_fd("env: ", STDERR_FILENO);
-		ft_putstr_fd(arg[1], STDERR_FILENO);
-		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+		ft_dprintf(2, "env: %s: No such file or directory\n", (*cmd)->args[1]);
 		return (127);
 	}
-	tmp = data->env.dll_env->e_top;
-	while (tmp)
-	{
-		if (tmp->value && tmp->value[0])
-			printf("%s=%s\n", tmp->key, tmp->value);
-		tmp = tmp->next;
-	}
+	_dllst_print_env(data->env);
 	return (_SUCCESS);
 }

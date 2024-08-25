@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/09 11:07:48 by ajordan-          #+#    #+#             */
-/*   Updated: 2024/07/10 14:32:15 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/21 16:16:02 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_list	*ft_lstnew(void *value)
 	new = malloc(sizeof(t_list));
 	if (!new)
 		return (NULL);
-	ft_memset(new, 0, sizeof(t_list));
+	*new = (t_list){0};
 	new->value = value;
 	return (new);
 }

@@ -6,29 +6,11 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:34:32 by moha              #+#    #+#             */
-/*   Updated: 2024/08/08 14:53:49 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/23 19:27:18 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	_export_print(u_padll dll)
-{
-	t_pev	tmp;
-
-	if (!dll)
-		return ;
-	tmp = dll->e_top;
-	while (tmp)
-	{
-		if (tmp->value && tmp->value[1] != '"')
-			printf("export %s=%s\n", tmp->key, tmp->value);
-		else
-			printf("export %s\n", tmp->key);
-		tmp = tmp->next;
-	}
-	return ;
-}
 
 int	_varstr_conv(char *str)
 {
@@ -38,10 +20,10 @@ int	_varstr_conv(char *str)
 	while (str[i])
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (_FAILURE);
+			return (1);
 		i++;
 	}
-	return (_SUCCESS);
+	return (0);
 }
 
 char	*_exp_value(char *value)
@@ -62,73 +44,71 @@ char	*_exp_value(char *value)
 
 int	_add_value(t_pdata data, char *arg)
 {
+	char	*key;
 	char	*value;
 	char	*exp_value;
-	char	*tmp;
 
-	tmp = ft_substr(arg, 0, _get_start_index(arg));
+	key = ft_substr(arg, 0, _get_start_index(arg));
 	value = ft_substr(arg, _get_start_index(arg) + 1, ft_strlen(arg));
 	exp_value = ft_strdup(value);
 	exp_value = _exp_value(exp_value);
-	data->env.dll_env = _env_push_back(data->env.dll_env, tmp, value);
-	data->env.dll_senv = _env_push_back(data->env.dll_senv, tmp, exp_value);
-	data->env.dll_senv = _env_sort(data->env.dll_senv);
+	_dllst_push_back(&data->env, key, value, 0);
+	_dllst_push_back(&data->export, key, exp_value, 0);
+	_dllst_sort(&data->export, false);
 	return (_SUCCESS);
 }
 
 int	_replace_env_value(t_pdata data, char *arg)
 {
-	t_pev	tmp;
+	t_pnlst	tmp;
 	char	*value;
+	char	*key;
 
-	data->tmp = ft_substr(arg, 0, _get_start_index(arg));
+	key = ft_substr(arg, 0, _get_start_index(arg));
 	value = ft_substr(arg, _get_start_index(arg) + 1, ft_strlen(arg));
-	tmp = data->env.dll_env->e_top;
+	tmp = data->env->d_top;
 	while (tmp)
 	{
-		if (!ft_strcmp(tmp->key, data->tmp))
+		if (!ft_strcmp((char *)tmp->addr_1, key))
 		{
-			free(data->tmp);
-			data->tmp = tmp->value;
-			tmp->value = value;
-			free(data->tmp);
-			data->tmp = NULL;
-			return (_IS);
+			free(key);
+			key = tmp->addr_2;
+			tmp->addr_2 = value;
+			free(key);
+			key = NULL;
+			return (1);
 		}
 		tmp = tmp->next;
 	}
 	free(value);
-	free(data->tmp);
-	data->tmp = NULL;
-	return (_NOT);
+	return (0);
 }
 
-int	_replace_senv_value(t_pdata data, char *arg)
+int	_replace_export_value(t_pdata data, char *arg)
 {
-	t_pev	tmp;
+	t_pnlst	tmp;
 	char	*value;
+	char	*key;
 
-	data->tmp = ft_substr(arg, 0, _get_start_index(arg));
+	key = ft_substr(arg, 0, _get_start_index(arg));
 	value = ft_substr(arg, _get_start_index(arg) + 1, ft_strlen(arg));
 	value = _exp_value(value);
-	tmp = data->env.dll_senv->e_top;
+	tmp = data->export->d_top;
 	while (tmp)
 	{
-		if (!ft_strcmp(tmp->key, data->tmp))
+		if (!ft_strcmp((char *)tmp->addr_1, key))
 		{
-			free(data->tmp);
-			data->tmp = tmp->value;
-			tmp->value = value;
-			free(data->tmp);
-			data->tmp = NULL;
-			return (_IS);
+			free(key);
+			key = tmp->addr_2;
+			tmp->addr_2 = value;
+			free(key);
+			tmp = NULL;
+			return (1);
 		}
 		tmp = tmp->next;
 	}
 	free(value);
-	free(data->tmp);
-	data->tmp = NULL;
-	return (_NOT);
+	return (0);
 }
 
 int	_bad_value(char *value)
@@ -138,9 +118,7 @@ int	_bad_value(char *value)
 	tmp = ft_substr(value, 0, _get_start_index(value));
 	if (!tmp[0] || _varstr_conv(tmp))
 	{
-		ft_putstr_fd("bash: export: `", 2);
-		ft_putstr_fd(value, 2);
-		ft_putstr_fd("': not a valid identifier\n", 2);
+		ft_dprintf(2, "bash: export: `%s': not a valid identifier\n", value);
 		free(tmp);
 		return (_FAILURE);
 	}
@@ -148,24 +126,24 @@ int	_bad_value(char *value)
 	return (_SUCCESS);
 }
 
-int	_export(t_pdata data, char **arg)
+int	_export(t_pdata data, t_pcmd *cmd)
 {
 	int	i;
 
-	if (!arg[1])
-		return (_export_print(data->env.dll_senv), _SUCCESS);
-	i = 0;
-	while (arg[++i])
+	if (!(*cmd)->args[1])
+		return (_dllst_print_export(data->export), _SUCCESS);
+	i = -1;
+	while ((*cmd)->args[++i])
 	{
-		if (_bad_value(arg[i]))
+		if (_bad_value((*cmd)->args[i]))
 			continue ;
-		else if (_replace_env_value(data, arg[i]))
+		else if (_replace_env_value(data, (*cmd)->args[i]))
 		{
-			_replace_senv_value(data, arg[i]);
+			_replace_export_value(data, (*cmd)->args[i]);
 			continue ;
 		}
-		_add_value(data, arg[i]);
+		_add_value(data, (*cmd)->args[i]);
 	}
-	data->env.dll_senv = _env_sort(data->env.dll_senv);
+	_dllst_sort(&data->export, false);
 	return (_SUCCESS);
 }

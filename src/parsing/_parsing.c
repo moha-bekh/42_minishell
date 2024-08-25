@@ -6,85 +6,57 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/16 07:53:01 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/25 00:30:58 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	_pars_args(t_pcmd cmd, t_ptok token)
+int	_pars_pipe_lines(t_pbtree *node)
 {
-	int	i;
+	t_pnlst	tmp;
 
-	if (!cmd || !token)
+	if (!*node)
 		return (_FAILURE);
-	i = _count_arg(token);
-	if (i && _alloc((void **)&cmd->cmd_arg, sizeof(char *) * (i + 1)))
-		return (_ALLOC);
-	i = 0;
-	while (token && token->type != _PIPE && !_tok_is(_TYP_SEP, token->type))
+	_cmd_push_back(&(*node)->cmd_line, (*node)->token);
+	tmp = (*node)->token;
+	while (tmp && (!(*node)->root || ((*node)->root && tmp != (*node)->root->token)))
 	{
-		if (_tok_is(_TYP_REDIRS, token->type))
+		if (tmp->x == _PIPE)
+			_cmd_push_back(&(*node)->cmd_line, tmp->next);
+		tmp = tmp->next;
+	}
+	return (_SUCCESS);
+}
+
+int	_pars_args_line(t_pcmd *cmd)
+{
+	t_pnlst	tmp;
+	int		i;
+
+	if (!*cmd)
+		return (_FAILURE);
+	i = _count_args((*cmd)->token);
+	if (i && (_alloc((void **)&(*cmd)->args, sizeof(char *) * (i + 1)) || !(*cmd)->args))
+		return (_FAILURE);
+	tmp = (*cmd)->token;
+	i = 0;
+	while (tmp && tmp->x != _PIPE && !_token_id(tmp->x, _TYP_SEP))
+	{
+		if (_token_id(tmp->x, _TYP_REDIRS))
 		{
-			if (_pars_redirs(cmd, token))
+			if (_pars_redirs(cmd, tmp))
 				return (_FAILURE);
-			token = token->next->next;
+			tmp = tmp->next;
+			if (tmp)
+				tmp = tmp->next;
 			continue ;
 		}
-		cmd->cmd_arg[i++] = ft_strdup(token->value);
-		token = token->next;
-	}
-	if (cmd->cmd_arg)
-		cmd->cmd_arg[i] = NULL;
-	return (_SUCCESS);
-}
-
-void	_pars_pipe(t_pbt_op node, t_ptok token)
-{
-	t_ptok	tmp;
-
-	if (!node || !token)
-		return ;
-	tmp = token;
-	while (tmp && !_tok_is(_TYP_SEP, tmp->type))
-	{
-		if (tmp->type == _PIPE)
-			node->cmd = _cmd_push_back(node->cmd, tmp->next, NULL);
+		(*cmd)->args[i] = ft_strdup((char *)tmp->addr_1);
+		i++;
 		tmp = tmp->next;
 	}
-	return ;
-}
-
-int	_pars_process(t_pbt_op tree_node, t_ptok token)
-{
-	t_pcmd	tmp;
-
-	if (!tree_node || !token)
-		return (_FAILURE);
-	tree_node->cmd = _cmd_push_back(tree_node->cmd, token, NULL);
-	_pars_pipe(tree_node, token);
-	tmp = tree_node->cmd->c_top;
-	while (tmp)
-	{
-		if (_pars_args(tmp, tmp->token))
-			return (_FAILURE);
-		tmp = tmp->next;
-	}
-	return (_SUCCESS);
-}
-
-int	_parsing(t_pdata data, t_pbt_op tree)
-{
-	if (!tree)
-		return (_FAILURE);
-	if (_pars_process(tree, tree->token))
-	{
-		data->_errno = 1;
-		return (_FAILURE);
-	}
-	if (tree->left)
-		_parsing(data, tree->left);
-	if (tree->right)
-		_parsing(data, tree->right);
+	if ((*cmd)->args)
+		(*cmd)->args[i] = NULL;
 	return (_SUCCESS);
 }

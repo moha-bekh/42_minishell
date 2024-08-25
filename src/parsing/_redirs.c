@@ -6,89 +6,77 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 13:02:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/16 07:45:27 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/25 00:31:06 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	_pars_redir_in(t_pcmd cmd, t_ptok token)
+int	_pars_redir_in(t_pcmd *cmd, t_pnlst token)
 {
-	if (!cmd->redir._access && !access(token->value, F_OK | R_OK))
+	if ((*cmd)->redirs.in_access)
 	{
-		cmd->redir.in_name = token->value;
+		ft_dprintf(2, "bash: %s: No such file or directory\n",
+			(char *)token->addr_1);
 		return (_SUCCESS);
 	}
-	ft_putstr_fd("bash: ", STDERR_FILENO);
-	ft_putstr_fd(token->value, STDERR_FILENO);
-	ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
-	cmd->redir.in_name = token->value;
-	cmd->redir._access = true;
-	return (_FAILURE);
-}
-
-int	_pars_redir_outt(t_pcmd cmd, t_ptok token)
-{
-	cmd->redir.out_name = token->value;
-	cmd->redir.fd[1] = open(cmd->redir.out_name, O_RDWR | O_CREAT | O_TRUNC, 0644);
-	if (cmd->redir.fd[1] < 0)
+	else if (!(*cmd)->redirs.in_access && !access((char *)token->addr_1,
+			F_OK | R_OK))
 	{
-		ft_putstr_fd("bash: ", STDERR_FILENO);
-		ft_putstr_fd(cmd->redir.out_name, STDERR_FILENO);
-		ft_putstr_fd(" : Is a directory\n", STDERR_FILENO);
-		return (_FAILURE);
+		(*cmd)->redirs.in_name = (char *)token->addr_1;
+		return (_SUCCESS);
 	}
-	cmd->redir.trunc = true;
-	close(cmd->redir.fd[1]);
+	(*cmd)->redirs.in_name = (char *)token->addr_1;
+	(*cmd)->redirs.in_access = true;
 	return (_SUCCESS);
 }
 
-int	_pars_redir_outa(t_pcmd cmd, t_ptok token)
+int	_pars_redir_outt(t_pcmd *cmd, t_pnlst token)
 {
-	cmd->redir.out_name = token->value;
-	cmd->redir.fd[1] = open(cmd->redir.out_name, O_RDWR | O_CREAT | O_APPEND, 0644);
-	if (cmd->redir.fd[1] < 0)
+	(*cmd)->redirs.out_name = (char *)token->addr_1;
+	(*cmd)->redirs.fd[1] = open((*cmd)->redirs.out_name,
+			O_RDWR | O_CREAT | O_TRUNC, 0644);
+	if ((*cmd)->redirs.fd[1] < 0)
 	{
-		ft_putstr_fd("bash: ", STDERR_FILENO);
-		ft_putstr_fd(cmd->redir.out_name, STDERR_FILENO);
-		ft_putstr_fd(" : Is a directory\n", STDERR_FILENO);
+		ft_dprintf(2, "bash: %s: Is a directory\n", (*cmd)->redirs.out_name);
 		return (_FAILURE);
 	}
-	cmd->redir.trunc = false;
-	close(cmd->redir.fd[1]);
+	(*cmd)->redirs.out_trunc = true;
+	close((*cmd)->redirs.fd[1]);
 	return (_SUCCESS);
 }
 
-int	_pars_redirs(t_pcmd cmd, t_ptok token)
+int	_pars_redir_outa(t_pcmd *cmd, t_pnlst token)
 {
-	t_ptok	tmp;
-
-	if (!cmd || !token)
-		return (_FAILURE);
-	tmp = token;
-	while (tmp && tmp->type != _PIPE && !_tok_is(_TYP_SEP, tmp->type))
+	(*cmd)->redirs.out_name = (char *)token->addr_1;
+	(*cmd)->redirs.fd[1] = open((*cmd)->redirs.out_name,
+			O_RDWR | O_CREAT | O_APPEND, 0644);
+	if ((*cmd)->redirs.fd[1] < 0)
 	{
-		if (tmp->type == 'H')
+		ft_dprintf(2, "bash: %s: Is a directory\n", (*cmd)->redirs.out_name);
+		return (_FAILURE);
+	}
+	(*cmd)->redirs.out_trunc = false;
+	close((*cmd)->redirs.fd[1]);
+	return (_SUCCESS);
+}
+
+int	_pars_redirs(t_pcmd *cmd, t_pnlst token)
+{
+	while (token && token->x != _PIPE && !_token_id(token->x, _TYP_SEP))
+	{
+		if (token->x == 'H')
 		{
-			cmd->redir.here_name = get_random_name();
-			cmd->redir.here_limit = tmp->next->value;
+			(*cmd)->redirs.here_name = get_random_name();
+			(*cmd)->redirs.here_limit = token->next->addr_1;
 		}
-		if (tmp->type == '<')
-		{
-			if (_pars_redir_in(cmd, tmp->next))
-				return (_FAILURE);
-		}
-		else if (tmp->type == '>')
-		{
-			if (_pars_redir_outt(cmd, tmp->next))
-				return (_FAILURE);
-		}
-		else if (tmp->type == 'N')
-		{
-			if (_pars_redir_outa(cmd, tmp->next))
-				return (_FAILURE);
-		}
-		tmp = tmp->next;
+		else if (token->x == '<' && _pars_redir_in(cmd, token->next))
+			return (_FAILURE);
+		else if (token->x == '>' && _pars_redir_outt(cmd, token->next))
+			return (_FAILURE);
+		else if (token->x == 'N' && _pars_redir_outa(cmd, token->next))
+			return (_FAILURE);
+		token = token->next;
 	}
 	return (_SUCCESS);
 }

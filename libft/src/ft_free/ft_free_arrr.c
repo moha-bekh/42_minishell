@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   m_free_arrr.c                                      :+:      :+:    :+:   */
+/*   ft_free_arrr.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:51:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/07/26 16:29:10 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/21 16:19:56 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,13 @@ void	ft_free_arrr(char ***arrr)
 	{
 		j = -1;
 		while (arrr[i][++j])
-			ft_free(arrr[i][j]);
-		ft_free(arrr[i]);
+		{
+			free(arrr[i][j]);
+			arrr[i][j] = NULL;
+		}
+		free(arrr[i]);
+		arrr[i] = NULL;
 	}
-	ft_free(arrr);
+	free(arrr);
+	arrr = NULL;
 }

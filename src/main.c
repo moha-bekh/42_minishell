@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/08/26 16:10:58 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/26 16:44:56 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,7 @@ int	_exec_child_proc(t_pdata data, t_pcmd *cmd)
 	close(data->args._stdin);
 	close(data->args._stdout);
 	execve((*cmd)->path, (*cmd)->args, data->args.env);
-	_exec_failed(data, cmd);
-	return (_FAILURE);
+	return (_exec_failed(data, cmd));
 }
 
 int	_exec_parent_proc(t_pcmd *cmd)
@@ -190,7 +189,7 @@ int	_exec_cmd_line(t_pdata data, t_pbtree *node)
 	(void)data;
 	_pars_pipe_lines(node);
 	tmp = (*node)->cmd_line->c_top;
-	while (tmp && !data->_errno)
+	while (tmp)
 	{
 		_pars_args_line(&tmp);
 		if (_is_builtin(data, tmp->args))
@@ -221,8 +220,6 @@ int	_exec(t_pdata data, t_pbtree *node)
 
 	if ((*node)->left)
 		_exec(data, &(*node)->left);
-
-	printf("token: %s\n", (char *)(*node)->token->addr_1);
 	// if ((*node)->token->x == '(')
 	// {
 	// 	_cmd_push_back(&(*node)->cmd_line, (*node)->token);
@@ -237,13 +234,13 @@ int	_exec(t_pdata data, t_pbtree *node)
 	// }
 	if (!_token_id((*node)->token->x, _TYP_SEP))
 		_exec_cmd_line(data, node);
-	// else
-	// {
-	// 	if ((*node)->token->x == _AND && data->_errno)
-	// 		return (_SUCCESS);
-	// 	else if ((*node)->token->x == _OR && !data->_errno)
-	// 		return (_SUCCESS);
-	// }
+	else
+	{
+		if ((*node)->token->x == _AND && data->_errno)
+			return (_SUCCESS);
+		else if ((*node)->token->x == _OR && !data->_errno)
+			return (_SUCCESS);
+	}
 	if ((*node)->right)
 		_exec(data, &(*node)->right);
 	return (_SUCCESS);

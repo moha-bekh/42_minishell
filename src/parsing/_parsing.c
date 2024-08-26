@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/26 12:46:31 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/26 16:47:12 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,7 @@ int	_pars_outside_redirs(t_pcmd *cmd, t_pnlst *token)
 				return (_FAILURE);
 			else
 			{
-				fd = open((char *)(*token)->next->addr_1,
-						O_RDWR | O_CREAT | O_TRUNC, 0644);
+				fd = open((char *)(*token)->next->addr_1, O_RDWR | O_CREAT | O_TRUNC, 0644);
 				close(fd);
 			}
 			(*token) = (*token)->next;
@@ -80,8 +79,7 @@ int	_pars_args_line(t_pcmd *cmd)
 	if (!*cmd)
 		return (_FAILURE);
 	i = _count_args((*cmd)->token);
-	if (i && (_alloc((void **)&(*cmd)->args, sizeof(char *) * (i + 1))
-			|| !(*cmd)->args))
+	if (i && (_alloc((void **)&(*cmd)->args, sizeof(char *) * (i + 1)) || !(*cmd)->args))
 		return (_FAILURE);
 	i = 0;
 	tmp = (*cmd)->token;

@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 19:10:13 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/26 11:42:35 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/26 16:37:03 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ void	_cmd_print_line(t_pcmd cmd)
 	if (cmd->redirs.here_name)
 	{
 		printf("\t\there_name: %s", cmd->redirs.here_name);
-		printf("\t\tlimiter: %s", cmd->redirs.here_limit);
+		i = -1;
+		while (cmd->redirs.here_limit[++i])
+			printf("\t\tlimiter: %d -> %s", i, cmd->redirs.here_limit[i]);
 	}
 	if (cmd->redirs.out_name)
 		printf("\t\tout_name: %s", cmd->redirs.out_name);

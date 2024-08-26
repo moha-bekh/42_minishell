@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/26 16:47:12 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 01:29:47 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,69 +30,46 @@ int	_pars_pipe_lines(t_pbtree *node)
 	return (_SUCCESS);
 }
 
-int	_pars_outside_redirs(t_pcmd *cmd, t_pnlst *token)
+int	_pars_args_proc(t_pcmd *cmd)
 {
-	int	fd;
+	int	i;
 
-	while (token && (*token)->x != _PIPE && !_token_id((*token)->x, _TYP_SEP))
-	{
-		if (_token_id((*token)->x, _TYP_REDIRS))
-		{
-			if (_pars_redirs(cmd, *token, false))
-				return (_FAILURE);
-			else
-			{
-				fd = open((char *)(*token)->next->addr_1, O_RDWR | O_CREAT | O_TRUNC, 0644);
-				close(fd);
-			}
-			(*token) = (*token)->next;
-			if (*token)
-				(*token) = (*token)->next;
-			continue ;
-		}
-		else
-			return (ft_dprintf(2, _ERR_TOKEN, (char *)(*token)->addr_1),
-				_FAILURE);
-		(*token) = (*token)->next;
-	}
+	i = _count_args((*cmd)->token);
+	if (i && (_alloc((void **)&(*cmd)->args, sizeof(char *) * (i + 1))
+			|| !(*cmd)->args))
+		return (_FAILURE);
 	return (_SUCCESS);
 }
 
-int	_pars_inside_redirs(t_pcmd *cmd, t_pnlst *token)
-{
-	if (_token_id((*token)->x, _TYP_REDIRS))
-	{
-		if (_pars_redirs(cmd, (*token), true))
-			return (_FAILURE);
-		(*token) = (*token)->next;
-		if (*token)
-			(*token) = (*token)->next;
-	}
-	return (_SUCCESS);
-}
-
-int	_pars_args_line(t_pcmd *cmd)
+int	_pars_args_line(t_pdata data, t_pcmd *cmd, t_pnlst *token, bool inside)
 {
 	t_pnlst	tmp;
 	int		i;
 
 	if (!*cmd)
 		return (_FAILURE);
-	i = _count_args((*cmd)->token);
-	if (i && (_alloc((void **)&(*cmd)->args, sizeof(char *) * (i + 1)) || !(*cmd)->args))
+	if (inside && _pars_args_proc(cmd))
 		return (_FAILURE);
 	i = 0;
-	tmp = (*cmd)->token;
+	tmp = *token;
 	while (tmp && tmp->x != _PIPE && !_token_id(tmp->x, _TYP_SEP))
 	{
-		if (_token_id(tmp->x, _TYP_REDIRS) && !_pars_inside_redirs(cmd, &tmp))
+		if (_token_id(tmp->x, _TYP_REDIRS))
+		{
+			if (_pars_redirs(cmd, &tmp, inside))
+				return (_FAILURE);
 			continue ;
-		(*cmd)->args[i++] = ft_strdup((char *)tmp->addr_1);
+		}
+		else if (inside && tmp->addr_1)
+			(*cmd)->args[i++] = ft_strdup((char *)tmp->addr_1);
+		else if (!inside && tmp->addr_1)
+			return (ft_dprintf(2, _ERR_TOKEN, (char *)tmp->addr_1), _FAILURE);
 		tmp = tmp->next;
 	}
-	if (tmp && tmp->x == ')' && tmp->next)
-		_pars_outside_redirs(cmd, &tmp->next);
-	if ((*cmd)->args)
+	if (inside && (*cmd)->args)
 		(*cmd)->args[i] = NULL;
+	if (tmp && tmp->x == ')' && tmp->next && _pars_args_line(data, cmd,
+			&tmp->next, false))
+		return (_FAILURE);
 	return (_SUCCESS);
 }

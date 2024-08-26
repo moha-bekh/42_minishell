@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _cmd_push.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 18:44:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/23 16:23:53 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/26 19:44:01 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	_cmd_push_back(u_padllst *dllst, t_pnlst token)
 	if (_alloc((void *)&node, sizeof(t_cmd)) || !node)
 		return ;
 	*node = (t_cmd){0};
+	node->redirs = (t_redir){0};
 	if (!(*dllst))
 	{
 		if (_alloc((void *)dllst, sizeof(u_adllst)) || !*dllst)

@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 23:44:34 by moha              #+#    #+#             */
-/*   Updated: 2024/08/26 11:25:27 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 00:44:28 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ t_pdata	get_data(void)
 
 void	_data_init_builtins(t_pdata data)
 {
-	_dllst_push_back(&data->builtins, (void *)ft_strdup("cd"), NULL, 0);
-	_dllst_push_back(&data->builtins, (void *)ft_strdup("echo"), NULL, 0);
-	_dllst_push_back(&data->builtins, (void *)ft_strdup("env"), NULL, 0);
-	_dllst_push_back(&data->builtins, (void *)ft_strdup("exit"), NULL, 0);
-	_dllst_push_back(&data->builtins, (void *)ft_strdup("export"), NULL, 0);
-	_dllst_push_back(&data->builtins, (void *)ft_strdup("pwd"), NULL, 0);
-	_dllst_push_back(&data->builtins, (void *)ft_strdup("unset"), NULL, 0);
+	_dllst_push_back(&data->builtins, ft_strdup("cd"), NULL, 0);
+	_dllst_push_back(&data->builtins, ft_strdup("echo"), NULL, 0);
+	_dllst_push_back(&data->builtins, ft_strdup("env"), NULL, 0);
+	_dllst_push_back(&data->builtins, ft_strdup("exit"), NULL, 0);
+	_dllst_push_back(&data->builtins, ft_strdup("export"), NULL, 0);
+	_dllst_push_back(&data->builtins, ft_strdup("pwd"), NULL, 0);
+	_dllst_push_back(&data->builtins, ft_strdup("unset"), NULL, 0);
 }
 
 int	_data_init(t_pdata data, int ac, char **av, char **ev)

@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 11:19:04 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/26 12:28:09 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/26 21:43:52 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ int	_get_path(t_pdata data, t_pcmd *cmd)
 	while (path[++i])
 	{
 		(*cmd)->path = ft_strjoin(path[i], prog);
+		if (!(*cmd)->path)
+			continue ;
 		if (!access((*cmd)->path, F_OK) && !access((*cmd)->path, X_OK))
 			return (_SUCCESS);
 		free((*cmd)->path);

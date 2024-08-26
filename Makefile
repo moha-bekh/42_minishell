@@ -110,6 +110,9 @@ TREE_OBJS :=					$(addprefix $(TREE_DIR), $(addsuffix .o, $(TREE_SRCS)))
 
 EXEC_DIR := 					exec/
 EXEC_SRCS := 					\
+								_exec\
+								_exec_child\
+								_exec_builtin\
 								_path
 
 EXEC_OBJS := 					$(addprefix $(EXEC_DIR), $(addsuffix .o, $(EXEC_SRCS)))

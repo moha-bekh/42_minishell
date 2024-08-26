@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/26 15:12:45 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/26 17:29:03 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,8 @@ int	_check_sub(t_pdata data)
 	{
 		if (data->prompt[i] == '(')
 			_found_pair(data, &i);
-		i++;
+		else
+			i++;
 	}
 	return (_SUCCESS);
 }

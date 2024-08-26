@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/08/26 13:31:30 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 01:35:03 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "libft.h"
+# include <dirent.h>
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -23,6 +24,9 @@
 # include <sys/wait.h>
 
 # define _PATH "/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
+
+# define _O_RWCT O_RDWR | O_CREAT | O_TRUNC, 0644
+# define _O_RWCA O_RDWR | O_CREAT | O_APPEND, 0644
 
 # define _TOKENS "*'\"()$|&<>"
 # define _OPERATORS "&|"
@@ -36,14 +40,14 @@
 
 # define _STX_OP "AOP"
 
+# define _TYP_SEP "AO()"
+# define _TYP_REDIRS "<>HN"
+
 # define _ERR_TOKEN "bash: syntax error near unexpected token `%s'\n"
 # define _ERR_CLOSE "bash: syntax error a token field `%c' is not closed\n"
 # define _ERR_NEWLINE "bash: syntax error near unexpected token `newline'\n"
 # define _ERR_NOT_FOUND "bash: %s: command not found\n"
 # define _ERR_HEREDOC "bash: maximum here-document count exceeded\n"
-
-# define _TYP_SEP "AO()"
-# define _TYP_REDIRS "<>HN"
 
 enum					e_tokens
 {
@@ -101,12 +105,13 @@ struct					s_redir
 	bool				in_access;
 	char				*out_name;
 	bool				out_trunc;
-	int					fd[2];
-	int					pfd[2];
+	bool				out_inside;
 	char				*here_name;
 	char				**here_limit;
 	int					idx_limit;
 	int					here_fd;
+	int					pfd[2];
+	int					fd[2];
 };
 
 struct					s_cmd
@@ -202,27 +207,38 @@ int						_data_structs_clear(t_pdata data);
 void					_data_init_env_n_export(t_pdata data);
 
 /* CHECK */
-int						_check_prompt(t_pdata data);
+// int						_check_prompt(t_pdata data);
 
 /* TOKENS */
 int						_token_list(t_pdata data);
+int						_token_id(char a, char *str);
 int						_op_proc(t_pdata data, int *i);
 int						_redir_proc(t_pdata data, int *i);
-int						_token_id(char a, char *str);
 
 /* TREE */
 t_pbtree				_tree_builder(t_pdata data);
 
 /* EXEC */
+int						_exec(t_pdata data, t_pbtree *node);
+int						_exec_child_proc(t_pdata data, t_pcmd *cmd);
 int						_resolve_path(t_pdata data, t_pcmd *cmd);
 
+int						_exec_builtin(t_pdata data, t_pcmd *cmd);
+int						_is_builtin(t_pdata data, char **args);
+
+int						_read_from_pipe(t_pcmd *cmd);
+int						_write_to_pipe(t_pcmd *cmd);
+int						_set_redir_in(t_pcmd *cmd);
+int						_set_redir_out(t_pcmd *cmd);
+
 /* EXPAND */
-// functions prototypes
+int						_expand_line(t_pnlst *tokens);
 
 /* PARSING */
 int						_pars_pipe_lines(t_pbtree *node);
-int						_pars_args_line(t_pcmd *cmd);
-int						_pars_redirs(t_pcmd *cmd, t_pnlst token, bool inside);
+int						_pars_args_line(t_pdata data, t_pcmd *cmd,
+							t_pnlst *token, bool inside);
+int						_pars_redirs(t_pcmd *cmd, t_pnlst *token, bool inside);
 
 /* BUILTINS */
 int						_echo(t_pdata data, t_pcmd *cmd);

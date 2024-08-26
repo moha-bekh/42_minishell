@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _dllst_push.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:32:43 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/23 12:32:46 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/27 01:26:10 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,7 @@ void	_dllst_push_back(u_padllst *dllst, void *addr_1, void *addr_2, int x)
 	(*dllst)->d_size++;
 }
 
-void	_dllst_push_in(u_padllst *dllst, t_pnlst node, void *addr_1,
-		void *addr_2)
+void	_dllst_push_in(u_padllst *dllst, t_pnlst node, void *addr_1, void *addr_2)
 {
 	t_pnlst	new;
 
@@ -80,6 +79,8 @@ void	_dllst_push_in(u_padllst *dllst, t_pnlst node, void *addr_1,
 	*new = (t_nlst){0};
 	new->addr_1 = addr_1;
 	new->addr_2 = addr_2;
+	if ((*dllst)->d_bot == node)
+		return (_dllst_push_back(dllst, addr_1, addr_2, 0));
 	if (node->prev)
 	{
 		new->prev = node->prev;

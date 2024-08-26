@@ -6,243 +6,111 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/08/26 16:44:56 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 01:42:02 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	_wait_pids(t_pdata data, u_padllst cmd_line, t_pcmd limit)
-{
-	t_pcmd	tmp;
-
-	(void)limit;
-	tmp = cmd_line->c_top;
-	while (tmp)
-	{
-		if (!tmp->args)
-			return ;
-		waitpid(tmp->pid, &data->_errno, 0);
-		if (WIFEXITED(data->_errno))
-			data->_errno = WEXITSTATUS(data->_errno);
-		if (tmp == limit)
-			break ;
-		tmp = tmp->next;
-	}
-}
-
-// int	_expand_vars(t_pdata data, t_pcmd *cmd)
+// int main(void)
 // {
-// 	t_pnlst	tmp;
 
-// 	tmp = (*cmd)->token;
-// 	while (tmp)
-// 	{
-// 		if (tmp->x == '$' && tmp->next)
-// 		{
-// 			tmp = tmp->next;
-// 			_dllst_pop_in(&(*cmd)->token->manager, &tmp->prev);
-// 		}
-// 	}
+// 	u_padllst dll = NULL;
+
+// 	_dllst_push_back(&dll, ft_strdup("1"), NULL, 0);
+// 	_dllst_push_back(&dll, ft_strdup("2"), NULL, 0);
+// 	_dllst_push_back(&dll, ft_strdup("3"), NULL, 0);
+
+// 	_dllst_push_in(&dll, dll->d_bot, ft_strdup("0"), NULL);
+
+// 	_dllst_print_builtins(dll);
+
+// 	_dllst_clear(&dll);
+// 	return (0);
 // }
 
-int	_exec_failed(t_pdata data, t_pcmd *cmd)
+int	_expand_list_to_tokens(t_pnlst *token, u_padllst *match_list)
 {
-	if ((*cmd)->args)
-		ft_dprintf(2, "bash: %s: command not found\n", (*cmd)->args[0]);
-	_data_clear(data);
-	exit(127);
-	return (_FAILURE);
-}
+	t_pnlst	tmp;
+	t_pnlst *to_remove;
 
-int	_set_redir_in(t_pcmd *cmd)
-{
-	(*cmd)->redirs.fd[0] = open((*cmd)->redirs.in_name, O_RDONLY);
-	if ((*cmd)->redirs.fd[0] < 0)
-		return (_EXT_OPEN);
-	if (dup2((*cmd)->redirs.fd[0], STDIN_FILENO) < 0)
-		return (perror("dup2: "), _EXT_DUP2);
-	close((*cmd)->redirs.fd[0]);
-	return (_SUCCESS);
-}
-
-int	_set_redir_out(t_pcmd *cmd)
-{
-	if ((*cmd)->redirs.out_trunc)
-		(*cmd)->redirs.fd[1] = open((*cmd)->redirs.out_name, O_RDWR | O_CREAT | O_TRUNC, 0644);
-	else
-		(*cmd)->redirs.fd[1] = open((*cmd)->redirs.out_name, O_RDWR | O_CREAT | O_APPEND, 0644);
-	if (dup2((*cmd)->redirs.fd[1], STDOUT_FILENO) < 0)
-		return (perror("dup2: "), _EXT_DUP2);
-	close((*cmd)->redirs.fd[1]);
-	return (_SUCCESS);
-}
-
-int	_read_from_pipe(t_pcmd *cmd)
-{
-	close((*cmd)->prev->redirs.pfd[1]);
-	if (dup2((*cmd)->prev->redirs.pfd[0], STDIN_FILENO) < 0)
-		return (perror("dup2: "), _EXT_DUP2);
-	close((*cmd)->prev->redirs.pfd[0]);
-	return (_SUCCESS);
-}
-
-int	_write_to_pipe(t_pcmd *cmd)
-{
-	close((*cmd)->redirs.pfd[0]);
-	if (dup2((*cmd)->redirs.pfd[1], STDOUT_FILENO) < 0)
-		return (perror("dup2: "), _EXT_DUP2);
-	close((*cmd)->redirs.pfd[1]);
-	return (_SUCCESS);
-}
-
-int	_exec_child_proc(t_pdata data, t_pcmd *cmd)
-{
-	data->s_sig.sa_handler = child_hndl;
-	if ((*cmd)->prev)
-		_read_from_pipe(cmd);
-	if ((*cmd)->next)
-		_write_to_pipe(cmd);
-	if ((*cmd)->redirs.in_name)
-		_set_redir_in(cmd);
-	if ((*cmd)->redirs.out_name)
-		_set_redir_out(cmd);
-	close(data->args._stdin);
-	close(data->args._stdout);
-	execve((*cmd)->path, (*cmd)->args, data->args.env);
-	return (_exec_failed(data, cmd));
-}
-
-int	_exec_parent_proc(t_pcmd *cmd)
-{
-	if ((*cmd)->prev)
+	to_remove = token;
+	tmp = (*match_list)->d_top;
+	while (tmp)
 	{
-		close((*cmd)->prev->redirs.pfd[1]);
-		close((*cmd)->prev->redirs.pfd[0]);
+		_dllst_push_in(&(*token)->manager, *token, ft_strdup((char *)tmp->addr_1), NULL);
+		token = &(*token)->next;
+		tmp = tmp->next;
 	}
+	_dllst_pop_in(&(*token)->manager, to_remove);
+	_dllst_clear(match_list);
 	return (_SUCCESS);
 }
 
-int	_exec_proc(t_pdata data, t_pcmd *cmd)
+int	_expand_wildcards_filter(t_pnlst *token, u_padllst *match_list)
 {
-	if ((*cmd)->next)
-		if (pipe((*cmd)->redirs.pfd))
-			return (perror("pipe: "), _EXT_PIPE);
-	(*cmd)->pid = fork();
-	if ((*cmd)->pid < 0)
-		return (perror("fork: "), _EXT_FORK);
-	if (!(*cmd)->pid)
+	char	**patterns;
+	t_pnlst	tmp;
+	int		i;
+
+	patterns = ft_split((char *)(*token)->addr_1, '*');
+	free((*token)->addr_1);
+	(*token)->addr_1 = NULL;
+	i = -1;
+	while (patterns[++i])
 	{
-		if (_exec_child_proc(data, cmd))
-			return (_FAILURE);
+		tmp = (*match_list)->d_top;
+		while (tmp)
+		{
+			if (!ft_strnstr((char *)tmp->addr_1, patterns[i],
+					ft_strlen((char *)tmp->addr_1)))
+			{
+				_dllst_pop_in(match_list, &tmp);
+				tmp = (*match_list)->d_top;
+			}
+			tmp = tmp->next;
+		}
 	}
-	else
-		_exec_parent_proc(cmd);
+	ft_free_arr(patterns);
+	if (_expand_list_to_tokens(token, match_list))
+		return (_FAILURE);
 	return (_SUCCESS);
 }
 
-int	_is_builtin(t_pdata data, char **args)
+int	_expand_wildcards(t_pnlst *token)
+{
+	u_padllst		match_list;
+	struct dirent	*entry;
+	char			*cwd_name;
+	DIR				*cwd_dir;
+
+	match_list = NULL;
+	cwd_name = getcwd(NULL, 0);
+	cwd_dir = opendir(cwd_name);
+	free(cwd_name);
+	entry = readdir(cwd_dir);
+	while (entry)
+	{
+		_dllst_push_back(&match_list, ft_strdup(entry->d_name), NULL, 0);
+		entry = readdir(cwd_dir);
+	}
+	closedir(cwd_dir);
+	if (_expand_wildcards_filter(token, &match_list))
+		return (_FAILURE);
+	return (_SUCCESS);
+}
+
+int	_expand_line(t_pnlst *tokens)
 {
 	t_pnlst	tmp;
 
-	if (!args || !args[0])
-		return (0);
-	tmp = data->builtins->d_top;
-	while (tmp)
+	tmp = *tokens;
+	while (tmp && tmp->x != _PIPE && !_token_id(tmp->x, _TYP_SEP))
 	{
-		if (!ft_strcmp((char *)tmp->addr_1, args[0]))
-			return (1);
+		if (tmp->x == '*' && _expand_wildcards(&tmp))
+			return (_FAILURE);
 		tmp = tmp->next;
 	}
-	return (0);
-}
-
-int	_exec_builtin(t_pdata data, t_pcmd *cmd)
-{
-	if ((*cmd)->prev)
-		_read_from_pipe(cmd);
-	if ((*cmd)->next)
-		_write_to_pipe(cmd);
-	if ((*cmd)->redirs.in_name)
-		_set_redir_in(cmd);
-	if ((*cmd)->redirs.out_name)
-		_set_redir_out(cmd);
-	// if (!ft_strncmp(args, "cd", 3))
-	// 	return (_cd(data));
-	if (!ft_strncmp((*cmd)->args[0], "echo", 4))
-		return (_echo(data, cmd));
-	if (!ft_strncmp((*cmd)->args[0], "env", 3))
-		return (_env(data, cmd));
-	if (!ft_strncmp((*cmd)->args[0], "export", 6))
-		return (_export(data, cmd));
-	if (!ft_strncmp((*cmd)->args[0], "pwd", 3))
-		return (_pwd());
-	if (!ft_strncmp((*cmd)->args[0], "unset", 5))
-		return (_unset(data, cmd));
-	return (_SUCCESS);
-}
-
-int	_exec_cmd_line(t_pdata data, t_pbtree *node)
-{
-	t_pcmd	tmp;
-
-	(void)data;
-	_pars_pipe_lines(node);
-	tmp = (*node)->cmd_line->c_top;
-	while (tmp)
-	{
-		_pars_args_line(&tmp);
-		if (_is_builtin(data, tmp->args))
-		{
-			data->_errno = _exec_builtin(data, &tmp);
-			if (dup2(data->args._stdin, STDIN_FILENO) < 0)
-				return (perror("dup2: "), _EXT_DUP2);
-			if (dup2(data->args._stdout, STDOUT_FILENO) < 0)
-				return (perror("dup2: "), _EXT_DUP2);
-		}
-		else
-		{
-			_resolve_path(data, &tmp);
-			// _expand_vars(data, &tmp);
-			if (_exec_proc(data, &tmp))
-				return (_FAILURE);
-		}
-		tmp = tmp->next;
-	}
-	_wait_pids(data, (*node)->cmd_line, tmp);
-	return (_SUCCESS);
-}
-
-int	_exec(t_pdata data, t_pbtree *node)
-{
-	if (!*node)
-		return (_SUCCESS);
-
-	if ((*node)->left)
-		_exec(data, &(*node)->left);
-	// if ((*node)->token->x == '(')
-	// {
-	// 	_cmd_push_back(&(*node)->cmd_line, (*node)->token);
-	// 	(*node)->cmd_line->c_top->pid = fork();
-	// 	if ((*node)->cmd_line->c_top->pid < 0)
-	// 		return (perror("fork: "), _EXT_FORK);
-	// 	if (!(*node)->cmd_line->c_top->pid)
-	// 		_exec(data, &(*node)->right);
-	// 	else
-	// 		_wait_pids(data, (*node)->cmd_line, (*node)->cmd_line->c_top);
-	// 	return (_SUCCESS);
-	// }
-	if (!_token_id((*node)->token->x, _TYP_SEP))
-		_exec_cmd_line(data, node);
-	else
-	{
-		if ((*node)->token->x == _AND && data->_errno)
-			return (_SUCCESS);
-		else if ((*node)->token->x == _OR && !data->_errno)
-			return (_SUCCESS);
-	}
-	if ((*node)->right)
-		_exec(data, &(*node)->right);
 	return (_SUCCESS);
 }
 

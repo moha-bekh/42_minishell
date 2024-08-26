@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:32:49 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/24 17:45:40 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 01:39:44 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,21 @@
 
 void	_dllst_print_builtins(u_padllst dllst)
 {
+	char	*str;
 	t_pnlst	tmp;
 
 	if (!dllst)
 		return ;
+	printf("\n");
 	tmp = dllst->d_top;
 	while (tmp)
 	{
-		printf("%s\n", (char *)tmp->addr_1);
+		str = (char *)tmp->addr_1;
+		if (str)
+			printf("%s\n", str);
 		tmp = tmp->next;
 	}
+	printf("\n");
 }
 
 void	_dllst_print_env(u_padllst dllst)
@@ -41,6 +46,7 @@ void	_dllst_print_env(u_padllst dllst)
 			printf("%s=%s\n", (char *)tmp->addr_1, str);
 		tmp = tmp->next;
 	}
+	printf("\n");
 }
 
 void	_dllst_print_export(u_padllst dllst)
@@ -60,6 +66,7 @@ void	_dllst_print_export(u_padllst dllst)
 			printf("export %s\n", (char *)tmp->addr_1);
 		tmp = tmp->next;
 	}
+	printf("\n");
 }
 
 void	_dllst_print_tokens(u_padllst dllst)
@@ -77,4 +84,5 @@ void	_dllst_print_tokens(u_padllst dllst)
 		printf("value: %s \n", (char *)tmp->addr_1);
 		tmp = tmp->next;
 	}
+	printf("\n");
 }

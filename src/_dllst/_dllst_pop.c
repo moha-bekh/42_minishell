@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _dllst_pop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:32:54 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/23 13:06:10 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/26 23:58:55 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,15 +74,14 @@ void	_dllst_pop_in(u_padllst *dllst, t_pnlst *node)
 		return (_dllst_pop_front(dllst));
 	if ((*dllst)->d_bot && (*dllst)->d_bot == *node)
 		return (_dllst_pop_back(dllst));
-	if (--(*dllst)->d_size > 2)
-	{
-		tmp = *node;
-		(*node)->prev->next = (*node)->next;
-		(*node)->next->prev = (*node)->prev;
-		free(tmp->addr_1);
-		free(tmp->addr_2);
-		*tmp = (t_nlst){0};
-		free(tmp);
-		tmp = NULL;
-	}
+	(*dllst)->d_size--;
+	tmp = *node;
+	*node = (*node)->prev;
+	(*node)->next = tmp->next;
+	tmp->next->prev = *node;
+	free(tmp->addr_1);
+	free(tmp->addr_2);
+	*tmp = (t_nlst){0};
+	free(tmp);
+	tmp = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/08/25 21:55:32 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/26 16:10:58 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,13 @@ void	_wait_pids(t_pdata data, u_padllst cmd_line, t_pcmd limit)
 	tmp = cmd_line->c_top;
 	while (tmp)
 	{
+		if (!tmp->args)
+			return ;
 		waitpid(tmp->pid, &data->_errno, 0);
 		if (WIFEXITED(data->_errno))
-		{
 			data->_errno = WEXITSTATUS(data->_errno);
-			// printf("pid: %d\terrno: %d\n", tmp->pid, data->_errno);
-		}
-		// else
-		// printf("pid: %d\texit abnormaly\n", tmp->pid);
-		// if (tmp == limit)
-		// 	break ;
+		if (tmp == limit)
+			break ;
 		tmp = tmp->next;
 	}
 }
@@ -51,8 +48,8 @@ void	_wait_pids(t_pdata data, u_padllst cmd_line, t_pcmd limit)
 
 int	_exec_failed(t_pdata data, t_pcmd *cmd)
 {
-	ft_dprintf(2, "bash: %s: command not found\n", (*cmd)->args[0]);
-	_data_structs_clear(data);
+	if ((*cmd)->args)
+		ft_dprintf(2, "bash: %s: command not found\n", (*cmd)->args[0]);
 	_data_clear(data);
 	exit(127);
 	return (_FAILURE);
@@ -72,11 +69,9 @@ int	_set_redir_in(t_pcmd *cmd)
 int	_set_redir_out(t_pcmd *cmd)
 {
 	if ((*cmd)->redirs.out_trunc)
-		(*cmd)->redirs.fd[1] = open((*cmd)->redirs.out_name,
-				O_RDWR | O_CREAT | O_TRUNC, 0644);
+		(*cmd)->redirs.fd[1] = open((*cmd)->redirs.out_name, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	else
-		(*cmd)->redirs.fd[1] = open((*cmd)->redirs.out_name,
-				O_RDWR | O_CREAT | O_APPEND, 0644);
+		(*cmd)->redirs.fd[1] = open((*cmd)->redirs.out_name, O_RDWR | O_CREAT | O_APPEND, 0644);
 	if (dup2((*cmd)->redirs.fd[1], STDOUT_FILENO) < 0)
 		return (perror("dup2: "), _EXT_DUP2);
 	close((*cmd)->redirs.fd[1]);
@@ -112,6 +107,8 @@ int	_exec_child_proc(t_pdata data, t_pcmd *cmd)
 		_set_redir_in(cmd);
 	if ((*cmd)->redirs.out_name)
 		_set_redir_out(cmd);
+	close(data->args._stdin);
+	close(data->args._stdout);
 	execve((*cmd)->path, (*cmd)->args, data->args.env);
 	_exec_failed(data, cmd);
 	return (_FAILURE);
@@ -163,6 +160,14 @@ int	_is_builtin(t_pdata data, char **args)
 
 int	_exec_builtin(t_pdata data, t_pcmd *cmd)
 {
+	if ((*cmd)->prev)
+		_read_from_pipe(cmd);
+	if ((*cmd)->next)
+		_write_to_pipe(cmd);
+	if ((*cmd)->redirs.in_name)
+		_set_redir_in(cmd);
+	if ((*cmd)->redirs.out_name)
+		_set_redir_out(cmd);
 	// if (!ft_strncmp(args, "cd", 3))
 	// 	return (_cd(data));
 	if (!ft_strncmp((*cmd)->args[0], "echo", 4))
@@ -189,12 +194,19 @@ int	_exec_cmd_line(t_pdata data, t_pbtree *node)
 	{
 		_pars_args_line(&tmp);
 		if (_is_builtin(data, tmp->args))
+		{
 			data->_errno = _exec_builtin(data, &tmp);
+			if (dup2(data->args._stdin, STDIN_FILENO) < 0)
+				return (perror("dup2: "), _EXT_DUP2);
+			if (dup2(data->args._stdout, STDOUT_FILENO) < 0)
+				return (perror("dup2: "), _EXT_DUP2);
+		}
 		else
 		{
 			_resolve_path(data, &tmp);
 			// _expand_vars(data, &tmp);
-			_exec_proc(data, &tmp);
+			if (_exec_proc(data, &tmp))
+				return (_FAILURE);
 		}
 		tmp = tmp->next;
 	}
@@ -206,29 +218,32 @@ int	_exec(t_pdata data, t_pbtree *node)
 {
 	if (!*node)
 		return (_SUCCESS);
+
 	if ((*node)->left)
 		_exec(data, &(*node)->left);
-	else if ((*node)->token->x == '(')
-	{
-		_cmd_push_back(&(*node)->cmd_line, (*node)->token);
-		(*node)->cmd_line->c_top->pid = fork();
-		if ((*node)->cmd_line->c_top->pid < 0)
-			return (perror("fork: "), _EXT_FORK);
-		if (!(*node)->cmd_line->c_top->pid)
-			_exec(data, &(*node)->right);
-		else
-			waitpid((*node)->cmd_line->c_top->pid, &data->_errno, 0);
-		return (_SUCCESS);
-	}
-	else if ((*node)->token->x != _AND && (*node)->token->x != _OR)
+
+	printf("token: %s\n", (char *)(*node)->token->addr_1);
+	// if ((*node)->token->x == '(')
+	// {
+	// 	_cmd_push_back(&(*node)->cmd_line, (*node)->token);
+	// 	(*node)->cmd_line->c_top->pid = fork();
+	// 	if ((*node)->cmd_line->c_top->pid < 0)
+	// 		return (perror("fork: "), _EXT_FORK);
+	// 	if (!(*node)->cmd_line->c_top->pid)
+	// 		_exec(data, &(*node)->right);
+	// 	else
+	// 		_wait_pids(data, (*node)->cmd_line, (*node)->cmd_line->c_top);
+	// 	return (_SUCCESS);
+	// }
+	if (!_token_id((*node)->token->x, _TYP_SEP))
 		_exec_cmd_line(data, node);
-	else
-	{
-		if ((*node)->token->x == _AND && data->_errno != 0)
-			return (_SUCCESS);
-		else if ((*node)->token->x == _OR && data->_errno == 0)
-			return (_SUCCESS);
-	}
+	// else
+	// {
+	// 	if ((*node)->token->x == _AND && data->_errno)
+	// 		return (_SUCCESS);
+	// 	else if ((*node)->token->x == _OR && !data->_errno)
+	// 		return (_SUCCESS);
+	// }
 	if ((*node)->right)
 		_exec(data, &(*node)->right);
 	return (_SUCCESS);

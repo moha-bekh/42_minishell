@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 23:44:34 by moha              #+#    #+#             */
-/*   Updated: 2024/08/24 14:12:39 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/26 11:25:27 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ int	_data_init(t_pdata data, int ac, char **av, char **ev)
 		if (!data->args.hard_path)
 			return (_FAILURE);
 	}
+	data->args._stdin = dup(STDIN_FILENO);
+	data->args._stdout = dup(STDOUT_FILENO);
 	_path_slash(data);
 	_data_init_builtins(data);
 	_data_init_env_n_export(data);

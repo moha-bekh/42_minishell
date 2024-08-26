@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 19:10:13 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/24 00:50:37 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/26 11:42:35 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	_cmd_print_line(t_pcmd cmd)
 	{
 		i = -1;
 		while (cmd->args[++i])
-			printf(" %s ", cmd->args[i]);
+			printf("\t %s\n", cmd->args[i]);
 	}
 	if (cmd->path)
 		printf(" path: %s", cmd->path);

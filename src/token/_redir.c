@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:25:01 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/25 00:30:51 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/26 13:34:24 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,16 @@
 
 int	_redir_heredoc(t_pdata data, int *i)
 {
+	if (++data->args.here_doc > 16)
+	{
+		ft_dprintf(2, _ERR_HEREDOC);
+		_data_clear(data);
+		exit(2);
+	}
 	_dllst_push_back(&data->tokens, ft_substr(data->prompt, *i, 2), NULL, _HERE_DOC);
 	*i += 2;
-	if (data->tokens && data->tokens->d_bot->prev && _token_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
+	if (data->tokens && data->tokens->d_bot->prev
+		&& _token_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
 	{
 		ft_dprintf(2, _ERR_TOKEN, "<<");
 		return (_SYNTAX);
@@ -28,7 +35,8 @@ int	_redir_in(t_pdata data, int *i)
 {
 	_dllst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL, '<');
 	*i += 1;
-	if (data->tokens && data->tokens->d_bot->prev && _token_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
+	if (data->tokens && data->tokens->d_bot->prev
+		&& _token_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
 	{
 		ft_dprintf(2, _ERR_TOKEN, "<");
 		return (_SYNTAX);
@@ -41,7 +49,8 @@ int	_redir_outa(t_pdata data, int *i)
 	_dllst_push_back(&data->tokens, ft_substr(data->prompt, *i, 2), NULL,
 		_REDIR_OUTA);
 	*i += 2;
-	if (data->tokens && data->tokens->d_bot->prev && _token_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
+	if (data->tokens && data->tokens->d_bot->prev
+		&& _token_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
 	{
 		ft_dprintf(2, _ERR_TOKEN, ">>");
 		return (_SYNTAX);
@@ -53,7 +62,8 @@ int	_redir_outt(t_pdata data, int *i)
 {
 	_dllst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL, '>');
 	*i += 1;
-	if (data->tokens && data->tokens->d_bot->prev && _token_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
+	if (data->tokens && data->tokens->d_bot->prev
+		&& _token_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
 	{
 		ft_dprintf(2, _ERR_TOKEN, ">");
 		return (_SYNTAX);

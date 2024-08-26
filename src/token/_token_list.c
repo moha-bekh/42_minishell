@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/25 21:56:18 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/26 15:12:45 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ int	_quote_proc(t_pdata data, int *i)
 			if (data->tokens && data->tokens->d_bot->flag)
 				_join_strings(data, j + 1, *i - j - 1);
 			else
-				_dllst_push_back(&data->tokens, ft_substr(data->prompt, j + 1, (*i - j - 1)), NULL, type_quote);
+				_dllst_push_back(&data->tokens, ft_substr(data->prompt, j + 1,
+						(*i - j - 1)), NULL, type_quote);
 			*i += 1;
 			if (data->prompt[*i] && !ft_isspace(data->prompt[*i]))
 				data->tokens->d_bot->flag = true;
@@ -78,7 +79,8 @@ int	_wildcards_proc(t_pdata data, int *i)
 		_join_strings(data, j, *i - j);
 	}
 	else
-		_dllst_push_back(&data->tokens, ft_substr(data->prompt, j, *i - j), NULL, '*');
+		_dllst_push_back(&data->tokens, ft_substr(data->prompt, j, *i - j),
+			NULL, '*');
 	if (data->prompt[*i] && !ft_isspace(data->prompt[*i]))
 		data->tokens->d_bot->flag = true;
 	return (_SUCCESS);
@@ -123,13 +125,15 @@ int	_sub_proc(t_pdata data, int *i)
 {
 	if (data->prompt[*i] == '(')
 	{
-		_dllst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL, '(');
-		data->args._stdin++;
+		_dllst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL,
+			'(');
+		data->args.parentheses++;
 	}
 	else if (data->prompt[*i] == ')')
 	{
-		_dllst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL, ')');
-		data->args._stdout++;
+		_dllst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL,
+			')');
+		data->args.parentheses++;
 	}
 	*i += 1;
 	return (_SUCCESS);
@@ -141,9 +145,9 @@ int	_token_proc(t_pdata data, int *i)
 		return (_FAILURE);
 	else if (_token_id(data->prompt[*i], _REDIRS) && _redir_proc(data, i))
 		return (_FAILURE);
-	else if (_token_id(data->prompt[*i], _QUOTES) && _quote_proc(data, i))
-		return (_FAILURE);
 	else if (_token_id(data->prompt[*i], _SUBSHELL) && _sub_proc(data, i))
+		return (_FAILURE);
+	else if (_token_id(data->prompt[*i], _QUOTES) && _quote_proc(data, i))
 		return (_FAILURE);
 	else if (data->prompt[*i] == '$' && _dollar_proc(data, i))
 		return (_FAILURE);
@@ -227,17 +231,15 @@ int	_check_bot(t_pdata data)
 		ft_dprintf(2, _ERR_NEWLINE);
 		return (_FAILURE);
 	}
-	if (data->args._stdin != data->args._stdout)
+	if (data->args.parentheses % 2)
 	{
-		data->args._stdin = 0;
-		data->args._stdout = 0;
+		data->args.parentheses = 0;
 		ft_dprintf(2, _ERR_TOKEN, ")");
 		return (_FAILURE);
 	}
+	data->args.parentheses = 0;
 	if (_check_sub(data))
 		return (_FAILURE);
-	data->args._stdin = 0;
-	data->args._stdout = 0;
 	return (_SUCCESS);
 }
 

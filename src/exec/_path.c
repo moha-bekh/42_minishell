@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _path.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 11:19:04 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/23 17:44:30 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/26 12:28:09 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,15 @@ int	_resolve_path(t_pdata data, t_pcmd *cmd)
 {
 	char	*prog;
 
-	prog = (*cmd)->args[0];
-	if (_is_path(prog) && !access(prog, F_OK) && !access(prog, X_OK))
-		(*cmd)->path = ft_strdup(prog);
+	if (!(*cmd)->args)
+		(*cmd)->path = ft_strdup("");
 	else
-		_get_path(data, cmd);
+	{
+		prog = (*cmd)->args[0];
+		if (_is_path(prog) && !access(prog, F_OK) && !access(prog, X_OK))
+			(*cmd)->path = ft_strdup(prog);
+		else if (_get_path(data, cmd))
+			(*cmd)->path = ft_strdup("");
+	}
 	return (_SUCCESS);
 }

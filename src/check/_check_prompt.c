@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 17:03:59 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/24 03:03:34 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/26 11:37:23 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,23 +168,23 @@
 // 	return (_SUCCESS);
 // }
 
-int	_scope_check(t_pdata data, int *i)
-{
-	char	open;
-	char	close;
+// int	_scope_check(t_pdata data, int *i)
+// {
+// 	char	open;
+// 	char	close;
 
-	open = data->prompt[*i];
-	if (open == '(')
-		close = ')';
-	else
-		close = open;
-	while (data->prompt[++*i] && data->prompt[*i] != '\n')
-	{
-		if (data->prompt[*i] == close)
-			return (_SUCCESS);
-	}
-	return (ft_dprintf(STDERR_FILENO, _BASH_ERR_CLOSE, open), _FAILURE);
-}
+// 	open = data->prompt[*i];
+// 	if (open == '(')
+// 		close = ')';
+// 	else
+// 		close = open;
+// 	while (data->prompt[++*i] && data->prompt[*i] != '\n')
+// 	{
+// 		if (data->prompt[*i] == close)
+// 			return (_SUCCESS);
+// 	}
+// 	return (ft_dprintf(STDERR_FILENO, _ERR_CLOSE, open), _FAILURE);
+// }
 
 // int	_check_prompt(t_pdata data)
 // {

@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/08/25 00:31:53 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/26 13:31:30 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@
 # define _ERR_CLOSE "bash: syntax error a token field `%c' is not closed\n"
 # define _ERR_NEWLINE "bash: syntax error near unexpected token `newline'\n"
 # define _ERR_NOT_FOUND "bash: %s: command not found\n"
+# define _ERR_HEREDOC "bash: maximum here-document count exceeded\n"
 
 # define _TYP_SEP "AO()"
 # define _TYP_REDIRS "<>HN"
@@ -103,7 +104,8 @@ struct					s_redir
 	int					fd[2];
 	int					pfd[2];
 	char				*here_name;
-	char				*here_limit;
+	char				**here_limit;
+	int					idx_limit;
 	int					here_fd;
 };
 
@@ -158,6 +160,8 @@ struct					s_args
 	char				*old_pwd;
 	int					_stdin;
 	int					_stdout;
+	int					parentheses;
+	int					here_doc;
 };
 
 struct					s_data
@@ -218,7 +222,7 @@ int						_resolve_path(t_pdata data, t_pcmd *cmd);
 /* PARSING */
 int						_pars_pipe_lines(t_pbtree *node);
 int						_pars_args_line(t_pcmd *cmd);
-int						_pars_redirs(t_pcmd *cmd, t_pnlst token);
+int						_pars_redirs(t_pcmd *cmd, t_pnlst token, bool inside);
 
 /* BUILTINS */
 int						_echo(t_pdata data, t_pcmd *cmd);

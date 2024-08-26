@@ -6,11 +6,21 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 15:44:21 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/25 21:32:17 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/26 12:16:53 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	_data_structs_clear(t_pdata data)
+{
+	data->_errno = 0;
+	free(data->prompt);
+	data->prompt = NULL;
+	_dllst_clear(&data->tokens);
+	_bt_clear(&data->tree);
+	return (_SUCCESS);
+}
 
 int	_data_clear(t_pdata data)
 {
@@ -22,15 +32,7 @@ int	_data_clear(t_pdata data)
 	_dllst_clear(&data->export);
 	_dllst_clear(&data->tokens);
 	_bt_clear(&data->tree);
-	return (_SUCCESS);
-}
-
-int	_data_structs_clear(t_pdata data)
-{
-	data->_errno = 0;
-	free(data->prompt);
-	data->prompt = NULL;
-	_dllst_clear(&data->tokens);
-	_bt_clear(&data->tree);
+	close(data->args._stdin);
+	close(data->args._stdout);
 	return (_SUCCESS);
 }

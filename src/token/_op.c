@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:25:28 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/24 02:17:59 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/26 11:35:53 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,7 @@ int	_tok_and(t_pdata data, int *i)
 		ft_dprintf(2, _ERR_TOKEN, "&");
 		return (_SYNTAX);
 	}
-	else if (!data->tokens->d_bot->prev || (data->tokens->d_bot->prev
-			&& _token_id(data->tokens->d_bot->prev->x, _STX_OP)))
+	else if (!data->tokens->d_bot->prev || (data->tokens->d_bot->prev && _token_id(data->tokens->d_bot->prev->x, _STX_OP)))
 	{
 		ft_dprintf(2, _ERR_TOKEN, "&&");
 		return (_SYNTAX);

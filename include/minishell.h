@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/08/27 17:38:02 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 23:10:04 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ int						_set_redir_in(t_ppncmd cmd);
 int						_set_redir_out(t_ppncmd cmd);
 
 /* EXPAND */
-int						_expand_wildcards(t_ppnlst token);
 int						_expand_line(t_ppnlst token);
+int						_expand_wildcards(t_ppnlst token);
 
 /* PARSING */
 int						_pars_pipe_lines(t_ppbtree node);

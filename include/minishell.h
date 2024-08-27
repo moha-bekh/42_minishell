@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/08/27 01:35:03 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 11:15:32 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,7 @@ int						_op_proc(t_pdata data, int *i);
 int						_redir_proc(t_pdata data, int *i);
 
 /* TREE */
-t_pbtree				_tree_builder(t_pdata data);
+t_pnlst					_tree_builder(t_pbtree *node, t_pnlst token);
 
 /* EXEC */
 int						_exec(t_pdata data, t_pbtree *node);

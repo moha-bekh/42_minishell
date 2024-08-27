@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/08/27 01:42:02 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 11:20:05 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,14 @@
 int	_expand_list_to_tokens(t_pnlst *token, u_padllst *match_list)
 {
 	t_pnlst	tmp;
-	t_pnlst *to_remove;
+	t_pnlst	*to_remove;
 
 	to_remove = token;
 	tmp = (*match_list)->d_top;
 	while (tmp)
 	{
-		_dllst_push_in(&(*token)->manager, *token, ft_strdup((char *)tmp->addr_1), NULL);
+		_dllst_push_in(&(*token)->manager, *token,
+			ft_strdup((char *)tmp->addr_1), NULL);
 		token = &(*token)->next;
 		tmp = tmp->next;
 	}
@@ -54,6 +55,8 @@ int	_expand_wildcards_filter(t_pnlst *token, u_padllst *match_list)
 	int		i;
 
 	patterns = ft_split((char *)(*token)->addr_1, '*');
+	printf("ptr patterns 0: %p\n", patterns[0]);
+	printf("ptr patterns 1: %p\n", patterns[1]);
 	free((*token)->addr_1);
 	(*token)->addr_1 = NULL;
 	i = -1;
@@ -128,9 +131,11 @@ int	main(int ac, char **av, char **ev)
 		add_history(data.prompt);
 		if (_token_list(&data) && !_data_structs_clear(&data))
 			continue ;
-		data.tree = _tree_builder(&data);
+		_tree_builder(&data.tree, data.tokens->d_top);
 		if (_exec(&data, &data.tree) && !_data_structs_clear(&data))
 			continue ;
+		_dllst_print_tokens(data.tokens);
+		_bt_print(data.tree, 0);
 		_data_structs_clear(&data);
 	}
 	return (_data_clear(&data), _SUCCESS);

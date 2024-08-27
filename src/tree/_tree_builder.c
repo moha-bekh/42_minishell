@@ -6,54 +6,50 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:26:15 by moha              #+#    #+#             */
-/*   Updated: 2024/08/26 11:34:15 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 11:15:37 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_pbtree	_op_node(t_pnlst *token);
-
-t_pbtree	_cmd_node(t_pnlst *token)
+t_pnlst	_cmd_node(t_pbtree *node, t_pnlst token)
 {
-	t_pbtree	node;
+	t_pbtree	tmp_node;
+	t_pnlst		tmp_token;
 
-	if (!*token)
+	if (!token)
 		return (NULL);
-	node = NULL;
-	if ((*token)->x == '(')
+	*node = NULL;
+	tmp_node = NULL;
+	tmp_token = NULL;
+	if (token->x == '(')
 	{
-		node = _bt_join(node, *token, _op_node(&(*token)->next));
-		*token = (*token)->next;
-		if (*token && (*token)->x == ')')
-			*token = (*token)->next;
+		tmp_token = token;
+		token = _tree_builder(&tmp_node, token->next);
+		*node = _bt_join(*node, tmp_token, tmp_node);
+		if (token && token->x == ')')
+			token = token->next;
 	}
 	else
 	{
-		node = _bt_create(*token);
-		while (*token && (*token)->x != _AND && (*token)->x != _OR)
-			*token = (*token)->next;
+		*node = _bt_create(token);
+		while (token && token->x != _AND && token->x != _OR)
+			token = token->next;
 	}
-	return (node);
+	return (token);
 }
 
-t_pbtree	_op_node(t_pnlst *token)
+t_pnlst	_tree_builder(t_pbtree *node, t_pnlst token)
 {
-	t_pbtree	node;
+	t_pbtree	tmp_node;
+	t_pnlst		tmp_token;
 
-	node = _cmd_node(token);
-	while (*token && ((*token)->x == _AND || (*token)->x == _OR))
+	token = _cmd_node(node, token);
+	while (token && (token->x == _AND || token->x == _OR))
 	{
-		node = _bt_join(node, *token, _cmd_node(&(*token)->next));
-		*token = (*token)->next;
+		tmp_token = token;
+		token = _cmd_node(&tmp_node, token->next);
+		*node = _bt_join(*node, tmp_token, tmp_node);
 	}
-	return (node);
-}
-
-t_pbtree	_tree_builder(t_pdata data)
-{
-	t_pnlst	tmp;
-
-	tmp = data->tokens->d_top;
-	return (_op_node(&tmp));
+	return (token);
 }

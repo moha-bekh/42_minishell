@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _dllst_utils.c                                     :+:      :+:    :+:   */
+/*   _dlst_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:32:36 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/23 12:32:38 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/27 16:45:56 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	_dllst_clear(u_padllst *dllst)
+void	_dlst_clear(t_ppadlst dlst)
 {
-	while (*dllst)
-		_dllst_pop_back(dllst);
+	while (*dlst)
+		_dlst_pop_back(dlst);
 }

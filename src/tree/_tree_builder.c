@@ -6,13 +6,13 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:26:15 by moha              #+#    #+#             */
-/*   Updated: 2024/08/27 11:15:37 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 16:49:42 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_pnlst	_cmd_node(t_pbtree *node, t_pnlst token)
+t_pnlst	_cmd_node(t_ppbtree node, t_pnlst token)
 {
 	t_pbtree	tmp_node;
 	t_pnlst		tmp_token;
@@ -39,7 +39,7 @@ t_pnlst	_cmd_node(t_pbtree *node, t_pnlst token)
 	return (token);
 }
 
-t_pnlst	_tree_builder(t_pbtree *node, t_pnlst token)
+t_pnlst	_tree_builder(t_ppbtree node, t_pnlst token)
 {
 	t_pbtree	tmp_node;
 	t_pnlst		tmp_token;

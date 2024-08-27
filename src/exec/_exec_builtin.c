@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 20:54:03 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/26 21:44:56 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 16:09:23 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	_is_builtin(t_pdata data, char **args)
 	return (0);
 }
 
-int	_exec_builtin(t_pdata data, t_pcmd *cmd)
+int	_exec_builtin(t_pdata data, t_ppncmd cmd)
 {
 	if ((*cmd)->prev)
 		_read_from_pipe(cmd);
@@ -50,5 +50,28 @@ int	_exec_builtin(t_pdata data, t_pcmd *cmd)
 		return (_pwd());
 	if (!ft_strncmp((*cmd)->args[0], "unset", 5))
 		return (_unset(data, cmd));
+	return (_SUCCESS);
+}
+
+int	_exec_builtin_proc(t_pdata data, t_ppncmd cmd)
+{
+	int	dup_stdin;
+	int	dup_stdout;
+
+	data->_errno = _exec_builtin(data, cmd);
+	if ((*cmd)->redirs.in_name || (*cmd)->redirs.here_name)
+	{
+		dup_stdin = dup(data->args._stdin);
+		data->_errno = dup2(dup_stdin, STDIN_FILENO);
+		if (data->_errno < 0)
+			return (perror("dup2: "), _EXT_DUP2);
+	}
+	if ((*cmd)->redirs.out_name)
+	{
+		dup_stdout = dup(data->args._stdout);
+		data->_errno = dup2(dup_stdout, STDOUT_FILENO);
+		if (data->_errno < 0)
+			return (perror("dup2: "), _EXT_DUP2);
+	}
 	return (_SUCCESS);
 }

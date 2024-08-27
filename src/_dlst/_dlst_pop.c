@@ -1,80 +1,80 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _dllst_pop.c                                       :+:      :+:    :+:   */
+/*   _dlst_pop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:32:54 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/26 23:58:55 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 16:50:49 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	_dllst_pop_front(u_padllst *dllst)
+void	_dlst_pop_front(t_ppadlst dlst)
 {
 	t_pnlst	tmp;
 
-	if (!*dllst)
+	if (!*dlst)
 		return ;
-	tmp = (*dllst)->d_bot;
-	if (--(*dllst)->d_size)
+	tmp = (*dlst)->d_bot;
+	if (--(*dlst)->d_size)
 	{
-		tmp = (*dllst)->d_top;
-		(*dllst)->d_top = (*dllst)->d_top->next;
-		(*dllst)->d_top->prev = NULL;
+		tmp = (*dlst)->d_top;
+		(*dlst)->d_top = (*dlst)->d_top->next;
+		(*dlst)->d_top->prev = NULL;
 	}
 	free(tmp->addr_1);
 	free(tmp->addr_2);
 	*tmp = (t_nlst){0};
 	free(tmp);
 	tmp = NULL;
-	if (!(*dllst)->d_size)
+	if (!(*dlst)->d_size)
 	{
-		(**dllst) = (u_adllst){0};
-		free(*dllst);
-		*dllst = NULL;
+		(**dlst) = (t_adlst){0};
+		free(*dlst);
+		*dlst = NULL;
 	}
 }
 
-void	_dllst_pop_back(u_padllst *dllst)
+void	_dlst_pop_back(t_ppadlst dlst)
 {
 	t_pnlst	tmp;
 
-	if (!*dllst)
+	if (!*dlst)
 		return ;
-	tmp = (*dllst)->d_bot;
-	if (--(*dllst)->d_size)
+	tmp = (*dlst)->d_bot;
+	if (--(*dlst)->d_size)
 	{
-		tmp = (*dllst)->d_bot;
-		(*dllst)->d_bot = (*dllst)->d_bot->prev;
-		(*dllst)->d_bot->next = NULL;
+		tmp = (*dlst)->d_bot;
+		(*dlst)->d_bot = (*dlst)->d_bot->prev;
+		(*dlst)->d_bot->next = NULL;
 	}
 	free(tmp->addr_1);
 	free(tmp->addr_2);
 	*tmp = (t_nlst){0};
 	free(tmp);
 	tmp = NULL;
-	if (!(*dllst)->d_size)
+	if (!(*dlst)->d_size)
 	{
-		(**dllst) = (u_adllst){0};
-		free(*dllst);
-		*dllst = NULL;
+		(**dlst) = (t_adlst){0};
+		free(*dlst);
+		*dlst = NULL;
 	}
 }
 
-void	_dllst_pop_in(u_padllst *dllst, t_pnlst *node)
+void	_dlst_pop_in(t_ppadlst dlst, t_ppnlst node)
 {
 	t_pnlst	tmp;
 
-	if (!*dllst || !node)
+	if (!*dlst || !node)
 		return ;
-	if ((*dllst)->d_top && (*dllst)->d_top == *node)
-		return (_dllst_pop_front(dllst));
-	if ((*dllst)->d_bot && (*dllst)->d_bot == *node)
-		return (_dllst_pop_back(dllst));
-	(*dllst)->d_size--;
+	if ((*dlst)->d_top && (*dlst)->d_top == *node)
+		return (_dlst_pop_front(dlst));
+	if ((*dlst)->d_bot && (*dlst)->d_bot == *node)
+		return (_dlst_pop_back(dlst));
+	(*dlst)->d_size--;
 	tmp = *node;
 	*node = (*node)->prev;
 	(*node)->next = tmp->next;

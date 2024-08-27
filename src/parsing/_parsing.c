@@ -6,13 +6,13 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/27 01:29:47 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 16:48:41 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	_pars_pipe_lines(t_pbtree *node)
+int	_pars_pipe_lines(t_ppbtree node)
 {
 	t_pnlst	tmp;
 
@@ -30,7 +30,7 @@ int	_pars_pipe_lines(t_pbtree *node)
 	return (_SUCCESS);
 }
 
-int	_pars_args_proc(t_pcmd *cmd)
+int	_pars_args_proc(t_ppncmd cmd)
 {
 	int	i;
 
@@ -41,7 +41,7 @@ int	_pars_args_proc(t_pcmd *cmd)
 	return (_SUCCESS);
 }
 
-int	_pars_args_line(t_pdata data, t_pcmd *cmd, t_pnlst *token, bool inside)
+int	_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 {
 	t_pnlst	tmp;
 	int		i;
@@ -56,14 +56,17 @@ int	_pars_args_line(t_pdata data, t_pcmd *cmd, t_pnlst *token, bool inside)
 	{
 		if (_token_id(tmp->x, _TYP_REDIRS))
 		{
-			if (_pars_redirs(cmd, &tmp, inside))
+			if (_pars_redirs(data, cmd, &tmp, inside))
 				return (_FAILURE);
 			continue ;
 		}
 		else if (inside && tmp->addr_1)
 			(*cmd)->args[i++] = ft_strdup((char *)tmp->addr_1);
 		else if (!inside && tmp->addr_1)
+		{
+			data->_errno = 2;
 			return (ft_dprintf(2, _ERR_TOKEN, (char *)tmp->addr_1), _FAILURE);
+		}
 		tmp = tmp->next;
 	}
 	if (inside && (*cmd)->args)

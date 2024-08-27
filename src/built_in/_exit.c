@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _exit.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:43 by moha              #+#    #+#             */
-/*   Updated: 2024/08/23 19:26:57 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/27 16:51:42 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,11 @@ int	_str_is_digit(char *str)
 	return (1);
 }
 
-int	_many_args(t_pdata data, char **arg)
+int	_many_args(char **arg)
 {
 	if (!_str_is_digit(arg[1]) && _str_is_digit(arg[2]))
-	{
-		ft_dprintf(2, "exit: %s: numeric argument required\n", arg[1]);
-		_data_clear(data);
-		exit(2);
-	}
-	ft_dprintf(2, "exit: bash: exit: too many arguments\n");
-	return (_FAILURE);
+		exit(_err_print(_ERR_EXIT_NUM, arg[1], true, 2));
+	return (_err_print(_ERR_EXIT_MANY, NULL, false, 2));
 }
 
 int	_exit_arg(t_pdata data, char **arg)
@@ -46,19 +41,17 @@ int	_exit_arg(t_pdata data, char **arg)
 	if (is_overflow(arg[1]))
 	{
 		str = ft_strdup(arg[1]);
-		ft_dprintf(2, "exit: %s: numeric argument required\n", str);
+		ft_dprintf(2, _ERR_EXIT_NUM, str);
 		free(str);
 		_data_clear(data);
 		exit(2);
-		return (_FAILURE);
 	}
 	ft_dprintf(STDERR_FILENO, "exit\n");
 	_data_clear(data);
 	exit(ft_atoi(arg[1]) % 256);
-	return (_FAILURE);
 }
 
-int	_exit_(t_pdata data, t_pcmd *cmd)
+int	_exit_(t_pdata data, t_ppncmd cmd)
 {
 	int	i;
 
@@ -78,6 +71,6 @@ int	_exit_(t_pdata data, t_pcmd *cmd)
 		return (_FAILURE);
 	}
 	else if (i > 1)
-		_many_args(data, (*cmd)->args);
+		_many_args((*cmd)->args);
 	return (_SUCCESS);
 }

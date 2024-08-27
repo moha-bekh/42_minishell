@@ -6,15 +6,15 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 07:36:01 by moha              #+#    #+#             */
-/*   Updated: 2024/08/27 01:46:53 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 16:49:21 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	_wait_pids(t_pdata data, u_padllst cmd_line, t_pcmd limit)
+void	_wait_pids(t_pdata data, t_padlst cmd_line, t_pncmd limit)
 {
-	t_pcmd	tmp;
+	t_pncmd	tmp;
 
 	(void)limit;
 	tmp = cmd_line->c_top;
@@ -31,7 +31,7 @@ void	_wait_pids(t_pdata data, u_padllst cmd_line, t_pcmd limit)
 	}
 }
 
-int	_exec_parent_proc(t_pcmd *cmd)
+int	_exec_parent_proc(t_ppncmd cmd)
 {
 	if ((*cmd)->prev)
 	{
@@ -41,7 +41,7 @@ int	_exec_parent_proc(t_pcmd *cmd)
 	return (_SUCCESS);
 }
 
-int	_exec_proc(t_pdata data, t_pcmd *cmd)
+int	_exec_proc(t_pdata data, t_ppncmd cmd)
 {
 	if ((*cmd)->next)
 		if (pipe((*cmd)->redirs.pfd))
@@ -59,9 +59,9 @@ int	_exec_proc(t_pdata data, t_pcmd *cmd)
 	return (_SUCCESS);
 }
 
-int	_exec_cmd_line(t_pdata data, t_pbtree *node)
+int	_exec_cmd_line(t_pdata data, t_ppbtree node)
 {
-	t_pcmd	tmp;
+	t_pncmd	tmp;
 
 	(void)data;
 	_pars_pipe_lines(node);
@@ -70,18 +70,12 @@ int	_exec_cmd_line(t_pdata data, t_pbtree *node)
 	{
 		if (_pars_args_line(data, &tmp, &tmp->token, true))
 			return (_FAILURE);
+		// _expand_vars(data, &tmp);
 		if (_is_builtin(data, tmp->args))
-		{
-			data->_errno = _exec_builtin(data, &tmp);
-			if (dup2(data->args._stdin, STDIN_FILENO) < 0)
-				return (perror("dup2: "), _EXT_DUP2);
-			if (dup2(data->args._stdout, STDOUT_FILENO) < 0)
-				return (perror("dup2: "), _EXT_DUP2);
-		}
+			_exec_builtin_proc(data, &tmp);
 		else
 		{
 			_resolve_path(data, &tmp);
-			// _expand_vars(data, &tmp);
 			if (_exec_proc(data, &tmp))
 				return (_FAILURE);
 		}
@@ -91,7 +85,7 @@ int	_exec_cmd_line(t_pdata data, t_pbtree *node)
 	return (_SUCCESS);
 }
 
-int	_exec(t_pdata data, t_pbtree *node)
+int	_exec(t_pdata data, t_ppbtree node)
 {
 	if (!*node)
 		return (_SUCCESS);
@@ -102,7 +96,10 @@ int	_exec(t_pdata data, t_pbtree *node)
 		_cmd_push_back(&(*node)->cmd_line, (*node)->token);
 		(*node)->cmd_line->c_top->pid = fork();
 		if ((*node)->cmd_line->c_top->pid < 0)
+		{
+			data->_errno = (*node)->cmd_line->c_top->pid;
 			return (perror("fork: "), _EXT_FORK);
+		}
 		if (!(*node)->cmd_line->c_top->pid)
 			_exec(data, &(*node)->right);
 		else

@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/26 17:29:03 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 16:43:07 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	_quote_proc(t_pdata data, int *i)
 			if (data->tokens && data->tokens->d_bot->flag)
 				_join_strings(data, j + 1, *i - j - 1);
 			else
-				_dllst_push_back(&data->tokens, ft_substr(data->prompt, j + 1,
+				_dlst_push_back(&data->tokens, ft_substr(data->prompt, j + 1,
 						(*i - j - 1)), NULL, type_quote);
 			*i += 1;
 			if (data->prompt[*i] && !ft_isspace(data->prompt[*i]))
@@ -59,7 +59,7 @@ int	_quote_proc(t_pdata data, int *i)
 			return (_SUCCESS);
 		}
 	}
-	return (ft_dprintf(2, _ERR_CLOSE, type_quote), 1);
+	return (_err_print(_ERR_CLOSE, &type_quote, false, 2));
 }
 
 int	_wildcards_proc(t_pdata data, int *i)
@@ -79,7 +79,7 @@ int	_wildcards_proc(t_pdata data, int *i)
 		_join_strings(data, j, *i - j);
 	}
 	else
-		_dllst_push_back(&data->tokens, ft_substr(data->prompt, j, *i - j),
+		_dlst_push_back(&data->tokens, ft_substr(data->prompt, j, *i - j),
 			NULL, '*');
 	if (data->prompt[*i] && !ft_isspace(data->prompt[*i]))
 		data->tokens->d_bot->flag = true;
@@ -99,8 +99,8 @@ int	_dollar_proc(t_pdata data, int *i)
 
 	if (data->prompt[*i + 1] && data->prompt[*i + 1] == '?')
 	{
-		_dllst_push_back(&data->tokens, ft_substr(data->prompt, *i + 1, 1),
-			NULL, '$');
+		_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 2), NULL,
+			'$');
 		*i += 2;
 	}
 	else if (data->prompt[*i + 1] && _is_varchr(data->prompt[*i + 1]))
@@ -109,12 +109,12 @@ int	_dollar_proc(t_pdata data, int *i)
 		j = *i;
 		while (data->prompt[*i] && _is_varchr(data->prompt[*i]))
 			*i += 1;
-		_dllst_push_back(&data->tokens, ft_substr(data->prompt, j, (*i - j)),
+		_dlst_push_back(&data->tokens, ft_substr(data->prompt, j, (*i - j)),
 			NULL, '$');
 	}
 	else
 	{
-		_dllst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL,
+		_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL,
 			'$');
 		*i += 1;
 	}
@@ -125,13 +125,13 @@ int	_sub_proc(t_pdata data, int *i)
 {
 	if (data->prompt[*i] == '(')
 	{
-		_dllst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL,
+		_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL,
 			'(');
 		data->args.parentheses++;
 	}
 	else if (data->prompt[*i] == ')')
 	{
-		_dllst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL,
+		_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL,
 			')');
 		data->args.parentheses++;
 	}
@@ -167,7 +167,8 @@ int	_token_word(t_pdata data, int *i)
 	if (data->tokens && data->tokens->d_bot->flag)
 		_join_strings(data, j, *i - j);
 	else
-		_dllst_push_back(&data->tokens, ft_substr(data->prompt, j, (*i - j)), NULL, _WORD);
+		_dlst_push_back(&data->tokens, ft_substr(data->prompt, j, (*i - j)),
+			NULL, _WORD);
 	if (data->prompt[*i] && !ft_isspace(data->prompt[*i])
 		&& _token_id(data->prompt[*i], _JOINERS))
 		data->tokens->d_bot->flag = true;
@@ -188,7 +189,7 @@ int	_found_pair(t_pdata data, int *i)
 		}
 		*i += 1;
 	}
-	return (ft_dprintf(2, _ERR_CLOSE, '('));
+	return (_err_print(_ERR_CLOSE, ")", false, 2));
 }
 
 int	_check_sub(t_pdata data)
@@ -216,7 +217,7 @@ int	_check_top(t_pdata data)
 		return (_SUCCESS);
 	tmp = data->tokens->d_top;
 	if (_token_id(tmp->x, _STX_OP))
-		return (ft_dprintf(2, _ERR_TOKEN, (char *)tmp->addr_1), _FAILURE);
+		return (_err_print(_ERR_TOKEN, tmp->addr_1, true, 2));
 	return (_SUCCESS);
 }
 
@@ -228,15 +229,11 @@ int	_check_bot(t_pdata data)
 		return (_FAILURE);
 	tmp = data->tokens->d_bot;
 	if (_token_id(tmp->x, _STX_OP) || _token_id(tmp->x, _TYP_REDIRS))
-	{
-		ft_dprintf(2, _ERR_NEWLINE);
-		return (_FAILURE);
-	}
+		return (_err_print(_ERR_NEWLINE, NULL, false, 2));
 	if (data->args.parentheses % 2)
 	{
 		data->args.parentheses = 0;
-		ft_dprintf(2, _ERR_TOKEN, ")");
-		return (_FAILURE);
+		return (_err_print(_ERR_TOKEN, "(", true, 2));
 	}
 	data->args.parentheses = 0;
 	if (_check_sub(data))

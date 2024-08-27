@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   _echo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:54 by moha              #+#    #+#             */
-/*   Updated: 2024/08/23 19:26:00 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/27 16:51:53 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	_echo(t_pdata data, t_pcmd *cmd)
+int	_echo(t_pdata data, t_ppncmd cmd)
 {
 	int		i;
 	bool	new_line;

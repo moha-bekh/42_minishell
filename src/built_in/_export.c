@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _export.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:34:32 by moha              #+#    #+#             */
-/*   Updated: 2024/08/23 19:27:18 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/27 16:51:38 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,9 @@ int	_add_value(t_pdata data, char *arg)
 	value = ft_substr(arg, _get_start_index(arg) + 1, ft_strlen(arg));
 	exp_value = ft_strdup(value);
 	exp_value = _exp_value(exp_value);
-	_dllst_push_back(&data->env, key, value, 0);
-	_dllst_push_back(&data->export, key, exp_value, 0);
-	_dllst_sort(&data->export, false);
+	_dlst_push_back(&data->env, key, value, 0);
+	_dlst_push_back(&data->export, key, exp_value, 0);
+	_dlst_sort(&data->export, false);
 	return (_SUCCESS);
 }
 
@@ -118,20 +118,19 @@ int	_bad_value(char *value)
 	tmp = ft_substr(value, 0, _get_start_index(value));
 	if (!tmp[0] || _varstr_conv(tmp))
 	{
-		ft_dprintf(2, "bash: export: `%s': not a valid identifier\n", value);
 		free(tmp);
-		return (_FAILURE);
+		return (_err_print(_ERR_EXPORT_INVALID, value, true, 1));
 	}
 	free(tmp);
 	return (_SUCCESS);
 }
 
-int	_export(t_pdata data, t_pcmd *cmd)
+int	_export(t_pdata data, t_ppncmd cmd)
 {
 	int	i;
 
 	if (!(*cmd)->args[1])
-		return (_dllst_print_export(data->export), _SUCCESS);
+		return (_dlst_print_export(data->export), _SUCCESS);
 	i = -1;
 	while ((*cmd)->args[++i])
 	{
@@ -144,6 +143,6 @@ int	_export(t_pdata data, t_pcmd *cmd)
 		}
 		_add_value(data, (*cmd)->args[i]);
 	}
-	_dllst_sort(&data->export, false);
+	_dlst_sort(&data->export, false);
 	return (_SUCCESS);
 }

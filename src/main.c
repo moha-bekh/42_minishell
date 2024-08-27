@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/08/27 11:20:05 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 16:48:03 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,40 +15,40 @@
 // int main(void)
 // {
 
-// 	u_padllst dll = NULL;
+// 	t_padlst dll = NULL;
 
-// 	_dllst_push_back(&dll, ft_strdup("1"), NULL, 0);
-// 	_dllst_push_back(&dll, ft_strdup("2"), NULL, 0);
-// 	_dllst_push_back(&dll, ft_strdup("3"), NULL, 0);
+// 	_dlst_push_back(&dll, ft_strdup("1"), NULL, 0);
+// 	_dlst_push_back(&dll, ft_strdup("2"), NULL, 0);
+// 	_dlst_push_back(&dll, ft_strdup("3"), NULL, 0);
 
-// 	_dllst_push_in(&dll, dll->d_bot, ft_strdup("0"), NULL);
+// 	_dlst_push_in(&dll, dll->d_bot, ft_strdup("0"), NULL);
 
-// 	_dllst_print_builtins(dll);
+// 	_dlst_print_builtins(dll);
 
-// 	_dllst_clear(&dll);
+// 	_dlst_clear(&dll);
 // 	return (0);
 // }
 
-int	_expand_list_to_tokens(t_pnlst *token, u_padllst *match_list)
+int	_expand_list_to_tokens(t_ppnlst token, t_ppadlst match_list)
 {
 	t_pnlst	tmp;
-	t_pnlst	*to_remove;
+	t_ppnlst	to_remove;
 
 	to_remove = token;
 	tmp = (*match_list)->d_top;
 	while (tmp)
 	{
-		_dllst_push_in(&(*token)->manager, *token,
+		_dlst_push_in(&(*token)->manager, *token,
 			ft_strdup((char *)tmp->addr_1), NULL);
 		token = &(*token)->next;
 		tmp = tmp->next;
 	}
-	_dllst_pop_in(&(*token)->manager, to_remove);
-	_dllst_clear(match_list);
+	_dlst_pop_in(&(*token)->manager, to_remove);
+	_dlst_clear(match_list);
 	return (_SUCCESS);
 }
 
-int	_expand_wildcards_filter(t_pnlst *token, u_padllst *match_list)
+int	_expand_wildcards_filter(t_ppnlst token, t_ppadlst match_list)
 {
 	char	**patterns;
 	t_pnlst	tmp;
@@ -68,7 +68,7 @@ int	_expand_wildcards_filter(t_pnlst *token, u_padllst *match_list)
 			if (!ft_strnstr((char *)tmp->addr_1, patterns[i],
 					ft_strlen((char *)tmp->addr_1)))
 			{
-				_dllst_pop_in(match_list, &tmp);
+				_dlst_pop_in(match_list, &tmp);
 				tmp = (*match_list)->d_top;
 			}
 			tmp = tmp->next;
@@ -80,9 +80,9 @@ int	_expand_wildcards_filter(t_pnlst *token, u_padllst *match_list)
 	return (_SUCCESS);
 }
 
-int	_expand_wildcards(t_pnlst *token)
+int	_expand_wildcards(t_ppnlst token)
 {
-	u_padllst		match_list;
+	t_padlst		match_list;
 	struct dirent	*entry;
 	char			*cwd_name;
 	DIR				*cwd_dir;
@@ -94,7 +94,7 @@ int	_expand_wildcards(t_pnlst *token)
 	entry = readdir(cwd_dir);
 	while (entry)
 	{
-		_dllst_push_back(&match_list, ft_strdup(entry->d_name), NULL, 0);
+		_dlst_push_back(&match_list, ft_strdup(entry->d_name), NULL, 0);
 		entry = readdir(cwd_dir);
 	}
 	closedir(cwd_dir);
@@ -103,7 +103,7 @@ int	_expand_wildcards(t_pnlst *token)
 	return (_SUCCESS);
 }
 
-int	_expand_line(t_pnlst *tokens)
+int	_expand_line(t_ppnlst tokens)
 {
 	t_pnlst	tmp;
 
@@ -131,11 +131,12 @@ int	main(int ac, char **av, char **ev)
 		add_history(data.prompt);
 		if (_token_list(&data) && !_data_structs_clear(&data))
 			continue ;
-		_tree_builder(&data.tree, data.tokens->d_top);
-		if (_exec(&data, &data.tree) && !_data_structs_clear(&data))
-			continue ;
-		_dllst_print_tokens(data.tokens);
-		_bt_print(data.tree, 0);
+		_dlst_print_tokens(data.tokens);
+		// _tree_builder(&data.tree, data.tokens->d_top);
+		// if (_exec(&data, &data.tree) && !_data_structs_clear(&data))
+		// 	continue ;
+		// _dlst_print_tokens(data.tokens);
+		// _bt_print(data.tree, 0);
 		_data_structs_clear(&data);
 	}
 	return (_data_clear(&data), _SUCCESS);

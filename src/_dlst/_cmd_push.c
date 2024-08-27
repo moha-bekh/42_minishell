@@ -6,35 +6,35 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 18:44:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/26 19:44:01 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 16:45:22 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	_cmd_push_back(u_padllst *dllst, t_pnlst token)
+void	_cmd_push_back(t_ppadlst dlst, t_pnlst token)
 {
-	t_pcmd	node;
+	t_pncmd	node;
 
 	node = NULL;
-	if (_alloc((void *)&node, sizeof(t_cmd)) || !node)
+	if (_alloc((void *)&node, sizeof(t_ncmd)) || !node)
 		return ;
-	*node = (t_cmd){0};
+	*node = (t_ncmd){0};
 	node->redirs = (t_redir){0};
-	if (!(*dllst))
+	if (!(*dlst))
 	{
-		if (_alloc((void *)dllst, sizeof(u_adllst)) || !*dllst)
+		if (_alloc((void *)dlst, sizeof(t_adlst)) || !*dlst)
 			return (free(node));
-		(**dllst) = (u_adllst){0};
-		(*dllst)->c_top = node;
-		(*dllst)->c_bot = node;
+		(**dlst) = (t_adlst){0};
+		(*dlst)->c_top = node;
+		(*dlst)->c_bot = node;
 	}
 	else
 	{
-		node->prev = (*dllst)->c_bot;
-		(*dllst)->c_bot->next = node;
-		(*dllst)->c_bot = node;
+		node->prev = (*dlst)->c_bot;
+		(*dlst)->c_bot->next = node;
+		(*dlst)->c_bot = node;
 	}
 	node->token = token;
-	(*dllst)->c_size++;
+	(*dlst)->c_size++;
 }

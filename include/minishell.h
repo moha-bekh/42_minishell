@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/08/27 11:15:32 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 16:51:14 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,169 +23,23 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 
-# define _PATH "/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
+// /* STRUCT TYPES */
+typedef struct s_ncmd t_ncmd, *t_pncmd, **t_ppncmd;     // List Command
+typedef struct s_adlst t_adlst, *t_padlst, **t_ppadlst; // List Manager
+typedef struct s_nlst t_nlst, *t_pnlst, **t_ppnlst;     // List Generic
 
-# define _O_RWCT O_RDWR | O_CREAT | O_TRUNC, 0644
-# define _O_RWCA O_RDWR | O_CREAT | O_APPEND, 0644
+typedef struct s_btree t_btree, *t_pbtree, **t_ppbtree; // Binary Tree
 
-# define _TOKENS "*'\"()$|&<>"
-# define _OPERATORS "&|"
-# define _SUBSHELL "()"
-# define _PIPELINE "|"
-# define _REDIRS "<>"
-# define _QUOTES "'\""
-# define _OTHERS "$*"
-# define _SCOPES "(\"'"
-# define _JOINERS "\"'$*"
-
-# define _STX_OP "AOP"
-
-# define _TYP_SEP "AO()"
-# define _TYP_REDIRS "<>HN"
-
-# define _ERR_TOKEN "bash: syntax error near unexpected token `%s'\n"
-# define _ERR_CLOSE "bash: syntax error a token field `%c' is not closed\n"
-# define _ERR_NEWLINE "bash: syntax error near unexpected token `newline'\n"
-# define _ERR_NOT_FOUND "bash: %s: command not found\n"
-# define _ERR_HEREDOC "bash: maximum here-document count exceeded\n"
-
-enum					e_tokens
-{
-	_AND = 'A',
-	_OR = 'O',
-	_SUB = 'S',
-	_WORD = 'W',
-	_PIPE = 'P',
-	_REDIR_OUTA = 'N',
-	_HERE_DOC = 'H'
-};
-
-enum					e_return
-{
-	_EXT_DUP2 = -15,
-	_EXT_DUP = -14,
-	_EXT_EXEC = -13,
-	_EXT_PIPE = -12,
-	_EXT_FORK = -11,
-	_EXT_OPEN = -10,
-
-	_SYNTAX = -3,
-	_ALLOC = -2,
-	_ERROR = -1,
-	_SUCCESS = 0,
-	_FAILURE = 1
-};
-
-/* GENERIC LINKED LIST */
-typedef struct s_nlst t_nlst, *t_pnlst;
-typedef struct s_adllst u_adllst, *u_padllst;
-/* CMD BTREE */
-typedef struct s_btree t_btree, *t_pbtree;
-/* CMD LIST && REDIR STRUCT */
-typedef struct s_redir t_redir, *t_predir;
-typedef struct s_cmd t_cmd, *t_pcmd;
-/* DATA STRUCT && ARGS STRUCT */
-typedef struct s_args t_args, *t_pargs;
-typedef struct s_data t_data, *t_pdata;
-
-struct					s_nlst
-{
-	void				*addr_1;
-	void				*addr_2;
-	int					x;
-	bool				flag;
-	t_pnlst				next;
-	t_pnlst				prev;
-	u_padllst			manager;
-};
-
-struct					s_redir
-{
-	char				*in_name;
-	bool				in_access;
-	char				*out_name;
-	bool				out_trunc;
-	bool				out_inside;
-	char				*here_name;
-	char				**here_limit;
-	int					idx_limit;
-	int					here_fd;
-	int					pfd[2];
-	int					fd[2];
-};
-
-struct					s_cmd
-{
-	t_pnlst				token;
-	char				**args;
-	char				*path;
-	t_redir				redirs;
-	pid_t				pid;
-	t_pcmd				next;
-	t_pcmd				prev;
-	u_padllst			manager;
-};
-
-struct					s_adllst
-{
-	union
-	{
-		struct
-		{
-			t_pnlst		d_top;
-			t_pnlst		d_bot;
-			int			d_size;
-		};
-		struct
-		{
-			t_pcmd		c_top;
-			t_pcmd		c_bot;
-			int			c_size;
-		};
-	};
-};
-
-struct					s_btree
-{
-	t_pnlst				token;
-	u_padllst			cmd_line;
-	struct s_btree		*root;
-	struct s_btree		*left;
-	struct s_btree		*right;
-};
-
-struct					s_args
-{
-	int					ac;
-	char				**av;
-	char				**env;
-	char				**env_path;
-	char				**hard_path;
-	char				*pwd;
-	char				*old_pwd;
-	int					_stdin;
-	int					_stdout;
-	int					parentheses;
-	int					here_doc;
-};
-
-struct					s_data
-{
-	char				*prompt;
-	t_args				args;
-	u_padllst			builtins;
-	u_padllst			env;
-	u_padllst			export;
-	u_padllst			tokens;
-	t_pbtree			tree;
-	int					_errno;
-	struct sigaction	s_sig;
-};
+typedef struct s_redir t_redir, *t_predir; // Struct Redirections
+typedef struct s_args t_args, *t_pargs;    // Struct Args
+typedef struct s_data t_data, *t_pdata;    // Struct Data
 
 extern int				*_ptr_errno;
 
 /* UTILS */
 int						_alloc(void **target, size_t size);
+int						_err_print(char *str, void *arg, bool ptr, int _errno);
+
 int						_get_start_index(char *str);
 int						_path_slash(t_pdata data);
 int						is_overflow(char *str);
@@ -216,74 +70,227 @@ int						_op_proc(t_pdata data, int *i);
 int						_redir_proc(t_pdata data, int *i);
 
 /* TREE */
-t_pnlst					_tree_builder(t_pbtree *node, t_pnlst token);
+t_pnlst					_tree_builder(t_ppbtree node, t_pnlst token);
 
 /* EXEC */
-int						_exec(t_pdata data, t_pbtree *node);
-int						_exec_child_proc(t_pdata data, t_pcmd *cmd);
-int						_resolve_path(t_pdata data, t_pcmd *cmd);
+int						_exec(t_pdata data, t_ppbtree node);
+int						_exec_child_proc(t_pdata data, t_ppncmd cmd);
+int						_resolve_path(t_pdata data, t_ppncmd cmd);
 
-int						_exec_builtin(t_pdata data, t_pcmd *cmd);
+int						_exec_builtin_proc(t_pdata data, t_ppncmd cmd);
 int						_is_builtin(t_pdata data, char **args);
 
-int						_read_from_pipe(t_pcmd *cmd);
-int						_write_to_pipe(t_pcmd *cmd);
-int						_set_redir_in(t_pcmd *cmd);
-int						_set_redir_out(t_pcmd *cmd);
+int						_read_from_pipe(t_ppncmd cmd);
+int						_write_to_pipe(t_ppncmd cmd);
+int						_set_redir_in(t_ppncmd cmd);
+int						_set_redir_out(t_ppncmd cmd);
 
 /* EXPAND */
 int						_expand_line(t_pnlst *tokens);
 
 /* PARSING */
-int						_pars_pipe_lines(t_pbtree *node);
-int						_pars_args_line(t_pdata data, t_pcmd *cmd,
-							t_pnlst *token, bool inside);
-int						_pars_redirs(t_pcmd *cmd, t_pnlst *token, bool inside);
+int						_pars_pipe_lines(t_ppbtree node);
+int						_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside);
+int						_pars_redirs(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside);
 
 /* BUILTINS */
-int						_echo(t_pdata data, t_pcmd *cmd);
-int						_env(t_pdata data, t_pcmd *cmd);
-int						_exit_(t_pdata data, t_pcmd *cmd);
-int						_export(t_pdata data, t_pcmd *cmd);
+int						_echo(t_pdata data, t_ppncmd cmd);
+int						_env(t_pdata data, t_ppncmd cmd);
+int						_exit_(t_pdata data, t_ppncmd cmd);
+int						_export(t_pdata data, t_ppncmd cmd);
 int						_pwd(void);
-int						_unset(t_pdata data, t_pcmd *cmd);
+int						_unset(t_pdata data, t_ppncmd cmd);
 
 /* BINARY TREE */
-void					_bt_clear(t_pbtree *node);
+void					_bt_clear(t_ppbtree node);
 t_pbtree				_bt_create(t_pnlst token);
 t_pbtree				_bt_join(t_pbtree left, t_pnlst token, t_pbtree right);
 void					_bt_print(t_pbtree node, int i);
-void					_bt_push_left(t_pbtree *node, t_pbtree new);
-void					_bt_push_right(t_pbtree *node, t_pbtree new);
-void					_bt_push_root(t_pbtree *node, t_pbtree new);
+void					_bt_push_left(t_ppbtree node, t_pbtree new);
+void					_bt_push_right(t_ppbtree node, t_pbtree new);
+void					_bt_push_root(t_ppbtree node, t_pbtree new);
 
 /* GENERIC LINKED LIST */
-void					_dllst_push_front(u_padllst *dllst, void *addr_1,
+void					_dlst_push_front(t_ppadlst dlst, void *addr_1,
 							void *addr_2, int x);
-void					_dllst_push_back(u_padllst *dllst, void *addr_1,
+void					_dlst_push_back(t_ppadlst dlst, void *addr_1,
 							void *addr_2, int x);
-void					_dllst_push_in(u_padllst *dllst, t_pnlst node,
+void					_dlst_push_in(t_ppadlst dlst, t_pnlst node,
 							void *addr_1, void *addr_2);
 
-void					_dllst_pop_front(u_padllst *dllst);
-void					_dllst_pop_back(u_padllst *dllst);
-void					_dllst_pop_in(u_padllst *dllst, t_pnlst *node);
+void					_dlst_pop_front(t_ppadlst dlst);
+void					_dlst_pop_back(t_ppadlst dlst);
+void					_dlst_pop_in(t_ppadlst dlst, t_ppnlst node);
 
-void					_dllst_clear(u_padllst *dllst);
+void					_dlst_clear(t_ppadlst dlst);
 
-void					_dllst_print_builtins(u_padllst dllst);
-void					_dllst_print_env(u_padllst dllst);
-void					_dllst_print_export(u_padllst dllst);
-void					_dllst_print_tokens(u_padllst dllst);
+void					_dlst_print_builtins(t_padlst dlst);
+void					_dlst_print_env(t_padlst dlst);
+void					_dlst_print_export(t_padlst dlst);
+void					_dlst_print_tokens(t_padlst dlst);
 
-void					_dllst_sort(u_padllst *dllst, bool reverse);
+void					_dlst_sort(t_ppadlst dlst, bool reverse);
 
 /* CMD LIST */
-void					_cmd_push_back(u_padllst *dllst, t_pnlst token);
-void					_cmd_pop_back(u_padllst *dllst);
-void					_cmd_clear(u_padllst *dllst);
-void					_cmd_print_line(t_pcmd cmd);
-void					_cmd_print_all(u_padllst dllst);
+void					_cmd_push_back(t_ppadlst dlst, t_pnlst token);
+void					_cmd_pop_back(t_ppadlst dlst);
+void					_cmd_clear(t_ppadlst dlst);
+void					_cmd_print_line(t_pncmd cmd);
+void					_cmd_print_all(t_padlst dlst);
+
+struct					s_args
+{
+	int					ac;
+	char				**av;
+	char				**env;
+	char				**env_path;
+	char				**hard_path;
+	char				*pwd;
+	char				*old_pwd;
+	int					_stdin;
+	int					_stdout;
+	int					parentheses;
+	int					here_doc;
+};
+
+struct					s_data
+{
+	char				*prompt;
+	t_args				args;
+	t_padlst			builtins;
+	t_padlst			env;
+	t_padlst			export;
+	t_padlst			tokens;
+	t_pbtree			tree;
+	int					_errno;
+	struct sigaction	s_sig;
+};
+
+struct					s_nlst
+{
+	void				*addr_1;
+	void				*addr_2;
+	int					x;
+	bool				flag;
+	t_pnlst				next;
+	t_pnlst				prev;
+	t_padlst			manager;
+};
+struct					s_redir
+{
+	char				*in_name;
+	bool				in_access;
+	char				*out_name;
+	bool				out_trunc;
+	bool				out_inside;
+	char				*here_name;
+	char				**here_limit;
+	int					idx_limit;
+	int					here_fd;
+	int					pfd[2];
+	int					fd[2];
+};
+
+struct					s_ncmd
+{
+	t_pnlst				token;
+	char				**args;
+	char				*path;
+	t_redir				redirs;
+	pid_t				pid;
+	t_pncmd				next;
+	t_pncmd				prev;
+	t_padlst			manager;
+};
+
+struct					s_adlst
+{
+	union
+	{
+		struct
+		{
+			t_pnlst		d_top;
+			t_pnlst		d_bot;
+			int			d_size;
+		};
+		struct
+		{
+			t_pncmd		c_top;
+			t_pncmd		c_bot;
+			int			c_size;
+		};
+	};
+};
+
+struct					s_btree
+{
+	t_pnlst				token;
+	t_padlst			cmd_line;
+	struct s_btree		*root;
+	struct s_btree		*left;
+	struct s_btree		*right;
+};
+
+# define _PATH "/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
+
+# define _O_RWCT O_RDWR | O_CREAT | O_TRUNC, 0644
+# define _O_RWCA O_RDWR | O_CREAT | O_APPEND, 0644
+
+# define _TOKENS "*'\"()$|&<>"
+# define _OPERATORS "&|"
+# define _SUBSHELL "()"
+# define _PIPELINE "|"
+# define _REDIRS "<>"
+# define _QUOTES "'\""
+# define _OTHERS "$*"
+# define _SCOPES "(\"'"
+# define _JOINERS "\"'$*"
+
+# define _STX_OP "AOP"
+
+# define _TYP_SEP "AO()"
+# define _TYP_REDIRS "<>HN"
+
+# define _ERR_TOKEN "bash: syntax error near unexpected token `%s'\n"
+# define _ERR_CLOSE "bash: syntax error a token field `%c' is not closed\n"
+# define _ERR_NEWLINE "bash: syntax error near unexpected token `newline'\n"
+# define _ERR_HEREDOC "bash: maximum here-document count exceeded\n"
+# define _ERR_NOT_FOUND "bash: %s: command not found\n"
+# define _ERR_IS_DIR "bash: %s: Is a directory\n"
+
+# define _ERR_ENV_NO_FILE "env: %s: No such file or directory\n"
+
+# define _ERR_EXIT_NUM "bash: exit: %s: numeric argument required\n"
+# define _ERR_EXIT_MANY "bash: exit: too many arguments\n"
+
+# define _ERR_EXPORT_INVALID "bash: export: `%s': not a valid identifier\n"
+
+enum					e_tokens
+{
+	_AND = 'A',
+	_OR = 'O',
+	_SUB = 'S',
+	_WORD = 'W',
+	_PIPE = 'P',
+	_REDIR_OUTA = 'N',
+	_HERE_DOC = 'H'
+};
+
+enum					e_return
+{
+	_EXT_DUP2 = -15,
+	_EXT_DUP = -14,
+	_EXT_EXEC = -13,
+	_EXT_PIPE = -12,
+	_EXT_FORK = -11,
+	_EXT_OPEN = -10,
+
+	_SYNTAX = -3,
+	_ALLOC = -2,
+	_ERROR = -1,
+	_SUCCESS = 0,
+	_FAILURE = 1
+};
 
 # define WHITE "\033[0;97m"
 # define RESET "\033[0;39m"

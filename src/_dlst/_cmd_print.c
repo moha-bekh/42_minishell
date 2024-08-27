@@ -6,17 +6,16 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 19:10:13 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/27 01:36:44 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 16:38:35 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	_cmd_print_line(t_pcmd cmd)
+void	_cmd_print_line(t_pncmd cmd)
 {
 	int	i;
-	
-	
+
 	if (*cmd->args)
 	{
 		i = 0;
@@ -41,9 +40,9 @@ void	_cmd_print_line(t_pcmd cmd)
 	printf("\n");
 }
 
-void	_cmd_print_all(u_padllst dllst)
+void	_cmd_print_all(t_padlst dllst)
 {
-	t_pcmd	tmp;
+	t_pncmd	tmp;
 
 	if (!dllst || !dllst->c_top)
 		return ;

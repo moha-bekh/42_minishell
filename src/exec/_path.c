@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 11:19:04 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/26 21:43:52 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 16:49:54 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	_is_path(char *str)
 	return (0);
 }
 
-int	_get_path(t_pdata data, t_pcmd *cmd)
+int	_get_path(t_pdata data, t_ppncmd cmd)
 {
 	char	**path;
 	char	*prog;
@@ -48,7 +48,7 @@ int	_get_path(t_pdata data, t_pcmd *cmd)
 	return (_FAILURE);
 }
 
-int	_resolve_path(t_pdata data, t_pcmd *cmd)
+int	_resolve_path(t_pdata data, t_ppncmd cmd)
 {
 	char	*prog;
 

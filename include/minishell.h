@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/08/27 16:51:14 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 17:38:02 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,15 @@ int						_set_redir_in(t_ppncmd cmd);
 int						_set_redir_out(t_ppncmd cmd);
 
 /* EXPAND */
-int						_expand_line(t_pnlst *tokens);
+int						_expand_wildcards(t_ppnlst token);
+int						_expand_line(t_ppnlst token);
 
 /* PARSING */
 int						_pars_pipe_lines(t_ppbtree node);
-int						_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside);
-int						_pars_redirs(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside);
+int						_pars_args_line(t_pdata data, t_ppncmd cmd,
+							t_ppnlst token, bool inside);
+int						_pars_redirs(t_pdata data, t_ppncmd cmd, t_ppnlst token,
+							bool inside);
 
 /* BUILTINS */
 int						_echo(t_pdata data, t_ppncmd cmd);
@@ -231,6 +234,44 @@ struct					s_btree
 	struct s_btree		*right;
 };
 
+enum					e_tokens
+{
+	_AND = 'A',
+	_OR = 'O',
+	_SUB = 'S',
+	_WORD = 'W',
+	_PIPE = 'P',
+	_REDIR_OUTA = 'N',
+	_HERE_DOC = 'H'
+};
+
+enum					e_return
+{
+	_EXT_DUP = -14,
+	_EXT_DUP2 = -13,
+	_EXT_PIPE = -12,
+	_EXT_FORK = -11,
+	_EXT_OPEN = -10,
+	_SYNTAX = -3,
+	_ALLOC = -2,
+	_ERROR = -1,
+	_SUCCESS = 0,
+	_FAILURE = 1
+};
+
+# define _ERR_TOKEN "bash: syntax error near unexpected token `%s'\n"
+# define _ERR_CLOSE "bash: syntax error a token field `%c' is not closed\n"
+# define _ERR_NEWLINE "bash: syntax error near unexpected token `newline'\n"
+# define _ERR_HEREDOC "bash: maximum here-document count exceeded\n"
+# define _ERR_NOT_FOUND "bash: %s: command not found\n"
+# define _ERR_IS_DIR "bash: %s: Is a directory\n"
+
+# define _ERR_ENV_NO_FILE "env: %s: No such file or directory\n"
+# define _ERR_EXPORT_INVALID "bash: export: `%s': not a valid identifier\n"
+
+# define _ERR_EXIT_NUM "bash: exit: %s: numeric argument required\n"
+# define _ERR_EXIT_MANY "bash: exit: too many arguments\n"
+
 # define _PATH "/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
 
 # define _O_RWCT O_RDWR | O_CREAT | O_TRUNC, 0644
@@ -250,47 +291,6 @@ struct					s_btree
 
 # define _TYP_SEP "AO()"
 # define _TYP_REDIRS "<>HN"
-
-# define _ERR_TOKEN "bash: syntax error near unexpected token `%s'\n"
-# define _ERR_CLOSE "bash: syntax error a token field `%c' is not closed\n"
-# define _ERR_NEWLINE "bash: syntax error near unexpected token `newline'\n"
-# define _ERR_HEREDOC "bash: maximum here-document count exceeded\n"
-# define _ERR_NOT_FOUND "bash: %s: command not found\n"
-# define _ERR_IS_DIR "bash: %s: Is a directory\n"
-
-# define _ERR_ENV_NO_FILE "env: %s: No such file or directory\n"
-
-# define _ERR_EXIT_NUM "bash: exit: %s: numeric argument required\n"
-# define _ERR_EXIT_MANY "bash: exit: too many arguments\n"
-
-# define _ERR_EXPORT_INVALID "bash: export: `%s': not a valid identifier\n"
-
-enum					e_tokens
-{
-	_AND = 'A',
-	_OR = 'O',
-	_SUB = 'S',
-	_WORD = 'W',
-	_PIPE = 'P',
-	_REDIR_OUTA = 'N',
-	_HERE_DOC = 'H'
-};
-
-enum					e_return
-{
-	_EXT_DUP2 = -15,
-	_EXT_DUP = -14,
-	_EXT_EXEC = -13,
-	_EXT_PIPE = -12,
-	_EXT_FORK = -11,
-	_EXT_OPEN = -10,
-
-	_SYNTAX = -3,
-	_ALLOC = -2,
-	_ERROR = -1,
-	_SUCCESS = 0,
-	_FAILURE = 1
-};
 
 # define WHITE "\033[0;97m"
 # define RESET "\033[0;39m"

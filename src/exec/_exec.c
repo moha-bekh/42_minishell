@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 07:36:01 by moha              #+#    #+#             */
-/*   Updated: 2024/08/27 16:49:21 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 17:17:24 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	_exec_cmd_line(t_pdata data, t_ppbtree node)
 	tmp = (*node)->cmd_line->c_top;
 	while (tmp)
 	{
+		_expand_line(&tmp->token);
 		if (_pars_args_line(data, &tmp, &tmp->token, true))
 			return (_FAILURE);
 		// _expand_vars(data, &tmp);

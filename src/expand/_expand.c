@@ -6,11 +6,25 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 16:22:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/27 16:19:08 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/27 17:38:49 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	_expand_line(t_ppnlst token)
+{
+	t_pnlst	tmp;
+
+	tmp = *token;
+	while (tmp && tmp->x != _PIPE && !_token_id(tmp->x, _TYP_SEP))
+	{
+		if (tmp->x == '*' && _expand_wildcards(&tmp))
+			return (_FAILURE);
+		tmp = tmp->next;
+	}
+	return (_SUCCESS);
+}
 
 // int	_varchr_conv(char c)
 // {

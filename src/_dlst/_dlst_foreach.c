@@ -6,22 +6,25 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 13:49:45 by moha              #+#    #+#             */
-/*   Updated: 2024/08/28 13:54:32 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/29 04:28:38 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	_dlst_foreach(t_ppadlst dlst, void (*f)(t_pnlst), char *limiter)
+int	_dlst_foreach_cmd(t_pdata data, t_pncmd cmd, int (*f)(t_pdata, t_pncmd),
+		char *limiters)
 {
-	t_pnlst	tmp;
+	t_pncmd	tmp;
 
-	tmp = (*dlst)->d_top;
+	tmp = cmd;
 	while (tmp)
 	{
-		if (tmp == limit)
+		if (limiters && _token_id(tmp->token->x, limiters))
 			break ;
-		f(tmp);
+		if (f(data, tmp))
+			return (_FAILURE);
 		tmp = tmp->next;
 	}
+	return (_SUCCESS);
 }

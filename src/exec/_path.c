@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 11:19:04 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/27 16:49:54 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/29 02:53:08 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	_get_path(t_pdata data, t_ppncmd cmd)
 	char	*prog;
 	int		i;
 
-	if (*data->args.env_path)
+	if (data->args.env_path)
 		path = data->args.env_path;
 	else if (*data->args.hard_path)
 		path = data->args.hard_path;

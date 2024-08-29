@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 15:44:21 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/27 16:42:34 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/29 05:35:14 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 int	_data_structs_clear(t_pdata data)
 {
 	data->_errno = 0;
+	data->args.here_doc = 0;
+	data->args.parentheses = 0;
 	free(data->prompt);
 	data->prompt = NULL;
 	_dlst_clear(&data->tokens);

@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:32:49 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/27 16:38:07 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/29 03:33:36 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	_dlst_print_builtins(t_padlst dlst)
 {
-	char	*str;
 	t_pnlst	tmp;
 
 	if (!dlst)
@@ -23,17 +22,14 @@ void	_dlst_print_builtins(t_padlst dlst)
 	tmp = dlst->d_top;
 	while (tmp)
 	{
-		str = (char *)tmp->addr_1;
-		if (str)
-			printf("%s\n", str);
+		if ((char *)tmp->addr_1)
+			printf("%s\n", (char *)tmp->addr_1);
 		tmp = tmp->next;
 	}
-	printf("\n");
 }
 
 void	_dlst_print_env(t_padlst dlst)
 {
-	char	*str;
 	t_pnlst	tmp;
 
 	if (!dlst)
@@ -41,17 +37,14 @@ void	_dlst_print_env(t_padlst dlst)
 	tmp = dlst->d_top;
 	while (tmp)
 	{
-		str = (char *)tmp->addr_2;
-		if (*str)
-			printf("%s=%s\n", (char *)tmp->addr_1, str);
+		if (tmp->addr_2)
+			printf("%s=%s\n", (char *)tmp->addr_1, (char *)tmp->addr_2);
 		tmp = tmp->next;
 	}
-	printf("\n");
 }
 
 void	_dlst_print_export(t_padlst dlst)
 {
-	char	*str;
 	t_pnlst	tmp;
 
 	if (!dlst)
@@ -59,14 +52,12 @@ void	_dlst_print_export(t_padlst dlst)
 	tmp = dlst->d_top;
 	while (tmp)
 	{
-		str = (char *)tmp->addr_2;
-		if (*str)
-			printf("export %s=\"%s\"\n", (char *)tmp->addr_1, str);
+		if (tmp->addr_2)
+			printf("export %s=\"%s\"\n", (char *)tmp->addr_1, (char *)tmp->addr_2);
 		else
 			printf("export %s\n", (char *)tmp->addr_1);
 		tmp = tmp->next;
 	}
-	printf("\n");
 }
 
 void	_dlst_print_tokens(t_padlst dlst)
@@ -84,5 +75,4 @@ void	_dlst_print_tokens(t_padlst dlst)
 		printf("value: %s \n", (char *)tmp->addr_1);
 		tmp = tmp->next;
 	}
-	printf("\n");
 }

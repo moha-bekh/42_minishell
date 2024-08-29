@@ -29,10 +29,11 @@ DLLST_SRCS :=			\
 						_cmd_pop\
 						_cmd_push\
 						_cmd_print\
-						_dlst_push\
+						_dlst_foreach\
 						_dlst_pop\
-						_dlst_sort\
 						_dlst_print\
+						_dlst_push\
+						_dlst_sort\
 						_dlst_utils
 
 BTREE_DIR := 			_btree/

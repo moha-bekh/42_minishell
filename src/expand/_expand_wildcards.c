@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _wildcards.c                                       :+:      :+:    :+:   */
+/*   _expand_wildcards.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 17:38:12 by moha              #+#    #+#             */
-/*   Updated: 2024/08/27 17:38:20 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/29 02:47:33 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	_expand_list_to_tokens(t_ppnlst token, t_ppadlst match_list)
 	while (tmp)
 	{
 		_dlst_push_in(&(*token)->manager, *token,
-			ft_strdup((char *)tmp->addr_1), NULL);
+			ft_strdup(tmp->addr_1), NULL);
 		token = &(*token)->next;
 		tmp = tmp->next;
 	}
@@ -82,7 +82,7 @@ int	_expand_wildcards_proc(t_ppnlst token, t_ppadlst match_list)
 {
 	char	**patterns;
 
-	patterns = ft_split((char *)(*token)->addr_1, '*');
+	patterns = ft_split((*token)->addr_1, '*');
 	if (*patterns)
 	{
 		if (!patterns[1] && patterns[0][0] == '.')

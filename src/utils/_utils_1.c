@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _utils.c                                           :+:      :+:    :+:   */
+/*   _utils_1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:35:57 by moha              #+#    #+#             */
-/*   Updated: 2024/08/25 00:30:39 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/29 04:55:05 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	_get_start_index(char *str)
+int	_sep(char *str)
 {
 	int	i;
 
@@ -24,7 +24,7 @@ int	_get_start_index(char *str)
 		if (str[i] == '=')
 			return (i);
 	}
-	return (i);
+	return (0);
 }
 
 int	_path_slash(t_pdata data)

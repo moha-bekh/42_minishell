@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/27 16:48:41 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/29 05:27:30 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,9 @@ int	_pars_pipe_lines(t_ppbtree node)
 {
 	t_pnlst	tmp;
 
-	if (!*node)
-		return (_FAILURE);
 	_cmd_push_back(&(*node)->cmd_line, (*node)->token);
 	tmp = (*node)->token;
-	while (tmp && (!(*node)->root || ((*node)->root
-				&& tmp != (*node)->root->token)))
+	while (tmp && (!(*node)->root || ((*node)->root && tmp != (*node)->root->token)))
 	{
 		if (tmp->x == _PIPE)
 			_cmd_push_back(&(*node)->cmd_line, tmp->next);
@@ -35,9 +32,8 @@ int	_pars_args_proc(t_ppncmd cmd)
 	int	i;
 
 	i = _count_args((*cmd)->token);
-	if (i && (_alloc((void **)&(*cmd)->args, sizeof(char *) * (i + 1))
-			|| !(*cmd)->args))
-		return (_FAILURE);
+	if (i && (_alloc((void **)&(*cmd)->args, sizeof(char *) * (i + 1)) || !(*cmd)->args))
+		return (_ALLOC);
 	return (_SUCCESS);
 }
 
@@ -56,16 +52,16 @@ int	_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 	{
 		if (_token_id(tmp->x, _TYP_REDIRS))
 		{
-			if (_pars_redirs(data, cmd, &tmp, inside))
+			if (_pars_redirs(cmd, &tmp, inside))
 				return (_FAILURE);
 			continue ;
 		}
 		else if (inside && tmp->addr_1)
-			(*cmd)->args[i++] = ft_strdup((char *)tmp->addr_1);
+			(*cmd)->args[i++] = ft_strdup(tmp->addr_1);
 		else if (!inside && tmp->addr_1)
 		{
 			data->_errno = 2;
-			return (ft_dprintf(2, _ERR_TOKEN, (char *)tmp->addr_1), _FAILURE);
+			return (ft_dprintf(2, _ERR_TOKEN, tmp->addr_1), _FAILURE);
 		}
 		tmp = tmp->next;
 	}

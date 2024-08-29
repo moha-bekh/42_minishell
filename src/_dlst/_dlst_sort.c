@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 16:10:20 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/27 16:45:52 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/29 02:46:26 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	_dlst_sort(t_ppadlst dlst, bool reverse)
 		tmp = (*dlst)->d_top;
 		while (tmp->next)
 		{
-			if (ft_strcmp((char *)tmp->addr_1, (char *)tmp->next->addr_1) > 0
+			if (ft_strcmp(tmp->addr_1, tmp->next->addr_1) > 0
 				&& !reverse)
 			{
 				ft_memswap(&tmp->addr_1, &tmp->next->addr_1, sizeof(void *));

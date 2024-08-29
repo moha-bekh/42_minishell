@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/08/27 17:38:43 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/29 06:20:03 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	main(int ac, char **av, char **ev)
 		if (_token_list(&data) && !_data_structs_clear(&data))
 			continue ;
 		_tree_builder(&data.tree, data.tokens->d_top);
+		// _bt_print(data.tree, 0);
 		if (_exec(&data, &data.tree) && !_data_structs_clear(&data))
 			continue ;
 		_data_structs_clear(&data);

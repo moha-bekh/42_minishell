@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:55:16 by moha              #+#    #+#             */
-/*   Updated: 2024/08/27 17:00:35 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/29 05:27:56 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	_alloc(void **target, size_t size)
 		return (_FAILURE);
 	(*target) = malloc(size);
 	if (!(*target))
-		return (_FAILURE);
+		return (_ALLOC);
 	ft_memset((*target), 0, size);
 	return (_SUCCESS);
 }

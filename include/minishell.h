@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/08/27 23:10:04 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/29 05:59:16 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ extern int				*_ptr_errno;
 int						_alloc(void **target, size_t size);
 int						_err_print(char *str, void *arg, bool ptr, int _errno);
 
-int						_get_start_index(char *str);
+int						_sep(char *str);
 int						_path_slash(t_pdata data);
 int						is_overflow(char *str);
 char					*get_random_name(void);
@@ -93,16 +93,16 @@ int						_expand_wildcards(t_ppnlst token);
 int						_pars_pipe_lines(t_ppbtree node);
 int						_pars_args_line(t_pdata data, t_ppncmd cmd,
 							t_ppnlst token, bool inside);
-int						_pars_redirs(t_pdata data, t_ppncmd cmd, t_ppnlst token,
-							bool inside);
+int						_pars_redirs(t_ppncmd cmd, t_ppnlst token, bool inside);
 
 /* BUILTINS */
-int						_echo(t_pdata data, t_ppncmd cmd);
-int						_env(t_pdata data, t_ppncmd cmd);
-int						_exit_(t_pdata data, t_ppncmd cmd);
-int						_export(t_pdata data, t_ppncmd cmd);
+int						_cd(t_pdata data, char **args);
+int						_echo(t_pdata data, char **args);
+int						_env(t_pdata data, char **args);
+int						_exit_(t_pdata data, char **args);
+int						_export(t_pdata data, char **args);
 int						_pwd(void);
-int						_unset(t_pdata data, t_ppncmd cmd);
+int						_unset(t_pdata data, char **args);
 
 /* BINARY TREE */
 void					_bt_clear(t_ppbtree node);
@@ -127,12 +127,15 @@ void					_dlst_pop_in(t_ppadlst dlst, t_ppnlst node);
 
 void					_dlst_clear(t_ppadlst dlst);
 
+int						_dlst_foreach_cmd(t_pdata data, t_pncmd cmd,
+							int (*f)(t_pdata, t_pncmd), char *limiters);
+
+void					_dlst_sort(t_ppadlst dlst, bool reverse);
+
 void					_dlst_print_builtins(t_padlst dlst);
 void					_dlst_print_env(t_padlst dlst);
 void					_dlst_print_export(t_padlst dlst);
 void					_dlst_print_tokens(t_padlst dlst);
-
-void					_dlst_sort(t_ppadlst dlst, bool reverse);
 
 /* CMD LIST */
 void					_cmd_push_back(t_ppadlst dlst, t_pnlst token);
@@ -148,8 +151,6 @@ struct					s_args
 	char				**env;
 	char				**env_path;
 	char				**hard_path;
-	char				*pwd;
-	char				*old_pwd;
 	int					_stdin;
 	int					_stdout;
 	int					parentheses;
@@ -247,16 +248,10 @@ enum					e_tokens
 
 enum					e_return
 {
-	_EXT_DUP = -14,
-	_EXT_DUP2 = -13,
-	_EXT_PIPE = -12,
-	_EXT_FORK = -11,
-	_EXT_OPEN = -10,
-	_SYNTAX = -3,
-	_ALLOC = -2,
-	_ERROR = -1,
 	_SUCCESS = 0,
-	_FAILURE = 1
+	_FAILURE = 1,
+	_ERROR = -1,
+	_ALLOC = -2
 };
 
 # define _ERR_TOKEN "bash: syntax error near unexpected token `%s'\n"
@@ -265,6 +260,7 @@ enum					e_return
 # define _ERR_HEREDOC "bash: maximum here-document count exceeded\n"
 # define _ERR_NOT_FOUND "bash: %s: command not found\n"
 # define _ERR_IS_DIR "bash: %s: Is a directory\n"
+# define _ERR_NO_FILE "bash: %s: No such file or directory\n"
 
 # define _ERR_ENV_NO_FILE "env: %s: No such file or directory\n"
 # define _ERR_EXPORT_INVALID "bash: export: `%s': not a valid identifier\n"

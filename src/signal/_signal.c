@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _signal.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 18:03:41 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/23 18:35:25 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/29 17:16:56 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	sig_hndl(int sig)
 		*_ptr_errno = 130;
 		printf("\n");
 		rl_on_new_line();
-		rl_replace_line("", 0);
+		// rl_replace_line("", 0);
 		rl_redisplay();
 		return ;
 	}

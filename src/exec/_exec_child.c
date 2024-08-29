@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 20:53:14 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/29 07:06:53 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/29 19:47:50 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,16 +102,16 @@
 
 int	_read_from_pipe(t_ppncmd cmd)
 {
+	close((*cmd)->prev->redirs.pfd[1]);
 	dup2((*cmd)->prev->redirs.pfd[0], STDIN_FILENO);
 	close((*cmd)->prev->redirs.pfd[0]);
-	close((*cmd)->prev->redirs.pfd[1]);
 	return (_SUCCESS);
 }
 
 int	_write_to_pipe(t_ppncmd cmd)
 {
-	dup2((*cmd)->redirs.pfd[1], STDOUT_FILENO);
 	close((*cmd)->redirs.pfd[0]);
+	dup2((*cmd)->redirs.pfd[1], STDOUT_FILENO);
 	close((*cmd)->redirs.pfd[1]);
 	return (_SUCCESS);
 }
@@ -130,7 +130,7 @@ int	_restore_stdfds(t_pdata data)
 	return (_SUCCESS);
 }
 
-int	_switch_here_doc(t_ppncmd cmd)
+int	_swap_here_doc(t_ppncmd cmd)
 {
 	(*cmd)->redirs.here_fd = open((*cmd)->redirs.here_name, O_RDONLY);
 	dup2((*cmd)->redirs.here_fd, STDIN_FILENO);
@@ -138,7 +138,7 @@ int	_switch_here_doc(t_ppncmd cmd)
 	return (_SUCCESS);
 }
 
-int	_switch_redir_in(t_ppncmd cmd)
+int	_swap_redir_in(t_ppncmd cmd)
 {
 	(*cmd)->redirs.fd[0] = open((*cmd)->redirs.in_name, O_RDONLY);
 	dup2((*cmd)->redirs.fd[0], STDIN_FILENO);
@@ -146,7 +146,7 @@ int	_switch_redir_in(t_ppncmd cmd)
 	return (_SUCCESS);
 }
 
-int	_switch_redir_out(t_ppncmd cmd)
+int	_swap_redir_out(t_ppncmd cmd)
 {
 	if ((*cmd)->redirs.out_trunc)
 		(*cmd)->redirs.fd[1] = open((*cmd)->redirs.out_name, _O_RWCT);
@@ -163,11 +163,11 @@ int	_exec_redirections(t_pdata data, t_ppncmd cmd)
 	(void)data;
 	if ((*cmd)->redirs.in_name)
 	{
-		_switch_redir_in(cmd);
+		_swap_redir_in(cmd);
 	}
 	if ((*cmd)->redirs.out_name)
 	{
-		_switch_redir_out(cmd);
+		_swap_redir_out(cmd);
 	}
 	if ((*cmd)->next && !(*cmd)->redirs.out_name)
 	{
@@ -183,6 +183,7 @@ int	_exec_redirections(t_pdata data, t_ppncmd cmd)
 int	_exec_child_proc(t_pdata data, t_ppncmd cmd)
 {
 	data->s_sig.sa_handler = child_hndl;
+	_exec_redirections(data, cmd);
 	execve((*cmd)->path, (*cmd)->args, data->args.env);
 	if ((*cmd)->args)
 		_err_print(_ERR_NOT_FOUND, (*cmd)->args[0], true, 126);

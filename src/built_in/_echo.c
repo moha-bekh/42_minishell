@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:54 by moha              #+#    #+#             */
-/*   Updated: 2024/08/29 05:01:08 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/29 17:17:02 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	_echo(t_pdata data, char **args)
 	}
 	while (args && args[++i])
 	{
-		if (!strcmp(args[i], "$?"))
+		if (!ft_strcmp(args[i], "$?"))
 			printf("%d", data->_errno);
 		else
 			printf("%s", args[i]);

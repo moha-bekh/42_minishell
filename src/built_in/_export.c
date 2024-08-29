@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:34:32 by moha              #+#    #+#             */
-/*   Updated: 2024/08/29 05:04:27 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/29 20:06:09 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,30 @@ int	_varstr_conv(char *str, int idx)
 
 int	_add_value(t_pdata data, char *arg)
 {
+	char *key;
 	int	idx;
 
 	if (!arg)
 		return (_SUCCESS);
 	idx = _sep(arg);
 	if (!idx)
+		key = ft_strdup(arg);
+	else
+		key = ft_substr(arg, 0, idx);
+	if (!ft_strcmp(key, data->env->d_bot->addr_1))
 	{
-		_dlst_push_back(&data->env, ft_strdup(arg), NULL, 0);
-		_dlst_push_back(&data->export, ft_strdup(arg), NULL, 0);
+		free(key);
+		return (_SUCCESS);
+	}
+	if (!idx)
+	{
+		_dlst_push_back(&data->env, key, NULL, 0);
+		_dlst_push_back(&data->export, key, NULL, 0);
 	}
 	else
 	{
-		_dlst_push_back(&data->env, ft_substr(arg, 0, idx), ft_strdup(arg + (idx
-					+ 1)), 0);
-		_dlst_push_back(&data->export, ft_substr(arg, 0, idx), ft_strdup(arg
-				+ (idx + 1)), 0);
+		_dlst_push_back(&data->env, key, ft_strdup(arg + (idx + 1)), 0);
+		_dlst_push_back(&data->export, key, ft_strdup(arg + (idx + 1)), 0);
 	}
 	_dlst_sort(&data->export, false);
 	return (_SUCCESS);

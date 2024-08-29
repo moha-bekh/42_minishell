@@ -6,26 +6,27 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 07:36:01 by moha              #+#    #+#             */
-/*   Updated: 2024/08/29 05:49:56 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/29 17:37:48 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	_wait_pids(t_pdata data, t_padlst cmd_line, t_pncmd limit)
+// void	_wait_pids(t_pdata data, t_padlst cmd_line, t_pncmd limit)
+		// if (!tmp->args)
+		// 	return ;
+		// if (tmp == limit)
+		// 	break ;
+void	_wait_pids(t_pdata data, t_padlst cmd_line)
 {
 	t_pncmd	tmp;
 
 	tmp = cmd_line->c_top;
 	while (tmp)
 	{
-		if (!tmp->args)
-			return ;
 		waitpid(tmp->pid, &data->_errno, 0);
 		if (WIFEXITED(data->_errno))
 			data->_errno = WEXITSTATUS(data->_errno);
-		if (tmp == limit)
-			break ;
 		tmp = tmp->next;
 	}
 }
@@ -85,7 +86,7 @@ int	_exec_cmd_line(t_pdata data, t_ppbtree node)
 	_pars_pipe_lines(node);
 	if (_dlst_foreach_cmd(data, (*node)->cmd_line->c_top, _exec_process, NULL))
 		return (_FAILURE);
-	_wait_pids(data, (*node)->cmd_line, (*node)->cmd_line->c_bot);
+	_wait_pids(data, (*node)->cmd_line);
 	return (_SUCCESS);
 }
 
@@ -98,7 +99,7 @@ int	_exec_subshell(t_pdata data, t_ppbtree node)
 		return (_err_print("bash: fork failed", NULL, false, 1));
 	if (!pid)
 	{
-		if (_exec(data, &(*node)->right))
+		if (_exec(data, node))
 			return (_FAILURE);
 		_data_clear(data);
 		exit(data->_errno);
@@ -118,17 +119,34 @@ int	_exec(t_pdata data, t_ppbtree node)
 		return (_SUCCESS);
 	if ((*node)->left)
 		_exec(data, &(*node)->left);
+	if (((*node)->token->x == _AND && data->_errno) || ((*node)->token->x == _OR && !data->_errno))
+		return (_SUCCESS);
 	if ((*node)->token->x == '(')
-		_exec_subshell(data, &(*node)->right);
-	if ((*node)->token->x != _AND && (*node)->token->x != _OR
-		&& _exec_cmd_line(data, node))
-		return (_FAILURE);
-	else
 	{
-		if (((*node)->token->x == _AND && data->_errno)
-			|| ((*node)->token->x == _OR && !data->_errno))
-			return (_SUCCESS);
+		// int	pid;
+
+		// pid = fork();
+		// if (pid < 0)
+		// 	return (_err_print("bash: fork failed", NULL, false, 1));
+		// if (!pid)
+		// {
+		// 	if (_exec(data, &(*node)->right))
+		// 		return (_FAILURE);
+		// 	_data_clear(data);
+		// 	exit(data->_errno);
+		// }
+		// else
+		// {
+		// 	waitpid(pid, &data->_errno, 0);
+		// 	if (WIFEXITED(data->_errno))
+		// 		data->_errno = WEXITSTATUS(data->_errno);
+		// }
+		if (_exec_subshell(data, &(*node)->right))
+			return (_FAILURE);
+		return (_SUCCESS);
 	}
+	if ((*node)->token->x != _AND && (*node)->token->x != _OR && _exec_cmd_line(data, node))
+		return (_FAILURE);
 	if ((*node)->right)
 		_exec(data, &(*node)->right);
 	return (_SUCCESS);

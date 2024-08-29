@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 20:54:03 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/29 07:08:03 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/29 19:26:29 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,16 @@ int	_exec_builtin(t_pdata data, t_ppncmd cmd)
 
 int	_exec_builtin_proc(t_pdata data, t_ppncmd cmd)
 {
+	if ((*cmd)->next)
+		pipe((*cmd)->redirs.pfd);
 	_save_stdfds(data);
 	_exec_redirections(data, cmd);
 	data->_errno = _exec_builtin(data, cmd);
 	_restore_stdfds(data);
+	if ((*cmd)->prev)
+	{
+		close((*cmd)->prev->redirs.pfd[0]);
+		close((*cmd)->prev->redirs.pfd[1]);
+	}
 	return (_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/29 05:27:30 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/29 20:12:14 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int	_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 	tmp = *token;
 	while (tmp && tmp->x != _PIPE && !_token_id(tmp->x, _TYP_SEP))
 	{
+		printf("tmp->addr_1: %s\n", (char *)tmp->addr_1);
 		if (_token_id(tmp->x, _TYP_REDIRS))
 		{
 			if (_pars_redirs(cmd, &tmp, inside))
@@ -57,7 +58,9 @@ int	_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 			continue ;
 		}
 		else if (inside && tmp->addr_1)
+		{
 			(*cmd)->args[i++] = ft_strdup(tmp->addr_1);
+		}
 		else if (!inside && tmp->addr_1)
 		{
 			data->_errno = 2;
@@ -67,8 +70,7 @@ int	_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 	}
 	if (inside && (*cmd)->args)
 		(*cmd)->args[i] = NULL;
-	if (tmp && tmp->x == ')' && tmp->next && _pars_args_line(data, cmd,
-			&tmp->next, false))
+	if (tmp && tmp->x == ')' && tmp->next && _pars_args_line(data, cmd, &tmp->next, false))
 		return (_FAILURE);
 	return (_SUCCESS);
 }

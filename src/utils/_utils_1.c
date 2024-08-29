@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:35:57 by moha              #+#    #+#             */
-/*   Updated: 2024/08/29 04:55:05 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/29 06:36:51 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,14 @@ int	_sep(char *str)
 {
 	int	i;
 
-	if (!str)
+	if (!*str)
 		return (0);
-	i = -1;
-	while (str[++i])
+	i = 0;
+	while (str[i])
 	{
 		if (str[i] == '=')
 			return (i);
+		i++;
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/08/29 05:59:16 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/29 07:06:51 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,19 @@ int						_resolve_path(t_pdata data, t_ppncmd cmd);
 int						_exec_builtin_proc(t_pdata data, t_ppncmd cmd);
 int						_is_builtin(t_pdata data, char **args);
 
+int						_exec_redirections(t_pdata data, t_ppncmd cmd);
 int						_read_from_pipe(t_ppncmd cmd);
 int						_write_to_pipe(t_ppncmd cmd);
-int						_set_redir_in(t_ppncmd cmd);
-int						_set_redir_out(t_ppncmd cmd);
+int						_save_stdfds(t_pdata data);
+int						_restore_stdfds(t_pdata data);
+int						_switch_here_doc(t_ppncmd cmd);
+int						_switch_redir_in(t_ppncmd cmd);
+int						_switch_redir_out(t_ppncmd cmd);
+
+// int						_read_from_pipe(t_ppncmd cmd);
+// int						_write_to_pipe(t_ppncmd cmd);
+// int						_set_redir_in(t_ppncmd cmd);
+// int						_set_redir_out(t_ppncmd cmd);
 
 /* EXPAND */
 int						_expand_line(t_ppnlst token);

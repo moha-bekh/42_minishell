@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/27 16:43:07 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/30 05:03:30 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,22 @@ int	_join_strings(t_pdata data, int start, int end)
 	data->tokens->d_bot->addr_1 = ft_strjoin(old, new);
 	free(old);
 	free(new);
+	return (_SUCCESS);
+}
+
+int	_token_word(t_pdata data, int *i)
+{
+	int	j;
+
+	j = *i;
+	while (data->prompt[*i] && !ft_isspace(data->prompt[*i]) && !_token_id(data->prompt[*i], _TOKENS))
+		*i += 1;
+	if (data->tokens && data->tokens->d_bot->flag)
+		_join_strings(data, j, *i - j);
+	else
+		_dlst_push_back(&data->tokens, ft_substr(data->prompt, j, (*i - j)), NULL, _WORD);
+	if (data->prompt[*i] && !ft_isspace(data->prompt[*i]) && _token_id(data->prompt[*i], _JOINERS))
+		data->tokens->d_bot->flag = true;
 	return (_SUCCESS);
 }
 
@@ -79,8 +95,8 @@ int	_wildcards_proc(t_pdata data, int *i)
 		_join_strings(data, j, *i - j);
 	}
 	else
-		_dlst_push_back(&data->tokens, ft_substr(data->prompt, j, *i - j),
-			NULL, '*');
+		_dlst_push_back(&data->tokens, ft_substr(data->prompt, j, *i - j), NULL,
+			'*');
 	if (data->prompt[*i] && !ft_isspace(data->prompt[*i]))
 		data->tokens->d_bot->flag = true;
 	return (_SUCCESS);
@@ -105,19 +121,15 @@ int	_dollar_proc(t_pdata data, int *i)
 	}
 	else if (data->prompt[*i + 1] && _is_varchr(data->prompt[*i + 1]))
 	{
-		*i += 1;
-		j = *i;
+		j = (*i)++;
 		while (data->prompt[*i] && _is_varchr(data->prompt[*i]))
 			*i += 1;
 		_dlst_push_back(&data->tokens, ft_substr(data->prompt, j, (*i - j)),
 			NULL, '$');
 	}
 	else
-	{
-		_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL,
-			'$');
-		*i += 1;
-	}
+		_dlst_push_back(&data->tokens, ft_substr(data->prompt, (*i)++, 1), NULL,
+			'W');
 	return (_SUCCESS);
 }
 
@@ -153,25 +165,6 @@ int	_token_proc(t_pdata data, int *i)
 		return (_FAILURE);
 	else if (data->prompt[*i] == '*' && _wildcards_proc(data, i))
 		return (_FAILURE);
-	return (_SUCCESS);
-}
-
-int	_token_word(t_pdata data, int *i)
-{
-	int	j;
-
-	j = *i;
-	while (data->prompt[*i] && !ft_isspace(data->prompt[*i])
-		&& !_token_id(data->prompt[*i], _TOKENS))
-		*i += 1;
-	if (data->tokens && data->tokens->d_bot->flag)
-		_join_strings(data, j, *i - j);
-	else
-		_dlst_push_back(&data->tokens, ft_substr(data->prompt, j, (*i - j)),
-			NULL, _WORD);
-	if (data->prompt[*i] && !ft_isspace(data->prompt[*i])
-		&& _token_id(data->prompt[*i], _JOINERS))
-		data->tokens->d_bot->flag = true;
 	return (_SUCCESS);
 }
 

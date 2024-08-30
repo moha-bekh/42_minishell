@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/08/29 07:06:51 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/30 04:36:00 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,6 @@ int						_data_structs_clear(t_pdata data);
 /* ENV */
 void					_data_init_env_n_export(t_pdata data);
 
-/* CHECK */
-// int						_check_prompt(t_pdata data);
-
 /* TOKENS */
 int						_token_list(t_pdata data);
 int						_token_id(char a, char *str);
@@ -81,18 +78,9 @@ int						_exec_builtin_proc(t_pdata data, t_ppncmd cmd);
 int						_is_builtin(t_pdata data, char **args);
 
 int						_exec_redirections(t_pdata data, t_ppncmd cmd);
-int						_read_from_pipe(t_ppncmd cmd);
-int						_write_to_pipe(t_ppncmd cmd);
 int						_save_stdfds(t_pdata data);
 int						_restore_stdfds(t_pdata data);
-int						_switch_here_doc(t_ppncmd cmd);
-int						_switch_redir_in(t_ppncmd cmd);
-int						_switch_redir_out(t_ppncmd cmd);
-
-// int						_read_from_pipe(t_ppncmd cmd);
-// int						_write_to_pipe(t_ppncmd cmd);
-// int						_set_redir_in(t_ppncmd cmd);
-// int						_set_redir_out(t_ppncmd cmd);
+int						_here_doc_proc(t_ppncmd cmd);
 
 /* EXPAND */
 int						_expand_line(t_ppnlst token);
@@ -192,16 +180,21 @@ struct					s_nlst
 struct					s_redir
 {
 	char				*in_name;
-	bool				in_access;
 	char				*out_name;
-	bool				out_trunc;
-	bool				out_inside;
 	char				*here_name;
+
+	char				**here_names;
 	char				**here_limit;
-	int					idx_limit;
+	int					here_idx;
 	int					here_fd;
+
 	int					pfd[2];
 	int					fd[2];
+
+	bool				in_access;
+	bool				out_trunc;
+	bool				out_inside;
+	bool				here_inside;
 };
 
 struct					s_ncmd

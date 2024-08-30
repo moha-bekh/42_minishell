@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:25:01 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/27 16:43:03 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/30 04:58:24 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ int	_redir_heredoc(t_pdata data, int *i)
 
 int	_redir_in(t_pdata data, int *i)
 {
-	_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL, '<');
-	*i += 1;
+	_dlst_push_back(&data->tokens, ft_substr(data->prompt, (*i)++, 1), NULL,
+		'<');
 	if (data->tokens && data->tokens->d_bot->prev
 		&& _token_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
 		return (_err_print(_ERR_TOKEN, "<", true, 2));
@@ -41,17 +41,19 @@ int	_redir_in(t_pdata data, int *i)
 
 int	_redir_outa(t_pdata data, int *i)
 {
-	_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 2), NULL, _REDIR_OUTA);
+	_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 2), NULL,
+		_REDIR_OUTA);
 	*i += 2;
-	if (data->tokens && data->tokens->d_bot->prev && _token_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
+	if (data->tokens && data->tokens->d_bot->prev
+		&& _token_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
 		return (_err_print(_ERR_TOKEN, ">>", true, 2));
 	return (_SUCCESS);
 }
 
 int	_redir_outt(t_pdata data, int *i)
 {
-	_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL, '>');
-	*i += 1;
+	_dlst_push_back(&data->tokens, ft_substr(data->prompt, (*i)++, 1), NULL,
+		'>');
 	if (data->tokens && data->tokens->d_bot->prev
 		&& _token_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
 		return (_err_print(_ERR_TOKEN, ">", true, 2));

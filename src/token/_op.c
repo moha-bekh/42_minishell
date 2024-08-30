@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:25:28 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/27 16:42:59 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/30 04:58:09 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,8 @@ int	_tok_and(t_pdata data, int *i)
 
 int	_tok_pipe(t_pdata data, int *i)
 {
-	_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL,
+	_dlst_push_back(&data->tokens, ft_substr(data->prompt, (*i)++, 1), NULL,
 		_PIPE);
-	*i += 1;
 	if (!data->tokens->d_bot->prev || (data->tokens->d_bot->prev
 			&& _token_id(data->tokens->d_bot->prev->x, _STX_OP)))
 		return (_err_print(_ERR_TOKEN, "|", true, 2));

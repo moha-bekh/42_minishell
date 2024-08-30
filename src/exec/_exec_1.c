@@ -6,17 +6,17 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 07:36:01 by moha              #+#    #+#             */
-/*   Updated: 2024/08/29 17:37:48 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/30 04:25:37 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // void	_wait_pids(t_pdata data, t_padlst cmd_line, t_pncmd limit)
-		// if (!tmp->args)
-		// 	return ;
-		// if (tmp == limit)
-		// 	break ;
+// if (!tmp->args)
+// 	return ;
+// if (tmp == limit)
+// 	break ;
 void	_wait_pids(t_pdata data, t_padlst cmd_line)
 {
 	t_pncmd	tmp;
@@ -119,51 +119,19 @@ int	_exec(t_pdata data, t_ppbtree node)
 		return (_SUCCESS);
 	if ((*node)->left)
 		_exec(data, &(*node)->left);
-	if (((*node)->token->x == _AND && data->_errno) || ((*node)->token->x == _OR && !data->_errno))
+	if (((*node)->token->x == _AND && data->_errno) || ((*node)->token->x == _OR
+			&& !data->_errno))
 		return (_SUCCESS);
 	if ((*node)->token->x == '(')
 	{
-		// int	pid;
-
-		// pid = fork();
-		// if (pid < 0)
-		// 	return (_err_print("bash: fork failed", NULL, false, 1));
-		// if (!pid)
-		// {
-		// 	if (_exec(data, &(*node)->right))
-		// 		return (_FAILURE);
-		// 	_data_clear(data);
-		// 	exit(data->_errno);
-		// }
-		// else
-		// {
-		// 	waitpid(pid, &data->_errno, 0);
-		// 	if (WIFEXITED(data->_errno))
-		// 		data->_errno = WEXITSTATUS(data->_errno);
-		// }
 		if (_exec_subshell(data, &(*node)->right))
 			return (_FAILURE);
 		return (_SUCCESS);
 	}
-	if ((*node)->token->x != _AND && (*node)->token->x != _OR && _exec_cmd_line(data, node))
+	if ((*node)->token->x != _AND && (*node)->token->x != _OR
+		&& _exec_cmd_line(data, node))
 		return (_FAILURE);
 	if ((*node)->right)
 		_exec(data, &(*node)->right);
 	return (_SUCCESS);
 }
-
-// if ((*node)->token->x == '(')
-// {
-// 	_cmd_push_back(&(*node)->cmd_line, (*node)->token);
-// 	(*node)->cmd_line->c_top->pid = fork();
-// 	if ((*node)->cmd_line->c_top->pid < 0)
-// 	{
-// 		data->_errno = (*node)->cmd_line->c_top->pid;
-// 		return (_err_print("bash: fork failed", NULL, false, 1), _EXT_FORK);
-// 	}
-// 	if (!(*node)->cmd_line->c_top->pid)
-// 		_exec(data, &(*node)->right);
-// 	else
-// 		waitpid((*node)->cmd_line->c_top->pid, &data->_errno, 0);
-// 	return (_SUCCESS);
-// }

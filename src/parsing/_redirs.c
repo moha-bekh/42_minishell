@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 13:02:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/29 19:57:58 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/30 04:14:06 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,40 +60,48 @@ int	_pars_redir_outa(t_ppncmd cmd, t_pnlst token, bool inside)
 		return (_err_print("close", NULL, true, 1));
 	return (_SUCCESS);
 }
-int	_pars_heredoc(t_ppncmd cmd, t_pnlst token)
+int	_pars_heredoc(t_ppncmd cmd, t_pnlst token, bool inside)
 {
-	if (!(*cmd)->redirs.here_limit)
+	char	*path_name;
+	char	*name;
+
+	if (!(*cmd)->redirs.here_name)
 	{
-		(*cmd)->redirs.here_limit = malloc(sizeof(char *) * 17);
-		if (!(*cmd)->redirs.here_limit)
-			return (_FAILURE);
+		if (_alloc((void **)&(*cmd)->redirs.here_names, sizeof(char *) * 17)
+			|| _alloc((void **)&(*cmd)->redirs.here_limit, sizeof(char *) * 17))
+			return (_ALLOC);
 	}
-	if ((*cmd)->redirs.here_name)
-	{
-		free((*cmd)->redirs.here_name);
-		(*cmd)->redirs.here_name = NULL;
-	}
-	(*cmd)->redirs.here_name = get_random_name();
-	(*cmd)->redirs.here_limit[(*cmd)->redirs.idx_limit++] = (char *)token->addr_1;
+	name = get_random_name();
+	path_name = ft_strjoin("/tmp/", name);
+	free(name);
+	(*cmd)->redirs.here_names[(*cmd)->redirs.here_idx] = path_name;
+	(*cmd)->redirs.here_limit[(*cmd)->redirs.here_idx] = (char *)token->addr_1;
+	(*cmd)->redirs.here_idx++;
 	(*cmd)->redirs.here_fd = 1;
+	if (inside || (!inside && !(*cmd)->redirs.here_inside))
+	{
+		if (inside)
+			(*cmd)->redirs.here_inside = true;
+		(*cmd)->redirs.here_name = path_name;
+	}
 	return (_SUCCESS);
 }
 
 int	_pars_redirs(t_ppncmd cmd, t_ppnlst token, bool inside)
 {
-	while (*token && (*token)->x != _PIPE && !_token_id((*token)->x, _TYP_SEP))
-	{
-		if (!inside && !_token_id((*token)->x, _TYP_REDIRS) && !_token_id((*token)->prev->x, _TYP_REDIRS))
-			return (_err_print(_ERR_TOKEN, (*token)->addr_1, true, 1));
-		if ((*token)->x == 'H' && _pars_heredoc(cmd, (*token)->next))
-			return (_FAILURE);
-		else if ((*token)->x == '<' && _pars_redir_in(cmd, (*token)->next))
-			return (_FAILURE);
-		else if ((*token)->x == '>' && _pars_redir_outt(cmd, (*token)->next, inside))
-			return (_FAILURE);
-		else if ((*token)->x == 'N' && _pars_redir_outa(cmd, (*token)->next, inside))
-			return (_FAILURE);
-		(*token) = (*token)->next;
-	}
+	if (!inside && !_token_id((*token)->x, _TYP_REDIRS)
+		&& !_token_id((*token)->prev->x, _TYP_REDIRS))
+		return (_err_print(_ERR_TOKEN, (*token)->addr_1, true, 1));
+	if ((*token)->x == 'H' && _pars_heredoc(cmd, (*token)->next, inside))
+		return (_FAILURE);
+	else if ((*token)->x == '<' && _pars_redir_in(cmd, (*token)->next))
+		return (_FAILURE);
+	else if ((*token)->x == '>' && _pars_redir_outt(cmd, (*token)->next,
+			inside))
+		return (_FAILURE);
+	else if ((*token)->x == 'N' && _pars_redir_outa(cmd, (*token)->next,
+			inside))
+		return (_FAILURE);
+	(*token) = (*token)->next->next;
 	return (_SUCCESS);
 }

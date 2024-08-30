@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/29 20:12:14 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/30 02:45:51 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ int	_pars_pipe_lines(t_ppbtree node)
 
 	_cmd_push_back(&(*node)->cmd_line, (*node)->token);
 	tmp = (*node)->token;
-	while (tmp && (!(*node)->root || ((*node)->root && tmp != (*node)->root->token)))
+	while (tmp && (!(*node)->root || ((*node)->root
+				&& tmp != (*node)->root->token)))
 	{
 		if (tmp->x == _PIPE)
 			_cmd_push_back(&(*node)->cmd_line, tmp->next);
@@ -32,7 +33,8 @@ int	_pars_args_proc(t_ppncmd cmd)
 	int	i;
 
 	i = _count_args((*cmd)->token);
-	if (i && (_alloc((void **)&(*cmd)->args, sizeof(char *) * (i + 1)) || !(*cmd)->args))
+	if (i && (_alloc((void **)&(*cmd)->args, sizeof(char *) * (i + 1))
+			|| !(*cmd)->args))
 		return (_ALLOC);
 	return (_SUCCESS);
 }
@@ -50,7 +52,6 @@ int	_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 	tmp = *token;
 	while (tmp && tmp->x != _PIPE && !_token_id(tmp->x, _TYP_SEP))
 	{
-		printf("tmp->addr_1: %s\n", (char *)tmp->addr_1);
 		if (_token_id(tmp->x, _TYP_REDIRS))
 		{
 			if (_pars_redirs(cmd, &tmp, inside))

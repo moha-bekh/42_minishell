@@ -86,10 +86,12 @@ TREE_SRCS :=			\
 
 EXEC_DIR := 			exec/
 EXEC_SRCS := 			\
-						_exec\
-						_exec_child\
+						__path\
+						_exec_1\
+						_exec_2\
 						_exec_builtin\
-						_path
+						_here_doc\
+						_redirs
 
 EXPAND_DIR := 			expand/
 EXPAND_SRCS := 			\

@@ -6,11 +6,11 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 16:10:20 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/29 02:46:26 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 16:02:49 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
 void	_dlst_sort(t_ppadlst dlst, bool reverse)
 {

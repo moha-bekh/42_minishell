@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 07:36:01 by moha              #+#    #+#             */
-/*   Updated: 2024/08/31 13:37:45 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 15:51:31 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	_exec_process(t_pdata data, t_pncmd cmd)
 int	_exec_cmd_line(t_pdata data, t_ppbtree node)
 {
 	_pars_pipe_lines(node);
-	if (_dlst_foreach_cmd(data, (*node)->cmd_line->c_top, _exec_process, NULL))
+	if (_cmd_foreach(data, (*node)->cmd_line->c_top, _exec_process, NULL))
 		return (_FAILURE);
 	_wait_pids(data, (*node)->cmd_line);
 	return (_SUCCESS);

@@ -6,11 +6,11 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:32:43 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/31 12:16:44 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 16:02:47 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
 void	_dlst_push_front(t_ppadlst dlst, void *addr_1, void *addr_2, int x)
 {

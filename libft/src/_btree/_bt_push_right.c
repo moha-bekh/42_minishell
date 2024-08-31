@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _bt_create.c                                       :+:      :+:    :+:   */
+/*   _bt_push_right.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/19 20:22:59 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/27 15:54:42 by moha             ###   ########.fr       */
+/*   Created: 2024/07/20 17:51:16 by moha              #+#    #+#             */
+/*   Updated: 2024/08/31 16:03:11 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-t_pbtree	_bt_create(t_pnlst token)
+void	_bt_push_right(t_ppbtree node, t_pbtree new)
 {
-	t_pbtree	node;
-
-	if (_alloc((void *)&node, sizeof(t_btree)))
-		return (NULL);
-	*node = (t_btree){0};
-	node->token = token;
-	return (node);
+	if (!(*node))
+		(*node) = new;
+	else
+	{
+		(*node)->right = new;
+		new->root = (*node);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 23:44:34 by moha              #+#    #+#             */
-/*   Updated: 2024/08/29 05:19:49 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 18:10:51 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,47 @@ void	_data_init_builtins(t_pdata data)
 	_dlst_push_back(&data->builtins, ft_strdup("unset"), NULL, 0);
 }
 
+void	_data_env_filled(t_pdata data, t_ppadlst dlst)
+{
+	int		i;
+	int		sep;
+	char	**env;
+
+	if (!dlst || !*data->args.env)
+		return ;
+	env = data->args.env;
+	i = -1;
+	while (env[++i])
+	{
+		sep = _sep(env[i]);
+		if (sep == 1 && env[i][0] == '_')
+			continue ;
+		_dlst_push_back(dlst, ft_substr(env[i], 0, sep), ft_strdup(env[i] + (sep
+					+ 1)), 0);
+	}
+}
+
+void	_data_init_env_n_export(t_pdata data)
+{
+	char	*buf;
+
+	buf = NULL;
+	if (!*data->args.env)
+	{
+		_dlst_push_back(&data->env, ft_strdup("OLDPWD"), NULL, 0);
+		_dlst_push_back(&data->env, ft_strdup("PWD"), getcwd(buf, 4096), 0);
+		_dlst_push_back(&data->export, ft_strdup("OLDPWD"), NULL, 0);
+		_dlst_push_back(&data->export, ft_strdup("PWD"), getcwd(buf, 4096), 0);
+		_dlst_sort(&data->export, false);
+		return ;
+	}
+	_data_env_filled(data, &data->env);
+	_data_env_filled(data, &data->export);
+	_dlst_push_back(&data->env, ft_strdup("OLDPWD"), NULL, 0);
+	_dlst_push_back(&data->export, ft_strdup("OLDPWD"), NULL, 0);
+	_dlst_sort(&data->export, false);
+}
+
 int	_data_init(t_pdata data, int ac, char **av, char **ev)
 {
 	data->args.ac = ac;
@@ -35,8 +76,6 @@ int	_data_init(t_pdata data, int ac, char **av, char **ev)
 		if (!data->args.hard_path)
 			return (_FAILURE);
 	}
-	// data->args._stdin = dup(STDIN_FILENO);
-	// data->args._stdout = dup(STDOUT_FILENO);
 	_path_slash(data);
 	_data_init_builtins(data);
 	_data_init_env_n_export(data);

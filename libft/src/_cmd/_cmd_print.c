@@ -6,11 +6,11 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 19:10:13 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/30 04:06:10 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 16:33:48 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
 void	_cmd_print_line(t_pncmd cmd)
 {

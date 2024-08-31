@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:32:49 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/29 03:33:36 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 16:20:08 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ void	_dlst_print_export(t_padlst dlst)
 	while (tmp)
 	{
 		if (tmp->addr_2)
-			printf("export %s=\"%s\"\n", (char *)tmp->addr_1, (char *)tmp->addr_2);
+			printf("export %s=\"%s\"\n", (char *)tmp->addr_1,
+				(char *)tmp->addr_2);
 		else
 			printf("export %s\n", (char *)tmp->addr_1);
 		tmp = tmp->next;

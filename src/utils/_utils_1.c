@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:35:57 by moha              #+#    #+#             */
-/*   Updated: 2024/08/31 13:36:32 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 16:43:39 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,19 +106,3 @@ int	_count_args(t_pnlst token)
 	}
 	return (i);
 }
-
-// char	*_get_env_value(u_padll env, char *key)
-// {
-// 	t_pev	tmp;
-
-// 	if (!env || !key)
-// 		return (ft_strdup(""));
-// 	tmp = env->e_top;
-// 	while (tmp)
-// 	{
-// 		if (!ft_strcmp(tmp->key, key))
-// 			return (ft_strdup(tmp->value));
-// 		tmp = tmp->next;
-// 	}
-// 	return (ft_strdup(""));
-// }

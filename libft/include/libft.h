@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 09:41:33 by ajordan-          #+#    #+#             */
-/*   Updated: 2024/08/21 16:31:33 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/31 17:34:43 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,32 +22,55 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-/* FT_FREE */
+typedef struct s_list t_list, *t_plist, **t_pplist;     // SIMPLE LIST
+typedef struct s_adlst t_adlst, *t_padlst, **t_ppadlst; // DOUBLE LIST MANAGER
+typedef struct s_nlst t_nlst, *t_pnlst, **t_ppnlst;     // DOUBLE LIST NODE
+typedef struct s_btree t_btree, *t_pbtree, **t_ppbtree; // BINARY TREE
+
+typedef struct s_ncmd t_ncmd, *t_pncmd, **t_ppncmd;       // CMD LIST
+typedef struct s_redir t_redir, *t_predir;                // REDIRS
+typedef struct s_ft_dprintf t_fd_dprintf, *t_ft_pdprintf; // FT_DPRINTF
+
+/* ALLOC && FREE */
+int					_alloc(void **target, size_t size);
 void				ft_free_arr(char **arr);
 void				ft_free_arrr(char ***arrr);
 void				ft_free_tab(int **tab, int size);
 
-/* FT_IS */
-int					ft_isalnum(int c);
-int					ft_isalpha(int c);
-int					ft_isascii(int c);
-int					ft_isdigit(int c);
-int					ft_isprint(int c);
-bool				ft_isspace(int c);
-int					ft_ishex_alpha(int c);
-int					ft_ishexALPHA(int c);
+/* BINARY TREE */
+void				_bt_clear(t_ppbtree node);
+t_pbtree			_bt_create(t_pnlst token);
+t_pbtree			_bt_join(t_pbtree left, t_pnlst token, t_pbtree right);
+void				_bt_print(t_pbtree node, int i);
+void				_bt_push_left(t_ppbtree node, t_pbtree new);
+void				_bt_push_right(t_ppbtree node, t_pbtree new);
+void				_bt_push_root(t_ppbtree node, t_pbtree new);
 
-/* FT_LST */
+/* CMD LIST */
+void				_cmd_push_back(t_ppadlst dlst, t_pnlst token);
+void				_cmd_pop_back(t_ppadlst dlst);
+void				_cmd_clear(t_ppadlst dlst);
+void				_cmd_print_line(t_pncmd cmd);
+void				_cmd_print_all(t_padlst dlst);
+
+/* DOUBLE LIST */
+void				_dlst_push_front(t_ppadlst dlst, void *addr_1, void *addr_2,
+						int x);
+void				_dlst_push_back(t_ppadlst dlst, void *addr_1, void *addr_2,
+						int x);
+void				_dlst_push_in(t_ppadlst dlst, t_pnlst node, void *addr_1,
+						void *addr_2);
+void				_dlst_pop_front(t_ppadlst dlst);
+void				_dlst_pop_back(t_ppadlst dlst);
+void				_dlst_pop_in(t_ppadlst dlst, t_ppnlst node);
+void				_dlst_clear(t_ppadlst dlst);
+void				_dlst_sort(t_ppadlst dlst, bool reverse);
+
+/* SIMPLE LIST */
+
 # ifndef BF
 #  define BF 4096
 # endif
-
-typedef struct s_list
-{
-	char			*key;
-	char			*value;
-	struct s_list	*next;
-}					t_list;
 
 void				ft_lstadd_back(t_list **lst, t_list *new);
 void				ft_lstadd_front(t_list **lst, t_list *new);
@@ -64,7 +87,24 @@ void				lst_push_bot(t_list **lst, void *value);
 void				lst_pop_top(t_list **lst);
 t_list				*lst_last_prev(t_list *lst);
 void				lst_clear(t_list *lst);
-//
+
+/* FT_DPRINTF */
+# define FT_DPRINTF_BUFF_SIZE 4096
+
+int					ft_dprintf(int fd, const char *format, ...);
+void				ft_putchar_buf(t_ft_pdprintf d, char c);
+void				ft_putstr_buf(t_ft_pdprintf d, char *str);
+
+/* FT_IS */
+int					ft_isalnum(int c);
+int					ft_isalpha(int c);
+int					ft_isascii(int c);
+int					ft_isdigit(int c);
+int					ft_isprint(int c);
+bool				ft_isspace(int c);
+int					ft_ishex_alpha(int c);
+int					ft_ishexALPHA(int c);
+
 /* FT_MEM */
 void				ft_bzero(void *s, size_t n);
 void				*ft_calloc(size_t count, size_t size);
@@ -77,8 +117,6 @@ int					ft_memswap(void *const a, void *const b, size_t size);
 
 /* FT_PRINTF */
 int					ft_printf(const char *str, ...);
-
-/* FT_PRINTF_UTILS */
 int					ft_print_char(char c);
 int					ft_print_hex(unsigned int nb, const char format);
 int					ft_print_nbr(int nb);
@@ -87,16 +125,6 @@ int					ft_print_str(char *str);
 int					ft_print_unsigned(unsigned int nb);
 void				ft_putchar(char c);
 void				ft_putstr(char *str);
-
-/* M_PRINTF */
-int					m_printfd(int fd, const char *format, ...);
-void				m_print_char(int fd, char c, int *len);
-void				m_print_str(int fd, char *str, int *len);
-void				m_print_nbr(int fd, int nbr, int *len);
-void				m_print_unsigned(int fd, unsigned int unbr, int *len);
-void				m_print_hex(int fd, unsigned int unbr, const char format,
-						int *len);
-void				m_print_ptr(int fd, unsigned long long ptr, int *len);
 
 /* FT_PUT */
 void				ft_putchar_fd(char c, int fd);
@@ -132,9 +160,6 @@ int					ft_toupper(int c);
 void				ft_swap(int *a, int *b);
 int					ft_atoi_base(const char *str, int base);
 
-/* SORT */
-void				quick_sort(int *tab, int start, int end);
-
 /* get_next_line */
 char				*get_next_line(int fd, t_list **lst);
 void				read_and_stock(int fd, t_list **lst);
@@ -148,10 +173,88 @@ void				generate_line(t_list *lst, char **line);
 void				free_list(t_list *lst);
 size_t				ft_strlen(const char *s);
 
-/* ft_dprintf */
-# define FT_DPRINTF_BUFF_SIZE 4096
+/* SORT */
+void				quick_sort(int *tab, int start, int end);
 
-typedef struct s_ft_dprintf
+struct				s_btree
+{
+	t_pnlst			token;
+	t_padlst		cmd_line;
+	struct s_btree	*root;
+	struct s_btree	*left;
+	struct s_btree	*right;
+};
+
+struct				s_nlst
+{
+	void			*addr_1;
+	void			*addr_2;
+	int				x;
+	bool			flag;
+	t_pnlst			next;
+	t_pnlst			prev;
+	t_padlst		manager;
+};
+
+struct				s_redir
+{
+	char			*in_name;
+	char			*out_name;
+	char			*here_name;
+
+	char			**here_names;
+	char			**here_limit;
+	int				here_idx;
+	int				here_fd;
+
+	int				pfd[2];
+	int				fd[2];
+
+	bool			in_access;
+	bool			out_trunc;
+	bool			out_inside;
+	bool			here_inside;
+};
+
+struct				s_ncmd
+{
+	t_pnlst			token;
+	char			**args;
+	char			*path;
+	t_redir			redirs;
+	pid_t			pid;
+	t_pncmd			next;
+	t_pncmd			prev;
+	t_padlst		manager;
+};
+
+struct				s_adlst
+{
+	union
+	{
+		struct
+		{
+			t_pnlst	d_top;
+			t_pnlst	d_bot;
+			int		d_size;
+		};
+		struct
+		{
+			t_pncmd	c_top;
+			t_pncmd	c_bot;
+			int		c_size;
+		};
+	};
+};
+
+struct				s_list
+{
+	char			*key;
+	char			*value;
+	t_plist			next;
+};
+
+struct				s_ft_dprintf
 {
 	int				fd;
 	const char		*format;
@@ -160,10 +263,6 @@ typedef struct s_ft_dprintf
 	int				len;
 	int				i;
 	int				j;
-} t_ft_dprintf, *t_ft_pdprintf;
-
-int					ft_dprintf(int fd, const char *format, ...);
-void				ft_putchar_buf(t_ft_pdprintf d, char c);
-void				ft_putstr_buf(t_ft_pdprintf d, char *str);
+};
 
 #endif /* LIBFT_H */

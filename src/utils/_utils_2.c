@@ -6,35 +6,24 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:55:16 by moha              #+#    #+#             */
-/*   Updated: 2024/08/29 05:27:56 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 18:16:44 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_pdata	get_data(void)
+t_pdata	_get_data(void)
 {
 	static t_data	data = {0};
 
 	return (&data);
 }
 
-int	_alloc(void **target, size_t size)
-{
-	if (!size)
-		return (_FAILURE);
-	(*target) = malloc(size);
-	if (!(*target))
-		return (_ALLOC);
-	ft_memset((*target), 0, size);
-	return (_SUCCESS);
-}
-
 int	_err_print(char *str, void *arg, bool ptr, int _errno)
 {
 	t_pdata	data;
 
-	data = get_data();
+	data = _get_data();
 	if (!arg)
 		ft_dprintf(2, str);
 	else if (arg && ptr)

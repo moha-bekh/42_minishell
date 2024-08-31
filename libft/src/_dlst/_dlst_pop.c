@@ -6,11 +6,11 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:32:54 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/27 16:50:49 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 16:23:05 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
 void	_dlst_pop_front(t_ppadlst dlst)
 {
@@ -84,4 +84,10 @@ void	_dlst_pop_in(t_ppadlst dlst, t_ppnlst node)
 	*tmp = (t_nlst){0};
 	free(tmp);
 	tmp = NULL;
+}
+
+void	_dlst_clear(t_ppadlst dlst)
+{
+	while (*dlst)
+		_dlst_pop_back(dlst);
 }

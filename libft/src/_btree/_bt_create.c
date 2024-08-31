@@ -1,19 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _dlst_utils.c                                      :+:      :+:    :+:   */
+/*   _bt_create.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/23 12:32:36 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/27 16:45:56 by moha             ###   ########.fr       */
+/*   Created: 2024/07/19 20:22:59 by mbekheir          #+#    #+#             */
+/*   Updated: 2024/08/31 16:02:55 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void	_dlst_clear(t_ppadlst dlst)
+t_pbtree	_bt_create(t_pnlst token)
 {
-	while (*dlst)
-		_dlst_pop_back(dlst);
+	t_pbtree	node;
+
+	if (_alloc((void *)&node, sizeof(t_btree)))
+		return (NULL);
+	*node = (t_btree){0};
+	node->token = token;
+	return (node);
 }

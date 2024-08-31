@@ -1,30 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _dlst_foreach.c                                    :+:      :+:    :+:   */
+/*   _bt_clear.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/28 13:49:45 by moha              #+#    #+#             */
-/*   Updated: 2024/08/31 11:55:20 by moha             ###   ########.fr       */
+/*   Created: 2024/07/19 20:26:47 by mbekheir          #+#    #+#             */
+/*   Updated: 2024/08/31 16:02:54 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	_dlst_foreach_cmd(t_pdata data, t_pncmd cmd, int (*f)(t_pdata, t_pncmd),
-		char *limiters)
+void	_bt_clear(t_ppbtree node)
 {
-	t_pncmd	tmp;
-
-	tmp = cmd;
-	while (tmp)
-	{
-		if (limiters && _tok_id(tmp->token->x, limiters))
-			break ;
-		if (f(data, tmp))
-			return (_FAILURE);
-		tmp = tmp->next;
-	}
-	return (_SUCCESS);
+	if (!*node)
+		return ;
+	if ((*node)->left)
+		_bt_clear(&(*node)->left);
+	if ((*node)->right)
+		_bt_clear(&(*node)->right);
+	_cmd_clear(&(*node)->cmd_line);
+	free((*node));
+	(*node) = NULL;
 }

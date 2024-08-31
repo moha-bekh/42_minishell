@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _bt_push_right.c                                   :+:      :+:    :+:   */
+/*   _alloc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/20 17:51:16 by moha              #+#    #+#             */
-/*   Updated: 2024/08/27 15:55:09 by moha             ###   ########.fr       */
+/*   Created: 2024/08/31 16:43:55 by moha              #+#    #+#             */
+/*   Updated: 2024/08/31 16:44:27 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void	_bt_push_right(t_ppbtree node, t_pbtree new)
+int	_alloc(void **target, size_t size)
 {
-	if (!(*node))
-		(*node) = new;
-	else
-	{
-		(*node)->right = new;
-		new->root = (*node);
-	}
+	if (!size)
+		return (EXIT_FAILURE);
+	(*target) = malloc(size);
+	if (!(*target))
+		return (EXIT_FAILURE);
+	ft_memset((*target), 0, size);
+	return (EXIT_SUCCESS);
 }

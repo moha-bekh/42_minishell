@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 16:22:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/31 13:54:34 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 18:18:48 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,64 @@ int	_join_strings(t_ppnlst token)
 	return (_SUCCESS);
 }
 
+int	_xpd_needed(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '$')
+			return (true);
+	}
+	return (true);
+}
+
+// int	_xpd_str(t_ppnlst token)
+// {
+// 	t_padlst	xpd_list;
+// 	char		*str;
+// 	int			i;
+
+// 	if (!_xpd_needed((*token)->addr_1))
+// 		return (_SUCCESS);
+// 	xpd_list = NULL;
+// 	str = (*token)->addr_1;
+// 	i = -1;
+// 	while (str[i])
+// 	{
+// 		if (str[i] == '$' && (ft_isalpha(str[i + 1]) || str[i + 1] == '_'))
+// 			_xpd_var(&xpd_list, token, &i);
+// 	}
+// 	return (_SUCCESS);
+// }
+
+char	*_env_get_value(char *key)
+{
+	t_pdata	data;
+	t_pnlst	tmp;
+
+	data = _get_data();
+	tmp = data->env->d_top;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->addr_1, key))
+			return ((char *)tmp->addr_2);
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
+
+int	_xpd_var(t_ppnlst token)
+{
+	char	*tmp;
+
+	tmp = (*token)->addr_1;
+	(*token)->addr_1 = ft_strdup(_env_get_value((*token)->addr_1));
+	free(tmp);
+	return (_SUCCESS);
+}
+
 int	_xpd_line(t_ppnlst token)
 {
 	t_pnlst	tmp;
@@ -43,6 +101,10 @@ int	_xpd_line(t_ppnlst token)
 	{
 		if (tmp->x == '*' && _xpd_wildcards(&tmp))
 			return (_FAILURE);
+		// else if (tmp->x == '$' && _xpd_var(&tmp))
+		// 	return (_FAILURE);
+		// if (tmp->x == '"')
+		// 	_xpd_str(&tmp);
 		tmp = tmp->next;
 	}
 	_join_strings(token);

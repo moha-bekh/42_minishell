@@ -1,25 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _bt_push_root.c                                    :+:      :+:    :+:   */
+/*   _cmd_foreach.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/20 17:51:02 by moha              #+#    #+#             */
-/*   Updated: 2024/08/27 15:55:13 by moha             ###   ########.fr       */
+/*   Created: 2024/08/28 13:49:45 by moha              #+#    #+#             */
+/*   Updated: 2024/08/31 16:40:38 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	_bt_push_root(t_ppbtree node, t_pbtree new)
+int	_cmd_foreach(t_pdata data, t_pncmd cmd, int (*f)(t_pdata, t_pncmd),
+		char *limiters)
 {
-	if (!(*node))
-		(*node) = new;
-	else
+	t_pncmd	tmp;
+
+	tmp = cmd;
+	while (tmp)
 	{
-		new->left = (*node);
-		(*node)->root = new;
-		(*node) = new;
+		if (limiters && _tok_id(tmp->token->x, limiters))
+			break ;
+		if (f(data, tmp))
+			return (_FAILURE);
+		tmp = tmp->next;
 	}
+	return (_SUCCESS);
 }

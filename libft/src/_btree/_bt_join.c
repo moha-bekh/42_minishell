@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _bt_clear.c                                        :+:      :+:    :+:   */
+/*   _bt_join.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/19 20:26:47 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/27 15:54:33 by moha             ###   ########.fr       */
+/*   Created: 2024/08/21 21:49:23 by moha              #+#    #+#             */
+/*   Updated: 2024/08/31 16:03:00 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void	_bt_clear(t_ppbtree node)
+t_pbtree	_bt_join(t_pbtree left, t_pnlst token, t_pbtree right)
 {
-	if (!*node)
-		return ;
-	if ((*node)->left)
-		_bt_clear(&(*node)->left);
-	if ((*node)->right)
-		_bt_clear(&(*node)->right);
-	_cmd_clear(&(*node)->cmd_line);
-	free((*node));
-	(*node) = NULL;
+	t_pbtree	node;
+
+	node = _bt_create(token);
+	node->left = left;
+	node->right = right;
+	if (left)
+		left->root = node;
+	if (right)
+		right->root = node;
+	return (node);
 }

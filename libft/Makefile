@@ -5,22 +5,33 @@ CFLAGS				=		-Wall -Werror -Wextra -I include -g3
 DEPFLAGS			=		-MMD -MP
 AR					=		ar -crs
 
+ALLOC_DIR			:=		_alloc/
+ALLOC				:=		_alloc ft_free_arr ft_free_arrr ft_free_tab
+
+BTREE_DIR			:= 		_btree/
+BTREE				:=		_bt_clear _bt_create _bt_join\
+							_bt_push_left _bt_push_right _bt_push_root
+
+CMD_DIR				:=		_cmd/
+CMD					:=		_cmd_pop _cmd_push _cmd_print
+
+DLST_DIR			:= 		_dlst/
+DLST				:=		_dlst_push _dlst_pop _dlst_sort
+
+LST_DIR				:=		_lst/
+LST					:=		ft_lstadd_back ft_lstadd_front ft_lstclear ft_lstdelone\
+							ft_lstiter ft_lstlast ft_lstmap ft_lstnew ft_lstsize\
+							lst_clear lst_push_top lst_push_bot lst_pop_top\
+							lst_last_prev
+
 DPRINTF_DIR			:=		ft_dprintf/
 DPRINTF				:=		ft_dprintf ft_dprintf_utils
 
-FREE_DIR			:=		ft_free/
-FREE				:=		ft_free_arr ft_free_arrr ft_free_tab
 
 FTIS_DIR			:=		ft_is/
 FTIS				:=		ft_isalnum ft_isalpha ft_isascii ft_isdigit\
 							ft_isprint ft_isspace\
 							ft_ishex_alpha ft_ishexALPHA
-
-FTLST_DIR			:=		ft_lst/
-FTLST				:=		ft_lstadd_back ft_lstadd_front ft_lstclear ft_lstdelone \
-							ft_lstiter ft_lstlast ft_lstmap ft_lstnew ft_lstsize\
-							lst_clear lst_push_top lst_push_bot lst_pop_top\
-							lst_last_prev
 
 FTMEM_DIR			:=		ft_mem/
 FTMEM				:=		ft_bzero ft_calloc ft_memchr ft_memcmp ft_memmove\
@@ -49,10 +60,13 @@ GNL					:=		get_next_line get_next_line_utils
 SORT_DIR			:=		sort/
 SORT				:=		ft_quick_sort\
 
+SRC_FILES			+=		$(addprefix $(ALLOC_DIR),$(ALLOC))
+SRC_FILES			+=		$(addprefix $(BTREE_DIR),$(BTREE))
+SRC_FILES			+=		$(addprefix $(CMD_DIR),$(CMD))
+SRC_FILES			+=		$(addprefix $(DLST_DIR),$(DLST))
+SRC_FILES			+=		$(addprefix $(LST_DIR),$(LST))
 SRC_FILES			+=		$(addprefix $(DPRINTF_DIR),$(DPRINTF))
-SRC_FILES			+=		$(addprefix $(FREE_DIR),$(FREE))
 SRC_FILES			+=		$(addprefix $(FTIS_DIR),$(FTIS))
-SRC_FILES			+=		$(addprefix $(FTLST_DIR),$(FTLST))
 SRC_FILES			+=		$(addprefix $(FTMEM_DIR),$(FTMEM))
 SRC_FILES			+=		$(addprefix $(FT_PRINTF_DIR),$(FT_PRINTF))
 SRC_FILES			+=		$(addprefix $(FTPUT_DIR),$(FTPUT))
@@ -84,20 +98,21 @@ $(OBJ_DIR)%.o 		: 		$(SRC_DIR)%.c | $(TREE)
 
 $(TREE)				:
 							@mkdir -p $(OBJ_DIR)
+							@mkdir -p $(OBJ_DIR)$(ALLOC_DIR)
+							@mkdir -p $(OBJ_DIR)$(BTREE_DIR)
+							@mkdir -p $(OBJ_DIR)$(CMD_DIR)
+							@mkdir -p $(OBJ_DIR)$(DLST_DIR)
+							@mkdir -p $(OBJ_DIR)$(LST_DIR)
 							@mkdir -p $(OBJ_DIR)$(DPRINTF_DIR)
+							@mkdir -p $(OBJ_DIR)$(FREE_DIR)
 							@mkdir -p $(OBJ_DIR)$(FTIS_DIR)
 							@mkdir -p $(OBJ_DIR)$(FTMEM_DIR)
-							@mkdir -p $(OBJ_DIR)$(FTPUT_DIR)
-							@mkdir -p $(OBJ_DIR)$(FTTO_DIR)
-							@mkdir -p $(OBJ_DIR)$(FTSTR_DIR)
-							@mkdir -p $(OBJ_DIR)$(FTLST_DIR)
 							@mkdir -p $(OBJ_DIR)$(FT_PRINTF_DIR)
-							@mkdir -p $(OBJ_DIR)$(M_PRINTF_DIR)
+							@mkdir -p $(OBJ_DIR)$(FTPUT_DIR)
+							@mkdir -p $(OBJ_DIR)$(FTSTR_DIR)
+							@mkdir -p $(OBJ_DIR)$(FTTO_DIR)
 							@mkdir -p $(OBJ_DIR)$(GNL_DIR)
-							@mkdir -p $(OBJ_DIR)$(BTREE_DIR)
-							@mkdir -p $(OBJ_DIR)$(FREE_DIR)
 							@mkdir -p $(OBJ_DIR)$(SORT_DIR)
-# @mkdir -p $(OBJ_DIR)$(DLL_DIR)
 
 clean				:
 							@rm -rf $(OBJ_DIR)

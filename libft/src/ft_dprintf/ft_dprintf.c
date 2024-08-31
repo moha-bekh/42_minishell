@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_dprintf.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 16:03:32 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/21 16:31:56 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/08/31 15:53:35 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,9 @@ void	ft_putformat(t_ft_pdprintf d)
 
 int	ft_dprintf(int fd, const char *format, ...)
 {
-	t_ft_dprintf	d;
+	t_fd_dprintf	d;
 
-	d = (t_ft_dprintf){0};
+	d = (t_fd_dprintf){0};
 	d.fd = fd;
 	d.format = format;
 	va_start(d.args, format);

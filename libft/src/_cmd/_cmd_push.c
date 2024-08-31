@@ -6,11 +6,11 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 18:44:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/30 04:10:52 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 16:33:53 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
 void	_cmd_push_back(t_ppadlst dlst, t_pnlst token)
 {

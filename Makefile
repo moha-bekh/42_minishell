@@ -67,6 +67,8 @@ _EXEC			:= 		__path\
 						_redirs
 
 _EXPAND			:= 		_xpd\
+						_xpd_str\
+						_xpd_utils\
 						_xpd_wildcards
 
 _PARS			:= 		_parsing\

@@ -6,103 +6,90 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:41:05 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/31 17:42:17 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 22:09:23 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-int	_errno_proc(t_pdata data)
+int	_xpd_var_proc(t_pdata data, t_ppnlst token, int *i)
 {
+	char	*str;
 	char	*tmp;
-
-	tmp = ft_itoa(data->_errno);
-	data->exp = _env_push_back(data->exp, NULL, ft_strdup(tmp));
-	free(tmp);
-	free(data->tmp);
-	data->tmp = NULL;
-	return (_SUCCESS);
-}
-
-int	_var_env_proc(t_pdata data)
-{
-	char	*tmp;
-
-	tmp = data->tmp;
-	data->tmp = _get_env_value(data->env.dll_env, data->tmp);
-	free(tmp);
-	data->exp = _env_push_back(data->exp, NULL, ft_strdup(data->tmp));
-	free(data->tmp);
-	data->tmp = NULL;
-	return (_SUCCESS);
-}
-
-int	_var_proc(t_pdata data, t_ptok token, int *i)
-{
-	// char	*tmp;
 	int		j;
 
-	// tmp = NULL;
-	*i += 1;
-	j = *i;
-	while (token->value[*i] && _varchr_conv(token->value[*i]))
+	str = (*token)->addr_1;
+	j = ++(*i);
+	while (str[*i] && _xpd_conv(str[*i]))
 	{
-		if (token->value[*i] == '?')
+		if (str[*i] == '?')
 		{
 			*i += 1;
 			break ;
 		}
 		*i += 1;
 	}
-	data->tmp = ft_substr(token->value, j, *i - j);
-	if (data->tmp[0] == '?')
-		_errno_proc(data);
+	tmp = ft_substr(str, j, *i - j);
+	if (tmp[0] == '?')
+		_xpd_errno(data);
 	else
-		_var_env_proc(data);
+		_xpd_var_env(data, tmp);
+	free(tmp);
 	return (_SUCCESS);
 }
 
-int	_str_proc(t_pdata data, t_ptok token, int *i)
+int	_xpd_str_proc(t_pdata data, t_ppnlst token, int *i)
 {
+	char	*str;
 	char	*tmp;
 	int		j;
 
+	str = (*token)->addr_1;
 	j = *i;
-	while (token->value[*i + 1] && token->value[*i + 1] != '$')
+	while (str[*i + 1] && str[*i + 1] != '$')
 		*i += 1;
-	tmp = ft_substr(token->value, j, *i - j + 1);
-	data->exp = _env_push_back(data->exp, NULL, ft_strdup(tmp));
+	tmp = ft_substr(str, j, *i - j + 1);
+	_dlst_push_back(&data->xpd, ft_strdup(tmp), NULL, 0);
 	free(tmp);
 	*i += 1;
 	return (_SUCCESS);
 }
 
-int	_expand_string(t_pdata data, t_ptok token)
+int	_xpd_join(t_pdata data, t_ppnlst token)
 {
-	char	*tmp_1;
-	t_pev	tmp_2;
+	t_pnlst	inc;
+	char	*tmp;
+	char	*pmt;
+
+	inc = data->xpd->d_top;
+	tmp = ft_strdup("");
+	while (inc)
+	{
+		pmt = tmp;
+		tmp = ft_strjoin(tmp, inc->addr_1);
+		free(pmt);
+		inc = inc->next;
+	}
+	free((*token)->addr_1);
+	(*token)->addr_1 = tmp;
+	_dlst_clear(&data->xpd);
+	return (_SUCCESS);
+}
+
+int	_xpd_str(t_pdata data, t_ppnlst token)
+{
+	char	*str;
 	int		i;
 
+	str = (*token)->addr_1;
 	i = 0;
-	while (token->value[i])
+	while (str[i])
 	{
-		if (token->value[i] == '$' && _varchr_conv(token->value[i + 1]))
-			_var_proc(data, token, &i);
+		if (str[i] == '$' && _xpd_conv(str[i + 1]))
+			_xpd_var_proc(data, token, &i);
 		else
-			_str_proc(data, token, &i);
+			_xpd_str_proc(data, token, &i);
 	}
-	tmp_2 = data->exp->e_top;
-	tmp_1 = ft_strdup("");
-	while (tmp_2)
-	{
-		data->tmp = tmp_1;
-		tmp_1 = ft_strjoin(tmp_1, tmp_2->value);
-		free(data->tmp);
-		tmp_2 = tmp_2->next;
-	}
-	free(token->value);
-	token->value = tmp_1;
-	data->exp = _env_clear(data->exp);
+	_xpd_join(data, token);
 	return (_SUCCESS);
 }

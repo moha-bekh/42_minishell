@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/08/31 18:16:20 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 22:13:33 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int						_count_args(t_pnlst token);
 
 int						_err_print(char *str, void *arg, bool ptr, int _errno);
 t_pdata					_get_data(void);
+char					*_env_get_value(t_pdata data, char *key);
 
 /* SIGNALS */
 int						_set_signals(t_pdata data);
@@ -53,7 +54,6 @@ void					sig_hndl(int sig);
 int						_data_init(t_pdata data, int ac, char **av, char **ev);
 int						_data_clear(t_pdata data);
 int						_data_structs_clear(t_pdata data);
-
 
 /* TOKENS */
 int						_tok_id(char a, char *str);
@@ -82,8 +82,14 @@ int						_restore_stdfds(t_pdata data);
 int						_here_doc_proc(t_ppncmd cmd);
 
 /* EXPAND */
-int						_xpd_line(t_ppnlst token);
+int						_xpd_line(t_pdata data, t_ppnlst token);
 int						_xpd_wildcards(t_ppnlst token);
+int						_xpd_str(t_pdata data, t_ppnlst token);
+
+int						_xpd_needed(char *str);
+int						_xpd_conv(char c);
+int						_xpd_errno(t_pdata data);
+int						_xpd_var_env(t_pdata data, char *tmp);
 
 /* PARSING */
 int						_pars_pipe_lines(t_ppbtree node);
@@ -129,6 +135,7 @@ struct					s_data
 	t_padlst			export;
 	t_padlst			tokens;
 	t_pbtree			tree;
+	t_padlst			xpd;
 	int					_errno;
 	struct sigaction	s_sig;
 };

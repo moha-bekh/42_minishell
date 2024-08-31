@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:55:16 by moha              #+#    #+#             */
-/*   Updated: 2024/08/31 18:16:44 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 22:12:05 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,18 @@ int	_err_print(char *str, void *arg, bool ptr, int _errno)
 	if (_errno)
 		data->_errno = _errno;
 	return (_errno);
+}
+
+char	*_env_get_value(t_pdata data, char *key)
+{
+	t_pnlst	tmp;
+
+	tmp = data->env->d_top;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->addr_1, key))
+			return ((char *)tmp->addr_2);
+		tmp = tmp->next;
+	}
+	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 07:36:01 by moha              #+#    #+#             */
-/*   Updated: 2024/08/31 15:51:31 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 20:23:07 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	_exec_proc(t_pdata data, t_ppncmd cmd)
 
 int	_exec_process(t_pdata data, t_pncmd cmd)
 {
-	if (_xpd_line(&cmd->token))
+	if (_xpd_line(data, &cmd->token))
 		return (_FAILURE);
 	if (_pars_args_line(data, &cmd, &cmd->token, true))
 		return (_FAILURE);

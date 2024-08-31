@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:25:28 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/30 04:58:09 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 11:55:43 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	_tok_or(t_pdata data, int *i)
 	_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 2), NULL, _OR);
 	*i += 2;
 	if (!data->tokens->d_bot->prev || (data->tokens->d_bot->prev
-			&& _token_id(data->tokens->d_bot->prev->x, _STX_OP)))
+			&& _tok_id(data->tokens->d_bot->prev->x, _STX_OP)))
 		return (_err_print(_ERR_TOKEN, "||", true, 2));
 	return (_SUCCESS);
 }
@@ -34,7 +34,7 @@ int	_tok_and(t_pdata data, int *i)
 	if (count == 1)
 		return (_err_print(_ERR_TOKEN, "&", true, 2));
 	else if (!data->tokens->d_bot->prev || (data->tokens->d_bot->prev
-			&& _token_id(data->tokens->d_bot->prev->x, _STX_OP)))
+			&& _tok_id(data->tokens->d_bot->prev->x, _STX_OP)))
 		return (_err_print(_ERR_TOKEN, "&&", true, 2));
 	return (_SUCCESS);
 }
@@ -44,7 +44,7 @@ int	_tok_pipe(t_pdata data, int *i)
 	_dlst_push_back(&data->tokens, ft_substr(data->prompt, (*i)++, 1), NULL,
 		_PIPE);
 	if (!data->tokens->d_bot->prev || (data->tokens->d_bot->prev
-			&& _token_id(data->tokens->d_bot->prev->x, _STX_OP)))
+			&& _tok_id(data->tokens->d_bot->prev->x, _STX_OP)))
 		return (_err_print(_ERR_TOKEN, "|", true, 2));
 	return (_SUCCESS);
 }

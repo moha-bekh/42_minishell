@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:35:57 by moha              #+#    #+#             */
-/*   Updated: 2024/08/30 01:49:07 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 13:36:32 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,13 @@ int	_count_args(t_pnlst token)
 	t_pnlst	tmp;
 	int		i;
 
+	if (!token)
+		return (0);
 	tmp = token;
 	i = 0;
-	while (tmp && tmp->x != _PIPE && !_token_id(tmp->x, _TYP_SEP))
+	while (tmp && tmp->x != _PIPE && !_tok_id(tmp->x, _TYP_SEP))
 	{
-		if (tmp && _token_id(tmp->x, _TYP_REDIRS))
+		if (tmp && _tok_id(tmp->x, _TYP_REDIRS))
 		{
 			tmp = tmp->next;
 			if (tmp)

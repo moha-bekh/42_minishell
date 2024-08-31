@@ -8,8 +8,14 @@
 
 int	main(int ac, char **av, char **ev)
 {
-	int _stdout_2 = dup(1);
-	int fd = open("out", O_RDWR | O_CREAT | O_TRUNC, 0644);
+	char	**arr;
 
+	arr = ft_split("*ou*", '*');
+	printf("ptr: %p\n", arr);
+	printf("arr[0]: %s\n", arr[0]);
+	ft_free_arr(arr);
+	arr = ft_split("*", '*');
+	printf("ptr: %p\n", arr);
+	printf("arr[0]: %s\n", arr[0]);
 	return (0);
 }

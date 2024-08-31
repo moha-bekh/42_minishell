@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:25:01 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/30 04:58:24 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 11:55:52 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	_redir_heredoc(t_pdata data, int *i)
 		_HERE_DOC);
 	*i += 2;
 	if (data->tokens && data->tokens->d_bot->prev
-		&& _token_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
+		&& _tok_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
 		return (_err_print(_ERR_TOKEN, "<<", true, 2));
 	return (_SUCCESS);
 }
@@ -34,7 +34,7 @@ int	_redir_in(t_pdata data, int *i)
 	_dlst_push_back(&data->tokens, ft_substr(data->prompt, (*i)++, 1), NULL,
 		'<');
 	if (data->tokens && data->tokens->d_bot->prev
-		&& _token_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
+		&& _tok_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
 		return (_err_print(_ERR_TOKEN, "<", true, 2));
 	return (_SUCCESS);
 }
@@ -45,7 +45,7 @@ int	_redir_outa(t_pdata data, int *i)
 		_REDIR_OUTA);
 	*i += 2;
 	if (data->tokens && data->tokens->d_bot->prev
-		&& _token_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
+		&& _tok_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
 		return (_err_print(_ERR_TOKEN, ">>", true, 2));
 	return (_SUCCESS);
 }
@@ -55,7 +55,7 @@ int	_redir_outt(t_pdata data, int *i)
 	_dlst_push_back(&data->tokens, ft_substr(data->prompt, (*i)++, 1), NULL,
 		'>');
 	if (data->tokens && data->tokens->d_bot->prev
-		&& _token_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
+		&& _tok_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
 		return (_err_print(_ERR_TOKEN, ">", true, 2));
 	return (_SUCCESS);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _exec.c                                            :+:      :+:    :+:   */
+/*   _exec_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 07:36:01 by moha              #+#    #+#             */
-/*   Updated: 2024/08/30 04:25:37 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 13:37:45 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	_exec_proc(t_pdata data, t_ppncmd cmd)
 
 int	_exec_process(t_pdata data, t_pncmd cmd)
 {
-	if (_expand_line(&cmd->token))
+	if (_xpd_line(&cmd->token))
 		return (_FAILURE);
 	if (_pars_args_line(data, &cmd, &cmd->token, true))
 		return (_FAILURE);

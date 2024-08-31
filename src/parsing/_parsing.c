@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/30 02:45:51 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 11:56:06 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ int	_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 		return (_FAILURE);
 	i = 0;
 	tmp = *token;
-	while (tmp && tmp->x != _PIPE && !_token_id(tmp->x, _TYP_SEP))
+	while (tmp && tmp->x != _PIPE && !_tok_id(tmp->x, _TYP_SEP))
 	{
-		if (_token_id(tmp->x, _TYP_REDIRS))
+		if (_tok_id(tmp->x, _TYP_REDIRS))
 		{
 			if (_pars_redirs(cmd, &tmp, inside))
 				return (_FAILURE);

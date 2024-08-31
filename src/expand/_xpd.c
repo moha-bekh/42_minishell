@@ -1,28 +1,51 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _expand.c                                          :+:      :+:    :+:   */
+/*   _xpd.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 16:22:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/27 17:38:49 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 13:54:34 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	_expand_line(t_ppnlst token)
+int	_join_strings(t_ppnlst token)
+{
+	t_pnlst	tmp;
+	char	*old;
+
+	tmp = *token;
+	while (tmp && tmp->x != _PIPE && !_tok_id(tmp->x, _TYP_SEP))
+	{
+		if (tmp->flag)
+		{
+			tmp = tmp->next;
+			old = tmp->addr_1;
+			tmp->addr_1 = ft_strjoin(tmp->prev->addr_1, tmp->addr_1);
+			free(old);
+			_dlst_pop_in(&(*token)->manager, &tmp->prev);
+			continue ;
+		}
+		tmp = tmp->next;
+	}
+	return (_SUCCESS);
+}
+
+int	_xpd_line(t_ppnlst token)
 {
 	t_pnlst	tmp;
 
 	tmp = *token;
-	while (tmp && tmp->x != _PIPE && !_token_id(tmp->x, _TYP_SEP))
+	while (tmp && tmp->x != _PIPE && !_tok_id(tmp->x, _TYP_SEP))
 	{
-		if (tmp->x == '*' && _expand_wildcards(&tmp))
+		if (tmp->x == '*' && _xpd_wildcards(&tmp))
 			return (_FAILURE);
 		tmp = tmp->next;
 	}
+	_join_strings(token);
 	return (_SUCCESS);
 }
 

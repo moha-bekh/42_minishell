@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/08/30 04:36:00 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 13:55:28 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ int						_data_structs_clear(t_pdata data);
 void					_data_init_env_n_export(t_pdata data);
 
 /* TOKENS */
-int						_token_list(t_pdata data);
-int						_token_id(char a, char *str);
+int						_tok_list(t_pdata data);
+int						_tok_id(char a, char *str);
 int						_op_proc(t_pdata data, int *i);
 int						_redir_proc(t_pdata data, int *i);
 
@@ -83,8 +83,8 @@ int						_restore_stdfds(t_pdata data);
 int						_here_doc_proc(t_ppncmd cmd);
 
 /* EXPAND */
-int						_expand_line(t_ppnlst token);
-int						_expand_wildcards(t_ppnlst token);
+int						_xpd_line(t_ppnlst token);
+int						_xpd_wildcards(t_ppnlst token);
 
 /* PARSING */
 int						_pars_pipe_lines(t_ppbtree node);
@@ -95,6 +95,7 @@ int						_pars_redirs(t_ppncmd cmd, t_ppnlst token, bool inside);
 /* BUILTINS */
 int						_cd(t_pdata data, char **args);
 int						_echo(t_pdata data, char **args);
+// int						_echo(t_pdata data, t_pnlst token, char **args);
 int						_env(t_pdata data, char **args);
 int						_exit_(t_pdata data, char **args);
 int						_export(t_pdata data, char **args);

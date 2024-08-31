@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 13:02:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/30 04:14:06 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 11:55:34 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ int	_pars_heredoc(t_ppncmd cmd, t_pnlst token, bool inside)
 
 int	_pars_redirs(t_ppncmd cmd, t_ppnlst token, bool inside)
 {
-	if (!inside && !_token_id((*token)->x, _TYP_REDIRS)
-		&& !_token_id((*token)->prev->x, _TYP_REDIRS))
+	if (!inside && !_tok_id((*token)->x, _TYP_REDIRS)
+		&& !_tok_id((*token)->prev->x, _TYP_REDIRS))
 		return (_err_print(_ERR_TOKEN, (*token)->addr_1, true, 1));
 	if ((*token)->x == 'H' && _pars_heredoc(cmd, (*token)->next, inside))
 		return (_FAILURE);

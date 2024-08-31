@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 20:28:49 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/26 11:23:36 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 11:55:29 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	_node_print_tokens(t_pnlst tokens)
 		printf("( %s )", (char *)tmp->addr_1);
 	else
 	{
-		while (tmp && !_token_id(tmp->x, _TYP_SEP))
+		while (tmp && !_tok_id(tmp->x, _TYP_SEP))
 		{
 			printf("%s ", (char *)tmp->addr_1);
 			tmp = tmp->next;

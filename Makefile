@@ -78,7 +78,7 @@ TOKEN_DIR := 			token/
 TOKEN_SRCS :=			\
 						_op\
 						_redir\
-						_token_list
+						_tok_list
 
 TREE_DIR :=				tree/
 TREE_SRCS :=			\
@@ -95,8 +95,8 @@ EXEC_SRCS := 			\
 
 EXPAND_DIR := 			expand/
 EXPAND_SRCS := 			\
-						_expand\
-						_expand_wildcards
+						_xpd\
+						_xpd_wildcards
 
 PARS_DIR := 			parsing/
 PARS_SRCS := 			\

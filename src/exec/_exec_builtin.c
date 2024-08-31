@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 20:54:03 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/29 19:26:29 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 13:56:06 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	_exec_builtin(t_pdata data, t_ppncmd cmd)
 {
 	if (!ft_strncmp((*cmd)->args[0], "cd", 2))
 		return (_cd(data, (*cmd)->args));
+	// if (!ft_strncmp((*cmd)->args[0], "echo", 4))
+	// 	return (_echo(data, (*cmd)->token->next, (*cmd)->args));
 	if (!ft_strncmp((*cmd)->args[0], "echo", 4))
 		return (_echo(data, (*cmd)->args));
 	if (!ft_strncmp((*cmd)->args[0], "env", 3))

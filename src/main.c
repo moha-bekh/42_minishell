@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/08/31 13:05:48 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 23:11:56 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	main(int ac, char **av, char **ev)
 		add_history(data.prompt);
 		if (_tok_list(&data) && !_data_structs_clear(&data))
 			continue ;
-		_dlst_print_tokens(data.tokens);
 		_tree_builder(&data.tree, data.tokens->d_top);
 		if (_exec(&data, &data.tree) && !_data_structs_clear(&data))
 			continue ;

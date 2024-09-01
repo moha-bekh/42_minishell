@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 12:55:16 by moha              #+#    #+#             */
-/*   Updated: 2024/08/31 22:12:05 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/01 00:28:01 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,18 @@ char	*_env_get_value(t_pdata data, char *key)
 		tmp = tmp->next;
 	}
 	return (NULL);
+}
+
+int	_varstr_conv(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isalpha(str[i]) && str[i] != '_')
+			return (1);
+		i++;
+	}
+	return (0);
 }

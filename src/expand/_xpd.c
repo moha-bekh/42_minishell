@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 16:22:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/31 22:11:00 by moha             ###   ########.fr       */
+/*   Updated: 2024/08/31 23:39:41 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	_xpd_line(t_pdata data, t_ppnlst token)
 	tmp = *token;
 	while (tmp && tmp->x != _PIPE && !_tok_id(tmp->x, _TYP_SEP))
 	{
-		if (tmp->x == '*' && _xpd_wildcards(&tmp))
+		if (tmp->x == '*' && _xpd_wildcards(data, &tmp))
 			return (_FAILURE);
 		else if (tmp->x == '$' && _xpd_var(data, &tmp))
 			return (_FAILURE);

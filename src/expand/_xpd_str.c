@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:41:05 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/31 22:09:23 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/01 02:08:17 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int	_xpd_join(t_pdata data, t_ppnlst token)
 	free((*token)->addr_1);
 	(*token)->addr_1 = tmp;
 	_dlst_clear(&data->xpd);
+	data->xpd = NULL;
 	return (_SUCCESS);
 }
 

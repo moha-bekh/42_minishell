@@ -6,33 +6,17 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:34:32 by moha              #+#    #+#             */
-/*   Updated: 2024/08/29 20:06:09 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/01 00:34:36 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	_varstr_conv(char *str, int idx)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] && i < idx)
-	{
-		if (!ft_isalpha(str[i]) && str[i] != '_')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
 int	_add_value(t_pdata data, char *arg)
 {
-	char *key;
-	int	idx;
+	char	*key;
+	int		idx;
 
-	if (!arg)
-		return (_SUCCESS);
 	idx = _sep(arg);
 	if (!idx)
 		key = ft_strdup(arg);
@@ -110,11 +94,18 @@ int	_replace_export_value(t_pdata data, char *arg)
 
 int	_bad_value(char *value)
 {
-	int	idx;
+	int	sep;
+	int	i;
 
-	idx = _sep(value);
-	if (!value[0] || _varstr_conv(value, idx))
+	if (*value == '=')
 		return (_err_print(_ERR_EXPORT_INVALID, value, true, 1));
+	sep = _sep(value);
+	i = -1;
+	while (value[++i] && i < sep)
+	{
+		if (!ft_isalpha(value[i]) && value[i] != '_')
+			return (_err_print(_ERR_EXPORT_INVALID, value, true, 1));
+	}
 	return (_SUCCESS);
 }
 

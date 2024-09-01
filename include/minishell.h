@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/08/31 22:13:33 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/01 01:48:07 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int						_count_args(t_pnlst token);
 int						_err_print(char *str, void *arg, bool ptr, int _errno);
 t_pdata					_get_data(void);
 char					*_env_get_value(t_pdata data, char *key);
+int						_varstr_conv(char *str);
 
 /* SIGNALS */
 int						_set_signals(t_pdata data);
@@ -83,7 +84,7 @@ int						_here_doc_proc(t_ppncmd cmd);
 
 /* EXPAND */
 int						_xpd_line(t_pdata data, t_ppnlst token);
-int						_xpd_wildcards(t_ppnlst token);
+int						_xpd_wildcards(t_pdata data, t_ppnlst token);
 int						_xpd_str(t_pdata data, t_ppnlst token);
 
 int						_xpd_needed(char *str);

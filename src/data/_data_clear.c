@@ -6,7 +6,7 @@
 /*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 15:44:21 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/30 03:21:46 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/01 02:04:55 by moha             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	_data_structs_clear(t_pdata data)
 	free(data->prompt);
 	data->prompt = NULL;
 	_dlst_clear(&data->tokens);
+	_dlst_clear(&data->xpd);
 	_bt_clear(&data->tree);
 	return (_SUCCESS);
 }
@@ -33,6 +34,7 @@ int	_data_clear(t_pdata data)
 	_dlst_clear(&data->env);
 	_dlst_clear(&data->export);
 	_dlst_clear(&data->tokens);
+	_dlst_clear(&data->xpd);
 	_bt_clear(&data->tree);
 	close(data->args._stdin);
 	close(data->args._stdout);

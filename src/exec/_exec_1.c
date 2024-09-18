@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _exec_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 07:36:01 by moha              #+#    #+#             */
-/*   Updated: 2024/08/31 20:23:07 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/18 19:09:19 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,7 @@ int	_exec(t_pdata data, t_ppbtree node)
 		return (_SUCCESS);
 	if ((*node)->left)
 		_exec(data, &(*node)->left);
-	if (((*node)->token->x == _AND && data->_errno) || ((*node)->token->x == _OR
-			&& !data->_errno))
+	if (((*node)->token->x == _AND && data->_errno) || ((*node)->token->x == _OR && !data->_errno))
 		return (_SUCCESS);
 	if ((*node)->token->x == '(')
 	{
@@ -128,8 +127,7 @@ int	_exec(t_pdata data, t_ppbtree node)
 			return (_FAILURE);
 		return (_SUCCESS);
 	}
-	if ((*node)->token->x != _AND && (*node)->token->x != _OR
-		&& _exec_cmd_line(data, node))
+	if ((*node)->token->x != _AND && (*node)->token->x != _OR && _exec_cmd_line(data, node))
 		return (_FAILURE);
 	if ((*node)->right)
 		_exec(data, &(*node)->right);

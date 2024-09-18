@@ -1,4 +1,3 @@
-cd : add home sym ~ and root sym /
-wildcards : leak check
-here doc : expantion
-error code
+wildcards : coriace leak`
+EXPATION here_doc !!!!
+Trouver un mate

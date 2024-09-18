@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _redirs.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 06:39:42 by moha              #+#    #+#             */
-/*   Updated: 2024/08/30 04:28:16 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/18 18:57:22 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,14 @@ int	_write_to_pipe(t_ppncmd cmd)
 int	_exec_redirections(t_pdata data, t_ppncmd cmd)
 {
 	(void)data;
-	if ((*cmd)->redirs.in_name && !(*cmd)->redirs.here_fd)
+	// if ((*cmd)->redirs.in_name && !(*cmd)->redirs.here_fd)
+	// 	_swap_fd_redir_in(cmd);
+	// else if ((*cmd)->redirs.here_fd && (*cmd)->redirs.here_name)
+	// 	_here_doc_proc(cmd);
+	// if ((*cmd)->redirs.here_fd)
+		// _xpd_here_doc(cmd);
+	if ((*cmd)->redirs.in_name)
 		_swap_fd_redir_in(cmd);
-	else if ((*cmd)->redirs.here_fd && (*cmd)->redirs.here_name)
-		_here_doc_proc(cmd);
 	if ((*cmd)->redirs.out_name)
 		_swap_fd_redir_out(cmd);
 	if ((*cmd)->next && !(*cmd)->redirs.out_name)

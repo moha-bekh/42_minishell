@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/09/18 14:35:14 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/18 19:27:50 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,8 +172,8 @@ enum					e_return
 # define _ERR_ENV_NO_FILE "env: %s: No such file or directory\n"
 # define _ERR_EXPORT_INVALID "bash: export: `%s': not a valid identifier\n"
 
-# define _ERR_EXIT_NUM "bash: exit: %s: numeric argument required\n"
-# define _ERR_EXIT_MANY "bash: exit: too many arguments\n"
+# define _ERR_EXIT_NUM "exit\nbash: exit: %s: numeric argument required\n"
+# define _ERR_EXIT_MANY "exit\nbash: exit: too many arguments\n"
 
 # define _PATH "/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
 

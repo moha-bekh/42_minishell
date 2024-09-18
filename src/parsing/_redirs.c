@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _redirs.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 13:02:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/31 11:55:34 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/18 16:24:59 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,28 @@ int	_pars_redir_outa(t_ppncmd cmd, t_pnlst token, bool inside)
 		return (_err_print("close", NULL, true, 1));
 	return (_SUCCESS);
 }
+
+// int	_here_doc_writer(t_ppncmd cmd, int idx)
+// {
+// 	char	*line;
+
+// 	(*cmd)->redirs.here_fd = open((*cmd)->redirs.here_names[idx], _O_RWCA);
+// 	while (true)
+// 	{
+// 		if ((*cmd)->redirs.here_names[idx] != (*cmd)->redirs.here_name)
+// 			unlink((*cmd)->redirs.here_names[idx]);
+// 		line = readline("> ");
+// 		if (!line || !ft_strcmp(line, (*cmd)->redirs.here_limit[idx]))
+// 			break ;
+// 		ft_dprintf((*cmd)->redirs.here_fd, "%s\n", line);
+// 		free(line);
+// 		line = NULL;
+// 	}
+// 	free(line);
+// 	close((*cmd)->redirs.here_fd);
+// 	return (_SUCCESS);
+// }
+
 int	_pars_heredoc(t_ppncmd cmd, t_pnlst token, bool inside)
 {
 	char	*path_name;
@@ -76,6 +98,25 @@ int	_pars_heredoc(t_ppncmd cmd, t_pnlst token, bool inside)
 	free(name);
 	(*cmd)->redirs.here_names[(*cmd)->redirs.here_idx] = path_name;
 	(*cmd)->redirs.here_limit[(*cmd)->redirs.here_idx] = (char *)token->addr_1;
+	
+	// here_doc_writer
+	{
+		char *line;
+		int idx = (*cmd)->redirs.here_idx;
+		(*cmd)->redirs.here_fd = open(path_name, _O_RWCA);
+		while (true)
+		{
+			line = readline("> ");
+			if (!line || !ft_strcmp(line, (*cmd)->redirs.here_limit[idx]))
+				break ;
+			ft_dprintf((*cmd)->redirs.here_fd, "%s\n", line);
+			free(line);
+			line = NULL;
+		}
+		free(line);
+		close((*cmd)->redirs.here_fd);
+	}
+	
 	(*cmd)->redirs.here_idx++;
 	(*cmd)->redirs.here_fd = 1;
 	if (inside || (!inside && !(*cmd)->redirs.here_inside))
@@ -83,6 +124,7 @@ int	_pars_heredoc(t_ppncmd cmd, t_pnlst token, bool inside)
 		if (inside)
 			(*cmd)->redirs.here_inside = true;
 		(*cmd)->redirs.here_name = path_name;
+		(*cmd)->redirs.in_name = path_name;
 	}
 	return (_SUCCESS);
 }

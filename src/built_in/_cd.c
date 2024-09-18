@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _cd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:50 by moha              #+#    #+#             */
-/*   Updated: 2024/08/29 05:06:07 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/18 14:35:32 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@ int	_cd_home(t_pdata data)
 	{
 		if (!ft_strncmp(tmp->addr_1, "HOME", 4))
 		{
-			if (!chdir(tmp->addr_2))
+			if (chdir(tmp->addr_2) < 0)
 				return (_err_print("chdir", NULL, true, 1));
+			return (_SUCCESS);
 		}
 		tmp = tmp->next;
 	}
@@ -33,23 +34,24 @@ int	_cd_home(t_pdata data)
 
 int	_cd(t_pdata data, char **args)
 {
-	char	oldpwd[4096];
-	char	pwd[4096];
-	char	*tmp;
+	char **oldpwd;
+	char **pwd;
 
-	if (getcwd(oldpwd, 4096) == NULL)
-		return (_err_print("getcwd", NULL, true, 1));
-	tmp = ft_strjoin("OLDPWD=", oldpwd);
-	_export(data, &tmp);
-	free(tmp);
 	if (!args[1] && _cd_home(data))
 		return (_FAILURE);
-	else if (args[1] && !chdir(args[1]))
-		return (_err_print("chdir", NULL, true, 1));
-	if (getcwd(pwd, 4096) == NULL)
-		return (_err_print("getcwd", NULL, true, 1));
-	tmp = ft_strjoin("PWD=", pwd);
-	_export(data, &tmp);
-	free(tmp);
+	oldpwd = malloc(sizeof(char *) * 3);
+	oldpwd[1] = ft_strjoin("OLDPWD=", getcwd(NULL, 0));
+	oldpwd[2] = NULL;
+	_export(data, oldpwd);
+	free(oldpwd[1]);
+	free(oldpwd);
+	if (args[1] && chdir(args[1]) < 0)
+		return (_err_print(_ERR_NO_DIR, args[1], true, 1));
+	pwd = malloc(sizeof(char *) * 3);
+	pwd[1] = ft_strjoin("PWD=", getcwd(NULL, 0));
+	pwd[2] = NULL;
+	_export(data, pwd);
+	free(pwd[1]);
+	free(pwd);
 	return (_SUCCESS);
 }

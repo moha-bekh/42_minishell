@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _data_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 23:44:34 by moha              #+#    #+#             */
-/*   Updated: 2024/08/31 18:10:51 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/18 13:39:50 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,31 @@ void	_data_env_filled(t_pdata data, t_ppadlst dlst)
 		sep = _sep(env[i]);
 		if (sep == 1 && env[i][0] == '_')
 			continue ;
-		_dlst_push_back(dlst, ft_substr(env[i], 0, sep), ft_strdup(env[i] + (sep
-					+ 1)), 0);
+		_dlst_push_back(dlst, ft_substr(env[i], 0, sep), ft_strdup(env[i] + (sep + 1)), 0);
 	}
+}
+
+void _set_oldpwd(t_pdata data)
+{
+	char **tmp;
+	int i;
+
+	tmp = data->args.env;
+	i = -1;
+	while (tmp[++i])
+	{
+		if (!ft_strncmp(tmp[i], "OLDPWD", 6))
+			return ;
+	}
+	_dlst_push_back(&data->env, ft_strdup("OLDPWD"), NULL, 0);
+	_dlst_push_back(&data->export, ft_strdup("OLDPWD"), NULL, 0);
+	return ;
 }
 
 void	_data_init_env_n_export(t_pdata data)
 {
 	char	*buf;
+	
 
 	buf = NULL;
 	if (!*data->args.env)
@@ -57,10 +74,9 @@ void	_data_init_env_n_export(t_pdata data)
 		_dlst_sort(&data->export, false);
 		return ;
 	}
+	_set_oldpwd(data);
 	_data_env_filled(data, &data->env);
 	_data_env_filled(data, &data->export);
-	_dlst_push_back(&data->env, ft_strdup("OLDPWD"), NULL, 0);
-	_dlst_push_back(&data->export, ft_strdup("OLDPWD"), NULL, 0);
 	_dlst_sort(&data->export, false);
 }
 

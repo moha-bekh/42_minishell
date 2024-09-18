@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/09/01 01:48:07 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/18 14:35:14 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,7 @@ enum					e_return
 # define _ERR_NOT_FOUND "bash: %s: command not found\n"
 # define _ERR_IS_DIR "bash: %s: Is a directory\n"
 # define _ERR_NO_FILE "bash: %s: No such file or directory\n"
+# define _ERR_NO_DIR "bash: cd: %s: No such file or directory\n"
 
 # define _ERR_ENV_NO_FILE "env: %s: No such file or directory\n"
 # define _ERR_EXPORT_INVALID "bash: export: `%s': not a valid identifier\n"

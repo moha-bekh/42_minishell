@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _export.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:34:32 by moha              #+#    #+#             */
-/*   Updated: 2024/09/01 00:34:36 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/18 14:19:17 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	_add_value(t_pdata data, char *arg)
 	char	*key;
 	int		idx;
 
+	printf("arg = %s\n", arg);
 	idx = _sep(arg);
 	if (!idx)
 		key = ft_strdup(arg);

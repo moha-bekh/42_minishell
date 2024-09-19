@@ -43,7 +43,7 @@ int	_exec_builtin(t_pdata data, t_ppncmd cmd)
 	if (!ft_strncmp((*cmd)->args[0], "export", 6))
 		return (_export(data, (*cmd)->args));
 	if (!ft_strncmp((*cmd)->args[0], "pwd", 3))
-		return (_pwd());
+		return (_pwd(data));
 	if (!ft_strncmp((*cmd)->args[0], "unset", 5))
 		return (_unset(data, (*cmd)->args));
 	return (_SUCCESS);

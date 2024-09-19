@@ -57,8 +57,13 @@ int	_resolve_path(t_pdata data, t_ppncmd cmd)
 	else
 	{
 		prog = (*cmd)->args[0];
-		if (_is_path(prog) && !access(prog, F_OK) && !access(prog, X_OK))
-			(*cmd)->path = ft_strdup(prog);
+		if (ft_strchr(prog, '/') && !access(prog, F_OK))
+		{
+			if (!access(prog, X_OK))
+				(*cmd)->path = ft_strdup(prog);
+			else
+				exit(_err_print("bash: permission denied\n", prog, true, 126));
+		}
 		else if (_get_path(data, cmd))
 			(*cmd)->path = ft_strdup("");
 	}

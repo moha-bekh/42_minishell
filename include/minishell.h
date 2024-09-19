@@ -105,7 +105,7 @@ int						_echo(t_pdata data, char **args);
 int						_env(t_pdata data, char **args);
 int						_exit_(t_pdata data, char **args);
 int						_export(t_pdata data, char **args);
-int						_pwd(void);
+int						_pwd(t_pdata data);
 int						_unset(t_pdata data, char **args);
 
 /* GENERIC LINKED LIST */

@@ -52,6 +52,8 @@ int	_unset(t_pdata data, char **args)
 		}
 		tmp = tmp->next;
 	}
+	ft_free_arr(data->args.hard_path);
+	ft_free_arr(data->args.env_path);
 	_update_export(data);
 	return (_SUCCESS);
 }

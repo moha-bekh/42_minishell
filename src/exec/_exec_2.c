@@ -120,8 +120,8 @@ int	_exec_child_proc(t_pdata data, t_ppncmd cmd)
 	_exec_redirections(data, cmd);
 	execve((*cmd)->path, (*cmd)->args, data->args.env);
 	if ((*cmd)->args)
-		_err_print(_ERR_NOT_FOUND, (*cmd)->args[0], true, 126);
+		_err_print(_ERR_NOT_FOUND, (*cmd)->args[0], true, 127);
 	_data_clear(data);
-	exit(126);
+	exit(127);
 	return (_FAILURE);
 }

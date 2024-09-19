@@ -25,6 +25,8 @@ void	_wait_pids(t_pdata data, t_padlst cmd_line)
 	while (tmp)
 	{
 		waitpid(tmp->pid, &data->_errno, 0);
+		if (WIFSIGNALED(data->_errno))
+			data->_errno = WTERMSIG(data->_errno) + 128;
 		if (WIFEXITED(data->_errno))
 			data->_errno = WEXITSTATUS(data->_errno);
 		tmp = tmp->next;
@@ -53,6 +55,8 @@ int	_exec_proc(t_pdata data, t_ppncmd cmd)
 		return (_err_print("bash: fork failed", NULL, false, 1));
 	if (!(*cmd)->pid)
 	{
+		if (_resolve_path(data, cmd))
+			return (_FAILURE);
 		if (_exec_child_proc(data, cmd))
 			return (_FAILURE);
 	}
@@ -67,14 +71,13 @@ int	_exec_process(t_pdata data, t_pncmd cmd)
 		return (_FAILURE);
 	if (_pars_args_line(data, &cmd, &cmd->token, true))
 		return (_FAILURE);
-	if (_is_builtin(data, cmd->args))
+	if (_is_builtin(data, cmd->args) && (!cmd->prev && !cmd->next))
 	{
 		if (_exec_builtin_proc(data, &cmd))
 			return (_FAILURE);
 	}
 	else
 	{
-		_resolve_path(data, &cmd);
 		if (_exec_proc(data, &cmd))
 			return (_FAILURE);
 	}

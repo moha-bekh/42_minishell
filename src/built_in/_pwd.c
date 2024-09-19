@@ -12,11 +12,12 @@
 
 #include "minishell.h"
 
-int	_pwd(void)
+int	_pwd(t_pdata data)
 {
 	char	*pwd;
 
-	pwd = getcwd(NULL, 0);
+	// pwd = getcwd(NULL, 0);
+	pwd = _env_get_value(data, "PWD");
 	ft_dprintf(STDOUT_FILENO, "%s\n", pwd);
 	free(pwd);
 	return (_SUCCESS);

@@ -80,12 +80,14 @@ int						_is_builtin(t_pdata data, char **args);
 int						_exec_redirections(t_pdata data, t_ppncmd cmd);
 int						_save_stdfds(t_pdata data);
 int						_restore_stdfds(t_pdata data);
-int						_here_doc_proc(t_ppncmd cmd);
+int						_here_doc_proc(t_pdata data, t_ppncmd cmd);
 
 /* EXPAND */
 int						_xpd_line(t_pdata data, t_ppnlst token);
 int						_xpd_wildcards(t_pdata data, t_ppnlst token);
 int						_xpd_str(t_pdata data, t_ppnlst token);
+
+char	*_xpd_xpd_str(t_pdata data, char *line);
 
 int						_xpd_needed(char *str);
 int						_xpd_conv(char c);
@@ -96,7 +98,7 @@ int						_xpd_var_env(t_pdata data, char *tmp);
 int						_pars_pipe_lines(t_ppbtree node);
 int						_pars_args_line(t_pdata data, t_ppncmd cmd,
 							t_ppnlst token, bool inside);
-int						_pars_redirs(t_ppncmd cmd, t_ppnlst token, bool inside);
+int						_pars_redirs(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside);
 
 /* BUILTINS */
 // int						_echo(t_pdata data, t_pnlst token, char **args);

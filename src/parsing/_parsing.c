@@ -54,7 +54,7 @@ int	_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 	{
 		if (_tok_id(tmp->x, _TYP_REDIRS))
 		{
-			if (_pars_redirs(cmd, &tmp, inside))
+			if (_pars_redirs(data, cmd, &tmp, inside))
 				return (_FAILURE);
 			continue ;
 		}

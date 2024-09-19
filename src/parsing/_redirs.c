@@ -82,7 +82,7 @@ int	_pars_redir_outa(t_ppncmd cmd, t_pnlst token, bool inside)
 // 	return (_SUCCESS);
 // }
 
-int	_pars_heredoc(t_ppncmd cmd, t_pnlst token, bool inside)
+int	_pars_heredoc(t_pdata data, t_ppncmd cmd, t_pnlst token, bool inside)
 {
 	char	*path_name;
 	char	*name;
@@ -109,6 +109,7 @@ int	_pars_heredoc(t_ppncmd cmd, t_pnlst token, bool inside)
 			line = readline("> ");
 			if (!line || !ft_strcmp(line, (*cmd)->redirs.here_limit[idx]))
 				break ;
+			line = _xpd_xpd_str(data, line);
 			ft_dprintf((*cmd)->redirs.here_fd, "%s\n", line);
 			free(line);
 			line = NULL;
@@ -129,12 +130,12 @@ int	_pars_heredoc(t_ppncmd cmd, t_pnlst token, bool inside)
 	return (_SUCCESS);
 }
 
-int	_pars_redirs(t_ppncmd cmd, t_ppnlst token, bool inside)
+int	_pars_redirs(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 {
 	if (!inside && !_tok_id((*token)->x, _TYP_REDIRS)
 		&& !_tok_id((*token)->prev->x, _TYP_REDIRS))
 		return (_err_print(_ERR_TOKEN, (*token)->addr_1, true, 1));
-	if ((*token)->x == 'H' && _pars_heredoc(cmd, (*token)->next, inside))
+	if ((*token)->x == 'H' && _pars_heredoc(data, cmd, (*token)->next, inside))
 		return (_FAILURE);
 	else if ((*token)->x == '<' && _pars_redir_in(cmd, (*token)->next))
 		return (_FAILURE);

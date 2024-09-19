@@ -20,7 +20,7 @@ int	_swap_fd_here_doc(t_ppncmd cmd)
 	return (_SUCCESS);
 }
 
-int	_here_doc_writer(t_ppncmd cmd, int idx)
+int	_here_doc_writer(t_pdata data, t_ppncmd cmd, int idx)
 {
 	char	*line;
 
@@ -32,6 +32,7 @@ int	_here_doc_writer(t_ppncmd cmd, int idx)
 		line = readline("> ");
 		if (!line || !ft_strcmp(line, (*cmd)->redirs.here_limit[idx]))
 			break ;
+		line = _xpd_xpd_str(data, line);
 		ft_dprintf((*cmd)->redirs.here_fd, "%s\n", line);
 		free(line);
 		line = NULL;
@@ -41,17 +42,18 @@ int	_here_doc_writer(t_ppncmd cmd, int idx)
 	return (_SUCCESS);
 }
 
-int	_here_doc_proc(t_ppncmd cmd)
+int	_here_doc_proc(t_pdata data, t_ppncmd cmd)
 {
 	int	i;
 
 	i = 0;
 	while (i < (*cmd)->redirs.here_idx)
 	{
-		if (_here_doc_writer(cmd, i))
+		if (_here_doc_writer(data, cmd, i))
 			return (_FAILURE);
 		i++;
 	}
 	_swap_fd_here_doc(cmd);
 	return (_SUCCESS);
 }
+

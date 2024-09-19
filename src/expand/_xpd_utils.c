@@ -49,3 +49,4 @@ int	_xpd_var_env(t_pdata data, char *tmp)
 		_dlst_push_back(&data->xpd, ft_strdup(value), NULL, 0);
 	return (_SUCCESS);
 }
+

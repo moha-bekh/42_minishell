@@ -15,9 +15,8 @@
 int	_add_value(t_pdata data, char *arg)
 {
 	char	*key;
-	int		idx;
+	int	idx;
 
-	printf("arg = %s\n", arg);
 	idx = _sep(arg);
 	if (!idx)
 		key = ft_strdup(arg);
@@ -42,53 +41,30 @@ int	_add_value(t_pdata data, char *arg)
 	return (_SUCCESS);
 }
 
-int	_replace_env_value(t_pdata data, char *arg)
+int _replace_env_value(t_ppadlst env, char *arg)
 {
-	char	*key;
-	int		idx;
-	t_pnlst	tmp;
+	char *key;
+	char *value;
+	t_pnlst tmp;
+	int idx;
 
-	if (!arg || !data->env)
-		return (0);
 	idx = _sep(arg);
 	key = ft_substr(arg, 0, idx);
-	tmp = data->env->d_top;
+	value = ft_strdup(arg + (idx + 1));
+	tmp = (*env)->d_top;
 	while (tmp)
 	{
 		if (!ft_strcmp(tmp->addr_1, key))
 		{
 			free(key);
-			free(tmp->addr_2);
-			tmp->addr_2 = ft_strdup(arg + (idx + 1));
-			return (1);
-		}
-		tmp = tmp->next;
-	}
-	return (0);
-}
-
-int	_replace_export_value(t_pdata data, char *arg)
-{
-	t_pnlst	tmp;
-	char	*value;
-	char	*key;
-
-	key = ft_substr(arg, 0, _sep(arg));
-	value = ft_substr(arg, _sep(arg) + 1, ft_strlen(arg));
-	tmp = data->export->d_top;
-	while (tmp)
-	{
-		if (!ft_strcmp(tmp->addr_1, key))
-		{
-			free(key);
-			key = tmp->addr_2;
+			if (tmp->addr_2)
+				free(tmp->addr_2);
 			tmp->addr_2 = value;
-			free(key);
-			tmp = NULL;
 			return (1);
 		}
 		tmp = tmp->next;
 	}
+	free(key);
 	free(value);
 	return (0);
 }
@@ -121,9 +97,9 @@ int	_export(t_pdata data, char **args)
 	{
 		if (_bad_value(args[i]))
 			continue ;
-		else if (_replace_env_value(data, args[i]))
+		else if (_replace_env_value(&data->env, args[i]))
 		{
-			_replace_export_value(data, args[i]);
+			_replace_env_value(&data->export, args[i]);
 			continue ;
 		}
 		else if (args[i])
@@ -132,3 +108,4 @@ int	_export(t_pdata data, char **args)
 	_dlst_sort(&data->export, false);
 	return (_SUCCESS);
 }
+

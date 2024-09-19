@@ -168,6 +168,7 @@ enum					e_return
 # define _ERR_IS_DIR "bash: %s: Is a directory\n"
 # define _ERR_NO_FILE "bash: %s: No such file or directory\n"
 # define _ERR_NO_DIR "bash: cd: %s: No such file or directory\n"
+# define _ERR_PWD "pwd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n"
 
 # define _ERR_ENV_NO_FILE "env: %s: No such file or directory\n"
 # define _ERR_EXPORT_INVALID "bash: export: `%s': not a valid identifier\n"

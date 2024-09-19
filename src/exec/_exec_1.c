@@ -25,8 +25,8 @@ void	_wait_pids(t_pdata data, t_padlst cmd_line)
 	while (tmp)
 	{
 		waitpid(tmp->pid, &data->_errno, 0);
-		if (WIFSIGNALED(data->_errno))
-			data->_errno = WTERMSIG(data->_errno) + 128;
+		/*if (WIFSIGNALED(data->_errno))*/
+		/*	data->_errno = WTERMSIG(data->_errno) + 128;*/
 		if (WIFEXITED(data->_errno))
 			data->_errno = WEXITSTATUS(data->_errno);
 		tmp = tmp->next;

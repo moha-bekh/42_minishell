@@ -16,8 +16,10 @@ int	_pwd(t_pdata data)
 {
 	char	*pwd;
 
-	// pwd = getcwd(NULL, 0);
-	pwd = _env_get_value(data, "PWD");
+	(void)data;
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+		return (_err_print(_ERR_PWD, NULL, true, 1));
 	ft_dprintf(STDOUT_FILENO, "%s\n", pwd);
 	free(pwd);
 	return (_SUCCESS);

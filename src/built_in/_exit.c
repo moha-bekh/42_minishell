@@ -26,10 +26,16 @@ int	_str_is_digit(char *str)
 	return (1);
 }
 
-int	_many_args(char **args)
+int	_many_args(t_pdata data, char **args)
 {
+	char buf[4096];
+
+	ft_strlcpy(buf, args[1], 4095);
 	if (!_str_is_digit(args[1]) && _str_is_digit(args[2]))
-		exit(_err_print(_ERR_EXIT_NUM, args[1], true, 2));
+	{
+		_data_clear(data);
+		exit(_err_print(_ERR_EXIT_NUM, buf, true, 2));
+	}
 	return (_err_print(_ERR_EXIT_MANY, NULL, false, 1));
 }
 
@@ -65,11 +71,8 @@ int	_exit_(t_pdata data, char **args)
 		exit(0);
 	}
 	if (i == 1)
-	{
 		_exit_arg(data, args);
-		return (_FAILURE);
-	}
 	else if (i > 1)
-		return (_many_args(args));
+		return (_many_args(data, args));
 	return (_SUCCESS);
 }

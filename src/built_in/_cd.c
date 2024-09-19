@@ -24,7 +24,7 @@ int	_cd_home(t_pdata data)
 		if (!ft_strncmp(tmp->addr_1, "HOME", 4))
 		{
 			if (chdir(tmp->addr_2) < 0)
-				return (_err_print("chdir", NULL, true, 1));
+				return (_err_print("chdir\n", NULL, true, 1));
 			return (_SUCCESS);
 		}
 		tmp = tmp->next;
@@ -32,7 +32,7 @@ int	_cd_home(t_pdata data)
 	return (_err_print("bash: cd: HOME not set\n", NULL, false, 1));
 }
 
-int _oldpwd(t_pdata data)
+int _set_old_pwd(t_pdata data)
 {
 	char **oldpwd;
 	char *tmp;
@@ -41,6 +41,11 @@ int _oldpwd(t_pdata data)
 	if (!oldpwd)
 		return (_FAILURE);
 	tmp = getcwd(NULL, 0);
+	if (!tmp)
+	{
+		tmp = ft_strdup(_env_get_value(data, "PWD"));
+		_err_print(_ERR_PWD, NULL, true, 1);
+	}
 	oldpwd[1] = ft_strjoin("OLDPWD=", tmp);
 	free(tmp);
 	oldpwd[2] = NULL;
@@ -50,12 +55,30 @@ int _oldpwd(t_pdata data)
 	return (_SUCCESS);
 }
 
-int	_cd(t_pdata data, char **args)
+int _set_new_pwd(t_pdata data)
 {
 	char **pwd;
 	char *tmp;
 
-	if (_oldpwd(data))
+	pwd = malloc(sizeof(char *) * 3);
+	if (!pwd)
+		return (_FAILURE);
+	tmp = getcwd(NULL, 0);
+	if (!tmp)
+		return (_FAILURE);
+	pwd[1] = ft_strjoin("PWD=", tmp);
+	free(tmp);
+	pwd[2] = NULL;
+	_export(data, pwd);
+	free(pwd[1]);
+	free(pwd);
+	return (_SUCCESS);
+}
+
+int	_cd(t_pdata data, char **args)
+{
+
+	if (_set_old_pwd(data))
 		return (_FAILURE);
 	if (!args[1] && _cd_home(data))
 		return (_FAILURE);
@@ -66,15 +89,8 @@ int	_cd(t_pdata data, char **args)
 		else if (chdir(args[1]) < 0)
 			return (_err_print(_ERR_NO_DIR, args[1], true, 1));
 	}
-	pwd = malloc(sizeof(char *) * 3);
-	if (!pwd)
+	if (_set_new_pwd(data))
 		return (_FAILURE);
-	tmp = getcwd(NULL, 0);
-	pwd[1] = ft_strjoin("PWD=", tmp);
-	free(tmp);
-	pwd[2] = NULL;
-	_export(data, pwd);
-	free(pwd[1]);
-	free(pwd);
 	return (_SUCCESS);
 }
+

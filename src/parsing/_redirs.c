@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 13:02:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/20 02:44:19 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/20 20:48:21 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,21 @@ int	_pars_redir_outa(t_ppncmd cmd, t_pnlst token, bool inside)
 // 	return (_SUCCESS);
 // }
 
+int _limit_quoted(char *str)
+{
+	int i;
+
+	if (!str)
+		return (false);
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '\'' || str[i] == '\"')
+			return (true);
+	}
+	return (false);
+}
+
 int	_pars_heredoc(t_pdata data, t_ppncmd cmd, t_pnlst token, bool inside)
 {
 	char	*path_name;
@@ -109,7 +124,8 @@ int	_pars_heredoc(t_pdata data, t_ppncmd cmd, t_pnlst token, bool inside)
 			line = readline("> ");
 			if (!line || !ft_strcmp(line, (*cmd)->redirs.here_limit[idx]))
 				break ;
-			line = _xpd_str(data, line);
+			if (!_limit_quoted(token->addr_2))
+				line = _xpd_str(data, line);
 			ft_dprintf((*cmd)->redirs.here_fd, "%s\n", line);
 			free(line);
 			line = NULL;

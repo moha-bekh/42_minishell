@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/09/20 02:43:41 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/21 01:30:55 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int						_exec_child_proc(t_pdata data, t_ppncmd cmd);
 int						_resolve_path(t_pdata data, t_ppncmd cmd);
 
 int						_exec_builtin_proc(t_pdata data, t_ppncmd cmd);
+int						_exec_builtin_process(t_pdata data, t_ppncmd cmd);
 int						_is_builtin(t_pdata data, char **args);
 
 int						_exec_redirections(t_pdata data, t_ppncmd cmd);

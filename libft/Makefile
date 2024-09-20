@@ -16,7 +16,7 @@ CMD_DIR				:=		_cmd/
 CMD					:=		_cmd_pop _cmd_push _cmd_print
 
 DLST_DIR			:= 		_dlst/
-DLST				:=		_dlst_push _dlst_pop _dlst_sort
+DLST				:=		_dlst_push _dlst_pop _dlst_sort _dlst_utils
 
 LST_DIR				:=		_lst/
 LST					:=		ft_lstadd_back ft_lstadd_front ft_lstclear ft_lstdelone\

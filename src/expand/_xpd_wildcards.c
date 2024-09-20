@@ -6,70 +6,12 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 17:38:12 by moha              #+#    #+#             */
-/*   Updated: 2024/09/20 03:11:09 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/21 01:17:26 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	_check_patterns(t_pnlst token, char **patt)
-{
-	char	*tmp;
-	int		len;
-	int		i;
-
-	tmp = (char *)token->addr_1;
-	i = 0;
-	while (patt[i])
-	{
-		len = ft_strlen(tmp);
-		tmp = ft_strnstr(tmp, patt[i], len - 1);
-		if (!tmp)
-			return (false);
-		i++;
-	}
-	return (true);
-}
-
-int	_xpd_wildcards_filter(t_ppadlst list, char **patterns)
-{
-	t_pnlst	tmp;
-
-	tmp = (*list)->d_top;
-	while (tmp)
-	{
-		if (!_check_patterns(tmp, patterns))
-		{
-			_dlst_pop_in(list, &tmp);
-			if (*list)
-				tmp = (*list)->d_top;
-			else
-				break ;
-		}
-		else
-			tmp = tmp->next;
-	}
-	return (_SUCCESS);
-}
-
-int	_xpd_merge_list(t_ppnlst token, t_ppadlst list)
-{
-	t_pnlst		tmp;
-	t_ppnlst	to_clear;
-
-	to_clear = token;
-	tmp = (*list)->d_top;
-	while (tmp)
-	{
-		_dlst_push_in(&(*token)->manager, *token, ft_strdup(tmp->addr_1), NULL);
-		token = &(*token)->next;
-		tmp = tmp->next;
-	}
-	if (list)
-		ft_memset((*to_clear)->addr_1, 0, sizeof(char *) * ft_strlen((*to_clear)->addr_1));
-	_dlst_clear(list);
-	return (_SUCCESS);
-}
 
 int	_xpd_right_border(t_ppnlst token, t_ppadlst list)
 {
@@ -120,19 +62,100 @@ int	_xpd_left_border(t_ppnlst token, t_ppadlst list)
 	return (_SUCCESS);
 }
 
-int	_xpd_wildcards_proc(t_ppnlst token, t_ppadlst list)
+int _xpd_full_astrix(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] != '*')
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+int	_check_patterns(t_pnlst token, char **patt)
 {
 	char	*tmp;
+	int		len;
+	int		i;
+
+	tmp = (char *)token->addr_1;
+	i = 0;
+	while (patt[i])
+	{
+		len = ft_strlen(tmp);
+		tmp = ft_strnstr(tmp, patt[i], len - 1);
+		if (!tmp)
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+int	_xpd_wildcards_filter(t_ppadlst list, char **patterns)
+{
+	t_pnlst	tmp;
+
+	tmp = (*list)->d_top;
+	while (tmp)
+	{
+		if (!_check_patterns(tmp, patterns))
+		{
+			_dlst_pop_in(list, &tmp);
+			if (*list)
+				tmp = (*list)->d_top;
+			else
+				break ;
+		}
+		else
+			tmp = tmp->next;
+	}
+	return (_SUCCESS);
+}
+
+int	_xpd_merge_list(t_ppnlst token, t_ppadlst list)
+{
+	t_pnlst		tmp;
+	t_ppnlst	to_clear;
+
+	to_clear = token;
+	tmp = (*list)->d_top;
+	while (tmp)
+	{
+		_dlst_push_after(&(*token)->manager, *token, ft_strdup(tmp->addr_1), NULL);
+		token = &(*token)->next;
+		tmp = tmp->next;
+	}
+	if (list)
+	{
+		
+		free((*to_clear)->addr_1);
+		(*to_clear)->addr_1 = NULL;
+	}
+	_dlst_clear(list);
+	return (_SUCCESS);
+}
+
+
+int	_xpd_wildcards_proc(t_ppnlst token, t_ppadlst list)
+{
+	char	*str;
 	char	**patterns;
 
-	tmp = (*token)->addr_1;
-	if (tmp[0] != '*')
+	str = (*token)->addr_1;
+	if (str[0] != '*')
 		return (_xpd_left_border(token, list));
-	if (tmp[ft_strlen(tmp) - 1] != '*')
+	if (str[ft_strlen(str) - 1] != '*')
 		return (_xpd_right_border(token, list));
+	if (_xpd_full_astrix(str))
+	{
+		_xpd_merge_list(token, list);
+		return (_dlst_clear(list), _SUCCESS);
+	}
 	patterns = ft_split((*token)->addr_1, '*');
-	if (!*patterns)
-		return (_xpd_merge_list(token, list));
 	_xpd_wildcards_filter(list, patterns);
 	ft_free_arr(patterns);
 	if (!*list)

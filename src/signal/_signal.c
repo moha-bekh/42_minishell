@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 18:03:41 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/20 02:36:22 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/20 21:02:38 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ int	_set_signals(t_pdata data)
 	data->s_sig.sa_flags = 0;
 
 	// sigaction(SIGTERM, &data->s_sig, NULL);
-	// sigaction(SIGINT, &data->s_sig, NULL);
+	sigaction(SIGINT, &data->s_sig, NULL);
 	// sigaction(SIGQUIT, &data->s_sig, NULL);
-	// signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	return (_SUCCESS);
 }

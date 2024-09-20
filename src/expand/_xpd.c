@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 16:22:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/20 03:07:51 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/21 01:24:05 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	_join_strings(t_ppnlst token)
 {
 	t_pnlst	tmp;
 	char	*old;
+	char a;
+	char b;
 
 	tmp = *token;
 	while (tmp && tmp->x != _PIPE && !_tok_id(tmp->x, _TYP_SEP))
@@ -25,6 +27,11 @@ int	_join_strings(t_ppnlst token)
 			tmp = tmp->next;
 			old = tmp->addr_1;
 			tmp->addr_1 = ft_strjoin(tmp->prev->addr_1, tmp->addr_1);
+			free(old);
+			a = tmp->prev->x;
+			b = tmp->x;
+			old = tmp->addr_2;
+			tmp->addr_2 = ft_strjoin(&a, &b);
 			free(old);
 			_dlst_pop_in(&(*token)->manager, &tmp->prev);
 			continue ;
@@ -134,7 +141,7 @@ char	*_xpd_str(t_pdata data, char *line)
 			j = ft_strlen(buf);
 			continue;
 		}
-		buf[j] = line[i++];
+		buf[j++] = line[i++];
 	}
 	free(line);
 	return (buf);

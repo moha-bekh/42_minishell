@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 20:54:03 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/18 19:02:26 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/21 01:37:28 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,24 @@ int	_exec_builtin_proc(t_pdata data, t_ppncmd cmd)
 	_exec_redirections(data, cmd);
 	data->_errno = _exec_builtin(data, cmd);
 	_restore_stdfds(data);
-	if ((*cmd)->prev)
+	return (_SUCCESS);
+}
+
+int  _exec_builtin_process(t_pdata data, t_ppncmd cmd)
+{
+	// data->s_sig.sa_handler = child_hndl;
+	if ((*cmd)->next)
 	{
-		close((*cmd)->prev->redirs.pfd[0]);
-		close((*cmd)->prev->redirs.pfd[1]);
+		if (pipe((*cmd)->redirs.pfd) < 0)
+			return (_err_print("bash: pipe failed", NULL, false, 1));
+	}
+	(*cmd)->pid = fork();
+	if ((*cmd)->pid < 0)
+		return (_err_print("bash: fork failed", NULL, false, 1));
+	if (!(*cmd)->pid)
+	{
+		if (_exec_builtin_proc(data, cmd))
+			return (_FAILURE);
 	}
 	return (_SUCCESS);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 09:41:33 by ajordan-          #+#    #+#             */
-/*   Updated: 2024/08/31 17:34:43 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/21 01:15:51 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,12 @@ void				_cmd_print_line(t_pncmd cmd);
 void				_cmd_print_all(t_padlst dlst);
 
 /* DOUBLE LIST */
+t_pnlst				_dlst_new_node();
+t_padlst			_dlst_new_manager();
+void				_dlst_merge_nodes(t_padlst dlst, t_pnlst prev, t_pnlst node, t_pnlst next);
+void				_dlst_push_before(t_ppadlst dlst, t_pnlst node, void *addr_1, void *addr_2);
+void				_dlst_push_after(t_ppadlst dlst, t_pnlst node, void *addr_1, void *addr_2);
+
 void				_dlst_push_front(t_ppadlst dlst, void *addr_1, void *addr_2,
 						int x);
 void				_dlst_push_back(t_ppadlst dlst, void *addr_1, void *addr_2,
@@ -178,22 +184,22 @@ void				quick_sort(int *tab, int start, int end);
 
 struct				s_btree
 {
-	t_pnlst			token;
-	t_padlst		cmd_line;
 	struct s_btree	*root;
 	struct s_btree	*left;
 	struct s_btree	*right;
+	t_pnlst			token;
+	t_padlst		cmd_line;
 };
 
 struct				s_nlst
 {
+	t_padlst		manager;
+	t_pnlst			next;
+	t_pnlst			prev;
 	void			*addr_1;
 	void			*addr_2;
 	int				x;
 	bool			flag;
-	t_pnlst			next;
-	t_pnlst			prev;
-	t_padlst		manager;
 };
 
 struct				s_redir
@@ -218,14 +224,14 @@ struct				s_redir
 
 struct				s_ncmd
 {
+	t_padlst		manager;
+	t_pncmd			next;
+	t_pncmd			prev;
 	t_pnlst			token;
 	char			**args;
 	char			*path;
 	t_redir			redirs;
 	pid_t			pid;
-	t_pncmd			next;
-	t_pncmd			prev;
-	t_padlst		manager;
 };
 
 struct				s_adlst

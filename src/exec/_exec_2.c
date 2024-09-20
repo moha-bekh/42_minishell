@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _exec_child.c                                      :+:      :+:    :+:   */
+/*   _exec_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 20:53:14 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/30 04:29:02 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/21 01:33:25 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int	_restore_stdfds(t_pdata data)
 
 int	_exec_child_proc(t_pdata data, t_ppncmd cmd)
 {
-	data->s_sig.sa_handler = child_hndl;
+	// data->s_sig.sa_handler = child_hndl;
 	_exec_redirections(data, cmd);
 	execve((*cmd)->path, (*cmd)->args, data->args.env);
 	if ((*cmd)->args)

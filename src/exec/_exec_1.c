@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 07:36:01 by moha              #+#    #+#             */
-/*   Updated: 2024/09/18 19:09:19 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/21 01:37:39 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,13 @@ int	_exec_process(t_pdata data, t_pncmd cmd)
 		return (_FAILURE);
 	if (_pars_args_line(data, &cmd, &cmd->token, true))
 		return (_FAILURE);
-	if (_is_builtin(data, cmd->args) && (!cmd->prev && !cmd->next))
+	if (_is_builtin(data, cmd->args))
 	{
-		if (_exec_builtin_proc(data, &cmd))
+		if ((!cmd->prev && !cmd->next) && _exec_builtin_proc(data, &cmd))
 			return (_FAILURE);
+		// if (_exec_builtin_process(data, &cmd))
+		// 	return (_FAILURE);
+		_exec_parent_proc(&cmd);
 	}
 	else
 	{

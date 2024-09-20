@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _alloc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 16:43:55 by moha              #+#    #+#             */
-/*   Updated: 2024/08/31 16:44:27 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/21 00:55:28 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ int	_alloc(void **target, size_t size)
 		return (EXIT_FAILURE);
 	(*target) = malloc(size);
 	if (!(*target))
+	{
+		perror("malloc");
 		return (EXIT_FAILURE);
+	}
 	ft_memset((*target), 0, size);
 	return (EXIT_SUCCESS);
 }

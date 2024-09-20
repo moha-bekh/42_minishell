@@ -1,3 +1,2 @@
 wildcards : coriace leak
-EXPATION here_doc !!!!
 Trouver un mate

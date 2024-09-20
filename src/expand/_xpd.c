@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _xpd.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 16:22:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/31 23:39:41 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/20 03:07:51 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int	_xpd_var(t_pdata data, t_ppnlst token)
 	{
 		free((*token)->addr_1);
 		(*token)->addr_1 = ft_strdup(tmp);
-		/*free(tmp);*/
 	}
 	else if (!tmp && !ft_strcmp((*token)->addr_1, "$?"))
 	{
@@ -53,7 +52,7 @@ int	_xpd_var(t_pdata data, t_ppnlst token)
 	return (_SUCCESS);
 }
 
-char	*_xpd_xpd_errno(t_pdata data, char *buf, int *i)
+char	*_xpd_errno(t_pdata data, char *buf, int *i)
 {
 	char *tmp;
 	int j;
@@ -71,7 +70,7 @@ char	*_xpd_xpd_errno(t_pdata data, char *buf, int *i)
 	return (buf);
 }
 
-char	*_xpd_xpd_get_var(char *line, int *i)
+char	*_xpd_get_var(char *line, int *i)
 {
 	char *key;
 	int start;
@@ -89,14 +88,14 @@ char	*_xpd_xpd_get_var(char *line, int *i)
 	return (key);
 }
 
-char	*_xpd_xpd_var(t_pdata data, char *line, char *buf, int *i)
+char	*_xpd_env_var(t_pdata data, char *line, char *buf, int *i)
 {
 	char *key;
 	char *value;
 	int j;
 	int k;
 
-	key = _xpd_xpd_get_var(line, i);
+	key = _xpd_get_var(line, i);
 	value = _env_get_value(data, key);
 	free(key);
 	if (!value)
@@ -111,7 +110,7 @@ char	*_xpd_xpd_var(t_pdata data, char *line, char *buf, int *i)
 	return (buf);
 }
 
-char	*_xpd_xpd_str(t_pdata data, char *line)
+char	*_xpd_str(t_pdata data, char *line)
 {
 	char *buf;
 	int i;
@@ -129,9 +128,9 @@ char	*_xpd_xpd_str(t_pdata data, char *line)
 		{
 			i++;
 			if (line[i] == '?')
-				buf = _xpd_xpd_errno(data, buf, &i);
+				buf = _xpd_errno(data, buf, &i);
 			else
-				buf = _xpd_xpd_var(data, line, buf, &i);
+				buf = _xpd_env_var(data, line, buf, &i);
 			j = ft_strlen(buf);
 			continue;
 		}
@@ -153,7 +152,7 @@ int	_xpd_line(t_pdata data, t_ppnlst token)
 		else if (tmp->x == '$' && _xpd_var(data, &tmp))
 			return (_FAILURE);
 		if (tmp->x == '"' && _xpd_needed(tmp->addr_1))
-			tmp->addr_1 = _xpd_xpd_str(data, tmp->addr_1);
+			tmp->addr_1 = _xpd_str(data, tmp->addr_1);
 		/*if (tmp->x == '"' && _xpd_needed(tmp->addr_1))*/
 		/*	_xpd_str(data, &tmp);*/
 		tmp = tmp->next;
@@ -161,4 +160,3 @@ int	_xpd_line(t_pdata data, t_ppnlst token)
 	_join_strings(token);
 	return (_SUCCESS);
 }
-

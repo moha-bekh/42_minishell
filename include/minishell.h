@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/09/18 19:27:50 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/20 02:43:41 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+#include <termios.h>
 
 // /* STRUCT TYPES */
 typedef struct s_redir t_redir, *t_predir; // Struct Redirections
@@ -49,7 +50,6 @@ int						_varstr_conv(char *str);
 /* SIGNALS */
 int						_set_signals(t_pdata data);
 void					child_hndl(int sig);
-void					sig_hndl(int sig);
 
 /* DATA */
 int						_data_init(t_pdata data, int ac, char **av, char **ev);
@@ -85,14 +85,15 @@ int						_here_doc_proc(t_pdata data, t_ppncmd cmd);
 /* EXPAND */
 int						_xpd_line(t_pdata data, t_ppnlst token);
 int						_xpd_wildcards(t_pdata data, t_ppnlst token);
-int						_xpd_str(t_pdata data, t_ppnlst token);
+char	*_xpd_str(t_pdata data, char *line);
 
+// int						_xpd_str(t_pdata data, t_ppnlst token);
 char	*_xpd_xpd_str(t_pdata data, char *line);
 
 int						_xpd_needed(char *str);
 int						_xpd_conv(char c);
-int						_xpd_errno(t_pdata data);
-int						_xpd_var_env(t_pdata data, char *tmp);
+// int						_xpd_errno(t_pdata data);
+// int						_xpd_var_env(t_pdata data, char *tmp);
 
 /* PARSING */
 int						_pars_pipe_lines(t_ppbtree node);

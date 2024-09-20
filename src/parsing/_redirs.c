@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 13:02:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/18 16:24:59 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/20 02:44:19 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int	_pars_heredoc(t_pdata data, t_ppncmd cmd, t_pnlst token, bool inside)
 			line = readline("> ");
 			if (!line || !ft_strcmp(line, (*cmd)->redirs.here_limit[idx]))
 				break ;
-			line = _xpd_xpd_str(data, line);
+			line = _xpd_str(data, line);
 			ft_dprintf((*cmd)->redirs.here_fd, "%s\n", line);
 			free(line);
 			line = NULL;

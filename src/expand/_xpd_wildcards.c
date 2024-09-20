@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _xpd_wildcards.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 17:38:12 by moha              #+#    #+#             */
-/*   Updated: 2024/09/01 02:16:16 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/20 03:11:09 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,26 +49,24 @@ int	_xpd_wildcards_filter(t_ppadlst list, char **patterns)
 		else
 			tmp = tmp->next;
 	}
-	ft_free_arr(patterns);
 	return (_SUCCESS);
 }
 
 int	_xpd_merge_list(t_ppnlst token, t_ppadlst list)
 {
 	t_pnlst		tmp;
-	t_ppnlst	to_remove;
+	t_ppnlst	to_clear;
 
-	to_remove = token;
+	to_clear = token;
 	tmp = (*list)->d_top;
 	while (tmp)
 	{
-		_dlst_push_in(&(*token)->manager, *token, tmp->addr_1, NULL);
-		tmp->addr_1 = NULL;
+		_dlst_push_in(&(*token)->manager, *token, ft_strdup(tmp->addr_1), NULL);
 		token = &(*token)->next;
 		tmp = tmp->next;
 	}
 	if (list)
-		_dlst_pop_in(&(*token)->manager, to_remove);
+		ft_memset((*to_clear)->addr_1, 0, sizeof(char *) * ft_strlen((*to_clear)->addr_1));
 	_dlst_clear(list);
 	return (_SUCCESS);
 }
@@ -136,6 +134,7 @@ int	_xpd_wildcards_proc(t_ppnlst token, t_ppadlst list)
 	if (!*patterns)
 		return (_xpd_merge_list(token, list));
 	_xpd_wildcards_filter(list, patterns);
+	ft_free_arr(patterns);
 	if (!*list)
 		return (_SUCCESS);
 	return (_xpd_merge_list(token, list));

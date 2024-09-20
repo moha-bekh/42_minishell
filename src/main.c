@@ -6,17 +6,36 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/09/18 14:43:01 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/20 02:35:34 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int	_set_shell(t_pdata data)
+{
+	// struct termios	base_term;
+	// struct termios new_term;
+
+	if (_set_signals(data))
+		return (_FAILURE);
+
+	// if (isatty(STDIN_FILENO))
+	// {
+	// 	tcgetattr(STDIN_FILENO, &base_term);
+	// 	new_term = base_term;
+	// 	new_term.c_lflag &= ~(ICANON | ECHO);
+	// 	tcsetattr(STDIN_FILENO, TCSANOW, &new_term);
+	// }
+	return (_SUCCESS);
+}
+
+
 int	main(int ac, char **av, char **ev)
 {
 	static t_data	data;
 
-	if (_data_init(&data, ac, av, ev) || _set_signals(&data))
+	if (_data_init(&data, ac, av, ev) || _set_shell(&data))
 		return (_data_clear(&data), _FAILURE);
 	while (true)
 	{

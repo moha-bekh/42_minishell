@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 13:02:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/20 20:48:21 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/21 19:29:28 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,27 +61,6 @@ int	_pars_redir_outa(t_ppncmd cmd, t_pnlst token, bool inside)
 	return (_SUCCESS);
 }
 
-// int	_here_doc_writer(t_ppncmd cmd, int idx)
-// {
-// 	char	*line;
-
-// 	(*cmd)->redirs.here_fd = open((*cmd)->redirs.here_names[idx], _O_RWCA);
-// 	while (true)
-// 	{
-// 		if ((*cmd)->redirs.here_names[idx] != (*cmd)->redirs.here_name)
-// 			unlink((*cmd)->redirs.here_names[idx]);
-// 		line = readline("> ");
-// 		if (!line || !ft_strcmp(line, (*cmd)->redirs.here_limit[idx]))
-// 			break ;
-// 		ft_dprintf((*cmd)->redirs.here_fd, "%s\n", line);
-// 		free(line);
-// 		line = NULL;
-// 	}
-// 	free(line);
-// 	close((*cmd)->redirs.here_fd);
-// 	return (_SUCCESS);
-// }
-
 int _limit_quoted(char *str)
 {
 	int i;
@@ -108,13 +87,12 @@ int	_pars_heredoc(t_pdata data, t_ppncmd cmd, t_pnlst token, bool inside)
 			|| _alloc((void **)&(*cmd)->redirs.here_limit, sizeof(char *) * 17))
 			return (_ALLOC);
 	}
-	name = get_random_name();
+	name = _get_random_name();
 	path_name = ft_strjoin("/tmp/", name);
 	free(name);
 	(*cmd)->redirs.here_names[(*cmd)->redirs.here_idx] = path_name;
 	(*cmd)->redirs.here_limit[(*cmd)->redirs.here_idx] = (char *)token->addr_1;
 	
-	// here_doc_writer
 	{
 		char *line;
 		int idx = (*cmd)->redirs.here_idx;
@@ -122,7 +100,7 @@ int	_pars_heredoc(t_pdata data, t_ppncmd cmd, t_pnlst token, bool inside)
 		while (true)
 		{
 			line = readline("> ");
-			if (!line || !ft_strcmp(line, (*cmd)->redirs.here_limit[idx]))
+			if (!ft_strcmp(line, (*cmd)->redirs.here_limit[idx]))
 				break ;
 			if (!_limit_quoted(token->addr_2))
 				line = _xpd_str(data, line);

@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 09:41:33 by ajordan-          #+#    #+#             */
-/*   Updated: 2024/09/21 01:15:51 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/21 16:58:55 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ typedef struct s_nlst t_nlst, *t_pnlst, **t_ppnlst;     // DOUBLE LIST NODE
 typedef struct s_btree t_btree, *t_pbtree, **t_ppbtree; // BINARY TREE
 
 typedef struct s_ncmd t_ncmd, *t_pncmd, **t_ppncmd;       // CMD LIST
-typedef struct s_redir t_redir, *t_predir;                // REDIRS
+// typedef struct s_redir t_redir, *t_predir;                // REDIRS
 typedef struct s_ft_dprintf t_fd_dprintf, *t_ft_pdprintf; // FT_DPRINTF
 
 /* ALLOC && FREE */
@@ -60,12 +60,8 @@ void				_dlst_merge_nodes(t_padlst dlst, t_pnlst prev, t_pnlst node, t_pnlst nex
 void				_dlst_push_before(t_ppadlst dlst, t_pnlst node, void *addr_1, void *addr_2);
 void				_dlst_push_after(t_ppadlst dlst, t_pnlst node, void *addr_1, void *addr_2);
 
-void				_dlst_push_front(t_ppadlst dlst, void *addr_1, void *addr_2,
-						int x);
-void				_dlst_push_back(t_ppadlst dlst, void *addr_1, void *addr_2,
-						int x);
-void				_dlst_push_in(t_ppadlst dlst, t_pnlst node, void *addr_1,
-						void *addr_2);
+void				_dlst_push_front(t_ppadlst dlst, void *addr_1, void *addr_2, int x);
+void				_dlst_push_back(t_ppadlst dlst, void *addr_1, void *addr_2, int x);
 void				_dlst_pop_front(t_ppadlst dlst);
 void				_dlst_pop_back(t_ppadlst dlst);
 void				_dlst_pop_in(t_ppadlst dlst, t_ppnlst node);
@@ -166,17 +162,13 @@ int					ft_toupper(int c);
 void				ft_swap(int *a, int *b);
 int					ft_atoi_base(const char *str, int base);
 
-/* get_next_line */
-char				*get_next_line(int fd, t_list **lst);
-void				read_and_stock(int fd, t_list **lst);
-void				add_to_list(t_list **lst, char *buf, int readed);
-void				extract_line(t_list *lst, char **line);
-bool				clean_list(t_list **lst);
-
-int					is_new_line(t_list *lst);
-t_list				*get_last_node(t_list *lst);
-void				generate_line(t_list *lst, char **line);
-void				free_list(t_list *lst);
+/* GNL */
+char				*get_next_line(int fd, t_pplist lst);
+/* GNL UTILS */
+int					is_new_line(t_plist lst);
+t_plist				get_last_node(t_plist lst);
+void				generate_line(t_plist lst, char **line);
+void				free_list(t_pplist lst);
 size_t				ft_strlen(const char *s);
 
 /* SORT */
@@ -230,7 +222,7 @@ struct				s_ncmd
 	t_pnlst			token;
 	char			**args;
 	char			*path;
-	t_redir			redirs;
+	struct s_redir	redirs;
 	pid_t			pid;
 };
 

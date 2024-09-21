@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/09/21 01:30:55 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/21 19:20:54 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,20 @@
 #include <termios.h>
 
 // /* STRUCT TYPES */
-typedef struct s_redir t_redir, *t_predir; // Struct Redirections
-typedef struct s_args t_args, *t_pargs;    // Struct Args
+// typedef struct s_args t_args, *t_pargs;    // Struct Args
+// typedef struct s_redir t_redir, *t_predir; // Struct Redirections
 typedef struct s_data t_data, *t_pdata;    // Struct Data
 
 extern int				*_ptr_errno;
 
 /* UTILS */
 void					_bt_print(t_pbtree node, int i);
-int						_cmd_foreach(t_pdata data, t_pncmd cmd,
-							int (*f)(t_pdata, t_pncmd), char *limiters);
+int						_cmd_foreach(t_pdata data, t_pncmd cmd, int (*f)(t_pdata, t_pncmd), char *limiters);
 
 int						_sep(char *str);
-int						_path_slash(t_pdata data);
-int						is_overflow(char *str);
-char					*get_random_name(void);
+int						_path_slasher(t_pdata data);
+int						_is_overflow(char *str);
+char					*_get_random_name(void);
 int						_count_args(t_pnlst token);
 
 int						_err_print(char *str, void *arg, bool ptr, int _errno);
@@ -48,8 +47,8 @@ char					*_env_get_value(t_pdata data, char *key);
 int						_varstr_conv(char *str);
 
 /* SIGNALS */
-int						_set_signals(t_pdata data);
-void					child_hndl(int sig);
+void						_set_signals(t_pdata data);
+// void					child_hndl(int sig);
 
 /* DATA */
 int						_data_init(t_pdata data, int ac, char **av, char **ev);
@@ -86,10 +85,10 @@ int						_here_doc_proc(t_pdata data, t_ppncmd cmd);
 /* EXPAND */
 int						_xpd_line(t_pdata data, t_ppnlst token);
 int						_xpd_wildcards(t_pdata data, t_ppnlst token);
-char	*_xpd_str(t_pdata data, char *line);
+char					*_xpd_str(t_pdata data, char *line);
 
 // int						_xpd_str(t_pdata data, t_ppnlst token);
-char	*_xpd_xpd_str(t_pdata data, char *line);
+char					*_xpd_xpd_str(t_pdata data, char *line);
 
 int						_xpd_needed(char *str);
 int						_xpd_conv(char c);
@@ -131,10 +130,18 @@ struct					s_args
 	int					here_doc;
 };
 
+struct s_shell
+{
+	struct termios		org_term;
+	struct termios		new_term;
+	struct sigaction	s_sigint;
+	struct sigaction	s_sigquit;
+};
+
 struct					s_data
 {
 	char				*prompt;
-	t_args				args;
+	struct s_args		args;
 	t_padlst			builtins;
 	t_padlst			env;
 	t_padlst			export;
@@ -142,7 +149,7 @@ struct					s_data
 	t_pbtree			tree;
 	t_padlst			xpd;
 	int					_errno;
-	struct sigaction	s_sig;
+	struct s_shell		shell;
 };
 
 enum					e_tokens

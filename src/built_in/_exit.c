@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:43 by moha              #+#    #+#             */
-/*   Updated: 2024/09/18 19:28:06 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/21 17:07:42 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	_exit_arg(t_pdata data, char **args)
 	char	buf[4096];
 
 	ft_strlcpy(buf, args[1], 4095);
-	if (is_overflow(buf))
+	if (_is_overflow(buf))
 	{
 		
 		ft_dprintf(2, _ERR_EXIT_NUM, buf);

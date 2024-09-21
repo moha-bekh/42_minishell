@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _utils_1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:35:57 by moha              #+#    #+#             */
-/*   Updated: 2024/08/31 16:43:39 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/21 19:20:48 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	_sep(char *str)
 	return (0);
 }
 
-int	_path_slash(t_pdata data)
+int	_path_slasher(t_pdata data)
 {
 	char	**path;
 	char	*tmp;
@@ -49,7 +49,7 @@ int	_path_slash(t_pdata data)
 	return (_SUCCESS);
 }
 
-int	is_overflow(char *str)
+int	_is_overflow(char *str)
 {
 	if (str[0] == '-' && (ft_strlen(str) <= 20))
 	{
@@ -64,7 +64,7 @@ int	is_overflow(char *str)
 	return (0);
 }
 
-char	*get_random_name(void)
+char	*_get_random_name(void)
 {
 	int				fd;
 	unsigned char	*buf;

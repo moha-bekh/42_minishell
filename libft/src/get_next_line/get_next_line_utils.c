@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 17:47:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/21 16:21:17 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/21 14:59:39 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	is_new_line(t_list *lst)
+int	is_new_line(t_plist lst)
 {
-	t_list	*current;
+	t_plist	current;
 	int		i;
 
 	if (!lst)
@@ -30,9 +30,9 @@ int	is_new_line(t_list *lst)
 	return (0);
 }
 
-t_list	*get_last_node(t_list *lst)
+t_plist	get_last_node(t_plist lst)
 {
-	t_list	*current;
+	t_plist current;
 
 	if (!lst)
 		return (NULL);
@@ -42,7 +42,7 @@ t_list	*get_last_node(t_list *lst)
 	return (current);
 }
 
-void	generate_line(t_list *lst, char **line)
+void	generate_line(t_plist lst, char **line)
 {
 	int	i;
 	int	len;
@@ -67,25 +67,23 @@ void	generate_line(t_list *lst, char **line)
 	}
 	*line = ft_calloc((len + 1), sizeof(char));
 	if (!*line)
-		return (free_list(lst));
+		return (free_list(&lst));
 }
 
-void	free_list(t_list *lst)
+void	free_list(t_pplist lst)
 {
-	t_list	*tmp;
-	t_list	*next;
+	t_plist	next;
 
 	if (!lst)
 		return ;
-	tmp = lst;
-	while (tmp)
+	while (lst)
 	{
-		free(tmp->value);
-		tmp->value = NULL;
-		next = tmp->next;
-		free(tmp);
-		tmp = next;
+		free((*lst)->value);
+		(*lst)->value = NULL;
+		next = (*lst)->next;
+		free(*lst);
+		*lst = next;
 	}
-	tmp = NULL;
+	*lst = NULL;
 	return ;
 }

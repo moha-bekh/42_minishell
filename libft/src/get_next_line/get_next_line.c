@@ -3,68 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 17:47:06 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/21 16:21:14 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/21 15:01:33 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*get_next_line(int fd, t_list **lst)
+void	add_to_list(t_pplist lst, char *buf, int rd)
 {
-	char			*line;
-
-	if (fd < 0 || BF <= 0)
-		return (NULL);
-	line = NULL;
-	read_and_stock(fd, lst);
-	if (!(*lst))
-		return (NULL);
-	extract_line((*lst), &line);
-	if (!line)
-		return (free_list((*lst)), NULL);
-	if (!clean_list(lst))
-		return (free(line), NULL);
-	if (line[0] == '\0')
-	{
-		free_list((*lst));
-		free(line);
-		return (NULL);
-	}
-	return (line);
-}
-
-void	read_and_stock(int fd, t_list **lst)
-{
-	char	*buf;
-	int		rd;
-
-	rd = 1;
-	while (!is_new_line(*lst) && rd != 0)
-	{
-		buf = ft_calloc((BF + 1), sizeof(char));
-		if (!buf)
-			return ;
-		rd = (int)read(fd, buf, BF);
-		if ((!*lst && rd == 0) || rd == -1)
-			return (free(buf));
-		buf[rd] = '\0';
-		add_to_list(lst, buf, rd);
-		free(buf);
-	}
-}
-
-void	add_to_list(t_list **lst, char *buf, int rd)
-{
-	t_list	*new;
-	t_list	*last;
+	t_plist	new;
+	t_plist	last;
 	int		i;
 
 	new = ft_calloc(1, sizeof(t_list));
 	if (!new)
 		return ;
+	*new = (t_list){0};
 	new->value = ft_calloc((rd + 1), sizeof(char));
 	if (!new->value)
 		return (free(new), free(buf));
@@ -84,7 +41,29 @@ void	add_to_list(t_list **lst, char *buf, int rd)
 	last->next = new;
 }
 
-void	extract_line(t_list *lst, char **line)
+void	read_and_stock(int fd, t_pplist lst)
+{
+	char	*buf;
+	int		rd;
+
+	rd = 1;
+	// if (!*lst)
+	// 	return ;
+	while (!is_new_line(*lst) && rd != 0)
+	{
+		buf = ft_calloc((BF + 1), sizeof(char));
+		if (!buf)
+			return ;
+		rd = (int)read(fd, buf, BF);
+		if ((!*lst && rd == 0) || rd == -1)
+			return (free(buf));
+		buf[rd] = '\0';
+		add_to_list(lst, buf, rd);
+		free(buf);
+	}
+}
+
+void	extract_line(t_plist lst, char **line)
 {
 	int	i;
 	int	j;
@@ -112,10 +91,10 @@ void	extract_line(t_list *lst, char **line)
 	(*line)[j] = '\0';
 }
 
-bool	clean_list(t_list **lst)
+bool	clean_list(t_pplist lst)
 {
-	t_list	*clean;
-	t_list	*last;
+	t_plist	clean;
+	t_plist	last;
 	int		i;
 	int		j;
 
@@ -124,7 +103,7 @@ bool	clean_list(t_list **lst)
 		return (false);
 	last = get_last_node(*lst);
 	if (!last)
-		return (free_list(*lst), free_list(clean), false);
+		return (free_list(lst), free_list(&clean), false);
 	i = 0;
 	while (last->value[i] && last->value[i] != '\n')
 		i++;
@@ -132,35 +111,35 @@ bool	clean_list(t_list **lst)
 		i++;
 	clean->value = ft_calloc(((ft_strlen(last->value) - i) + 1), sizeof(char));
 	if (!clean->value)
-		return (free_list(*lst), free_list(clean), false);
+		return (free_list(lst), free_list(&clean), false);
 	j = 0;
 	while (last->value[i])
 		clean->value[j++] = last->value[i++];
 	clean->value[j] = '\0';
-	free_list(*lst);
+	free_list(lst);
 	return (*lst = clean, true);
 }
-/* 
-int main(void)
+
+char	*get_next_line(int fd, t_pplist lst)
 {
-	// t_list *lst = NULL;
+	char			*line;
 
-	// lst = ft_calloc(sizeof(t_list), 1);
-	// if (!lst)
-		// return (0);
-
-	int fd = open("test.txt", O_RDONLY);
-	char *line;
-	
-	while (1)
+	if (fd < 0 || BF <= 0)
+		return (NULL);
+	line = NULL;
+	read_and_stock(fd, lst);
+	if (!(*lst))
+		return (NULL);
+	extract_line((*lst), &line);
+	if (!line)
+		return (free_list(lst), NULL);
+	if (!clean_list(lst))
+		return (free(line), NULL);
+	if (line[0] == '\0')
 	{
-		line = get_next_line(fd);
-		if (!line)
-			break ;
-		printf("%s\n", line);
+		free_list(lst);
 		free(line);
+		return (NULL);
 	}
-	close(fd);
-	return (0);
+	return (line);
 }
- */

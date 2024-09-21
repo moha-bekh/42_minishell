@@ -6,11 +6,13 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 23:44:34 by moha              #+#    #+#             */
-/*   Updated: 2024/09/18 13:39:50 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/21 19:23:38 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int		*_ptr_errno;
 
 void	_data_init_builtins(t_pdata data)
 {
@@ -63,7 +65,6 @@ void	_data_init_env_n_export(t_pdata data)
 {
 	char	*buf;
 	
-
 	buf = NULL;
 	if (!*data->args.env)
 	{
@@ -85,6 +86,7 @@ int	_data_init(t_pdata data, int ac, char **av, char **ev)
 	data->args.ac = ac;
 	data->args.av = av;
 	data->args.env = ev;
+	_ptr_errno = &data->_errno;
 	data->args.env_path = ft_split(getenv("PATH"), ':');
 	if (!data->args.env_path)
 	{
@@ -92,7 +94,7 @@ int	_data_init(t_pdata data, int ac, char **av, char **ev)
 		if (!data->args.hard_path)
 			return (_FAILURE);
 	}
-	_path_slash(data);
+	_path_slasher(data);
 	_data_init_builtins(data);
 	_data_init_env_n_export(data);
 	return (_SUCCESS);

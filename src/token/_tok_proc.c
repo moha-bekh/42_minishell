@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 16:12:52 by moha              #+#    #+#             */
-/*   Updated: 2024/09/25 23:09:38 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/25 23:41:20 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,22 @@ int	_is_varchr(char c)
 	return (false);
 }
 
+int	_errno_proc(t_pdata data, int *i)
+{
+	_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 2), NULL, '$');
+	if (!data->tokens->d_bot->addr_1)
+		return (_FAILURE);
+	*i += 2;
+	return (_SUCCESS);
+}
+
 int	_dollar_proc(t_pdata data, int *i)
 {
 	int	j;
 
-	if (data->prompt[*i + 1] && data->prompt[*i + 1] == '?')
-	{
-		_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 2), NULL,
-			'$');
-		if (!data->tokens->d_bot->addr_1)
-			return (_FAILURE);
-		*i += 2;
-	}
+	if (data->prompt[*i + 1] && data->prompt[*i + 1] == '?' && _errno_proc(data,
+			i))
+		return (_FAILURE);
 	else if (data->prompt[*i + 1] && _is_varchr(data->prompt[*i + 1]))
 	{
 		j = ++(*i);

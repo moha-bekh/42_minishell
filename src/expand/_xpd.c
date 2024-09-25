@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 16:22:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/25 23:15:14 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/25 23:43:12 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,12 +133,8 @@ char	*_xpd_str(t_pdata data, char *line)
 	int		i;
 	int		j;
 
-	if (!line)
+	if (!line || _alloc((void **)&buf, sizeof(char) * 4096))
 		return (NULL);
-	buf = malloc(sizeof(char) * 4096);
-	if (!buf)
-		return (NULL);
-	ft_memset(buf, 0, 4096);
 	i = 0;
 	j = 0;
 	while (line[i])

@@ -6,26 +6,34 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:34:32 by moha              #+#    #+#             */
-/*   Updated: 2024/09/25 23:21:31 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/25 23:40:06 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*_get_key(char *arg, int *idx)
+{
+	char	*key;
+
+	*idx = _sep(arg);
+	if (!*idx)
+		key = ft_strdup(arg);
+	else
+	{
+		key = ft_substr(arg, 0, *idx);
+		if (!key)
+			return (NULL);
+	}
+	return (key);
+}
 
 int	_add_value(t_pdata data, char *arg)
 {
 	char	*key;
 	int		idx;
 
-	idx = _sep(arg);
-	if (!idx)
-		key = ft_strdup(arg);
-	else
-	{
-		key = ft_substr(arg, 0, idx);
-		if (!key)
-			return (_FAILURE);
-	}
+	key = _get_key(arg, &idx);
 	if (!ft_strcmp(key, data->env->d_bot->addr_1))
 	{
 		free(key);
@@ -45,23 +53,10 @@ int	_add_value(t_pdata data, char *arg)
 	return (_SUCCESS);
 }
 
-int	_replace_env_value(t_ppadlst env, char *arg)
+int	_search_and_replace(t_ppadlst env, char *key, char *value)
 {
-	char	*key;
-	char	*value;
 	t_pnlst	tmp;
-	int		idx;
 
-	idx = _sep(arg);
-	key = ft_substr(arg, 0, idx);
-	if (!key)
-		return (_FAILURE);
-	value = ft_strdup(arg + (idx + 1));
-	if (!value)
-	{
-		free(key);
-		return (_FAILURE);
-	}
 	tmp = (*env)->d_top;
 	while (tmp)
 	{
@@ -75,6 +70,26 @@ int	_replace_env_value(t_ppadlst env, char *arg)
 		}
 		tmp = tmp->next;
 	}
+	return (_SUCCESS);
+}
+
+int	_replace_env_value(t_ppadlst env, char *arg)
+{
+	char	*key;
+	char	*value;
+	int		idx;
+
+	idx = _sep(arg);
+	key = ft_substr(arg, 0, idx);
+	if (!key)
+		return (_FAILURE);
+	value = ft_strdup(arg + (idx + 1));
+	if (!value)
+	{
+		free(key);
+		return (_FAILURE);
+	}
+	_search_and_replace(env, key, value);
 	free(key);
 	free(value);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 16:22:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/21 01:24:05 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/21 20:13:13 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,8 @@ char	*_xpd_str(t_pdata data, char *line)
 	int i;
 	int j;
 
+	if (!line)
+		return (NULL);
 	buf = malloc(sizeof(char) * 4096);
 	if (!buf)
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 13:02:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/21 19:29:28 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/21 20:26:15 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,15 @@ int	_pars_heredoc(t_pdata data, t_ppncmd cmd, t_pnlst token, bool inside)
 			line = readline("> ");
 			if (!ft_strcmp(line, (*cmd)->redirs.here_limit[idx]))
 				break ;
-			if (!_limit_quoted(token->addr_2))
+			if (line && !_limit_quoted(token->addr_2))
 				line = _xpd_str(data, line);
-			ft_dprintf((*cmd)->redirs.here_fd, "%s\n", line);
+			if (line)
+				ft_dprintf((*cmd)->redirs.here_fd, "%s\n", line);
+			if (!line)
+			{
+				ft_dprintf(2, "bash: warning: here-document delimited by end-of-file (wanted `%s')\n", (*cmd)->redirs.here_limit[idx]);
+				break ;
+			}
 			free(line);
 			line = NULL;
 		}

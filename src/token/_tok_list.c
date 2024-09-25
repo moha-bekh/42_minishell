@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _tok_list.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/31 16:16:19 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/25 17:08:36 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ int	_quote_proc(t_pdata data, int *i)
 		if (data->prompt[*i] && data->prompt[*i] == type_quote)
 		{
 			str = ft_substr(data->prompt, j + 1, (*i - j - 1));
-			_dlst_push_back(&data->tokens, str, NULL, type_quote);
+			str = _xpd_str(data, str);
+			_dlst_push_back(&data->tokens, str, NULL, type_quote);		
 			*i += 1;
 			if (data->prompt[*i] && !ft_isspace(data->prompt[*i]))
 				data->tokens->d_bot->flag = true;
@@ -88,6 +89,8 @@ int	_tok_list(t_pdata data)
 	int	i;
 
 	i = 0;
+	if (!data->prompt)
+		return (_FAILURE);
 	if (_first_tok(data, &i))
 		return (_FAILURE);
 	while (data->prompt[i] && data->prompt[i] != '\n')

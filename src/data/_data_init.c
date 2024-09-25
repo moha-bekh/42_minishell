@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _data_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 23:44:34 by moha              #+#    #+#             */
-/*   Updated: 2024/09/21 19:23:38 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/25 17:03:59 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,6 @@ int	_data_init(t_pdata data, int ac, char **av, char **ev)
 	_path_slasher(data);
 	_data_init_builtins(data);
 	_data_init_env_n_export(data);
+	_set_signals(data);
 	return (_SUCCESS);
 }

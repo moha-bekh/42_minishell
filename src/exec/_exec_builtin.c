@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _exec_builtin.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 20:54:03 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/21 01:37:28 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/25 16:00:34 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ int	_exec_builtin(t_pdata data, t_ppncmd cmd)
 
 int	_exec_builtin_proc(t_pdata data, t_ppncmd cmd)
 {
-	if ((*cmd)->next)
-		pipe((*cmd)->redirs.pfd);
 	_save_stdfds(data);
 	_exec_redirections(data, cmd);
 	data->_errno = _exec_builtin(data, cmd);

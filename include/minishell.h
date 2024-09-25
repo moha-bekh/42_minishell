@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/09/21 19:20:54 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/25 17:04:58 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,19 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-#include <termios.h>
+# include <termios.h>
 
 // /* STRUCT TYPES */
 // typedef struct s_args t_args, *t_pargs;    // Struct Args
 // typedef struct s_redir t_redir, *t_predir; // Struct Redirections
-typedef struct s_data t_data, *t_pdata;    // Struct Data
+typedef struct s_data t_data, *t_pdata; // Struct Data
 
 extern int				*_ptr_errno;
 
 /* UTILS */
 void					_bt_print(t_pbtree node, int i);
-int						_cmd_foreach(t_pdata data, t_pncmd cmd, int (*f)(t_pdata, t_pncmd), char *limiters);
+int						_cmd_foreach(t_pdata data, t_pncmd cmd,
+							int (*f)(t_pdata, t_pncmd), char *limiters);
 
 int						_sep(char *str);
 int						_path_slasher(t_pdata data);
@@ -47,7 +48,7 @@ char					*_env_get_value(t_pdata data, char *key);
 int						_varstr_conv(char *str);
 
 /* SIGNALS */
-void						_set_signals(t_pdata data);
+int						_set_signals(t_pdata data);
 // void					child_hndl(int sig);
 
 /* DATA */
@@ -99,7 +100,8 @@ int						_xpd_conv(char c);
 int						_pars_pipe_lines(t_ppbtree node);
 int						_pars_args_line(t_pdata data, t_ppncmd cmd,
 							t_ppnlst token, bool inside);
-int						_pars_redirs(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside);
+int						_pars_redirs(t_pdata data, t_ppncmd cmd, t_ppnlst token,
+							bool inside);
 
 /* BUILTINS */
 // int						_echo(t_pdata data, t_pnlst token, char **args);
@@ -130,7 +132,7 @@ struct					s_args
 	int					here_doc;
 };
 
-struct s_shell
+struct					s_shell
 {
 	struct termios		org_term;
 	struct termios		new_term;

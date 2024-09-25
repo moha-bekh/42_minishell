@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _redirs.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 13:02:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/21 20:26:15 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/25 16:12:20 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,7 @@ int	_pars_heredoc(t_pdata data, t_ppncmd cmd, t_pnlst token, bool inside)
 
 	if (!(*cmd)->redirs.here_name)
 	{
-		if (_alloc((void **)&(*cmd)->redirs.here_names, sizeof(char *) * 17)
-			|| _alloc((void **)&(*cmd)->redirs.here_limit, sizeof(char *) * 17))
+		if (_alloc((void **)&(*cmd)->redirs.here_names, sizeof(char *) * 17) || _alloc((void **)&(*cmd)->redirs.here_limit, sizeof(char *) * 17))
 			return (_ALLOC);
 	}
 	name = _get_random_name();
@@ -92,7 +91,6 @@ int	_pars_heredoc(t_pdata data, t_ppncmd cmd, t_pnlst token, bool inside)
 	free(name);
 	(*cmd)->redirs.here_names[(*cmd)->redirs.here_idx] = path_name;
 	(*cmd)->redirs.here_limit[(*cmd)->redirs.here_idx] = (char *)token->addr_1;
-	
 	{
 		char *line;
 		int idx = (*cmd)->redirs.here_idx;
@@ -132,8 +130,7 @@ int	_pars_heredoc(t_pdata data, t_ppncmd cmd, t_pnlst token, bool inside)
 
 int	_pars_redirs(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 {
-	if (!inside && !_tok_id((*token)->x, _TYP_REDIRS)
-		&& !_tok_id((*token)->prev->x, _TYP_REDIRS))
+	if (!inside && !_tok_id((*token)->x, _TYP_REDIRS) && !_tok_id((*token)->prev->x, _TYP_REDIRS))
 		return (_err_print(_ERR_TOKEN, (*token)->addr_1, true, 1));
 	if ((*token)->x == 'H' && _pars_heredoc(data, cmd, (*token)->next, inside))
 		return (_FAILURE);

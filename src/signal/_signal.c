@@ -3,14 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   _signal.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 18:03:41 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/21 19:01:34 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/25 17:04:19 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	_sigint_handler(int sig)
+{
+	(void)sig;
+	*_ptr_errno = 130;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
+
+int	_set_signals(t_pdata data)
+{
+	sigemptyset(&data->shell.s_sigint.sa_mask);
+	data->shell.s_sigint.sa_flags = 0;
+	data->shell.s_sigint.sa_handler = _sigint_handler;
+	sigaction(SIGINT, &data->shell.s_sigint, NULL);
+	sigemptyset(&data->shell.s_sigquit.sa_mask);
+	data->shell.s_sigquit.sa_flags = 0;
+	data->shell.s_sigquit.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &data->shell.s_sigquit, NULL);
+	return (_SUCCESS);
+}
+
 
 // int		*_ptr_errno;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _parsing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/31 11:56:06 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/25 16:09:05 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ int	_pars_pipe_lines(t_ppbtree node)
 
 	_cmd_push_back(&(*node)->cmd_line, (*node)->token);
 	tmp = (*node)->token;
-	while (tmp && (!(*node)->root || ((*node)->root
-				&& tmp != (*node)->root->token)))
+	while (tmp && (!(*node)->root || ((*node)->root && tmp != (*node)->root->token)))
 	{
 		if (tmp->x == _PIPE)
 			_cmd_push_back(&(*node)->cmd_line, tmp->next);

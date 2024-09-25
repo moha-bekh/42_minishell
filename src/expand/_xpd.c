@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _xpd.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 16:22:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/21 20:13:13 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/25 16:38:55 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,11 @@ int	_xpd_var(t_pdata data, t_ppnlst token)
 	{
 		free((*token)->addr_1);
 		(*token)->addr_1 = ft_itoa(data->_errno);
+	}
+	else
+	{
+		free((*token)->addr_1);
+		(*token)->addr_1 = ft_strdup("");
 	}
 	return (_SUCCESS);
 }

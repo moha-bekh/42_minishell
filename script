@@ -1,2 +1,1 @@
-echo "hello $USER, welcome to $HOSTNAME"
-haha
+echo $HOME

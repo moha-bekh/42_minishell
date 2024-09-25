@@ -33,6 +33,7 @@ UTILS_DIR		= 		utils/
 _SRC			:=		main
 
 _DATA			:= 		_data_init\
+						_env_init\
 						_data_clear
 
 _UTILS			:= 		_utils_1\
@@ -41,7 +42,7 @@ _UTILS			:= 		_utils_1\
 						_dlst_print\
 						_bt_print
 
-_SIG			:= 		_signal
+_SIG			:= 		
 
 _BULTIN		= 			_cd\
 						_echo\
@@ -59,15 +60,13 @@ _TOKEN			:=		_op\
 
 _TREE			:=		_tree_builder
 
-_EXEC			:= 		__path\
+_EXEC			:= 		_path\
 						_exec_1\
 						_exec_2\
 						_exec_builtin\
-						_here_doc\
 						_redirs
 
 _EXPAND			:= 		_xpd\
-						_xpd_str\
 						_xpd_utils\
 						_xpd_wildcards
 

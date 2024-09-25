@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/25 17:08:36 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/25 22:59:57 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,12 @@ int	_quote_proc(t_pdata data, int *i)
 		if (data->prompt[*i] && data->prompt[*i] == type_quote)
 		{
 			str = ft_substr(data->prompt, j + 1, (*i - j - 1));
+			if (!str)
+				return (_FAILURE);
 			str = _xpd_str(data, str);
-			_dlst_push_back(&data->tokens, str, NULL, type_quote);		
+			if (!str)
+				return (_FAILURE);
+			_dlst_push_back(&data->tokens, str, NULL, type_quote);
 			*i += 1;
 			if (data->prompt[*i] && !ft_isspace(data->prompt[*i]))
 				data->tokens->d_bot->flag = true;
@@ -58,7 +62,11 @@ int	_tok_word(t_pdata data, int *i)
 		&& !_tok_id(data->prompt[*i], _TOKENS))
 		*i += 1;
 	str = ft_substr(data->prompt, j, (*i - j));
+	if (!str)
+		return (_FAILURE);
 	_dlst_push_back(&data->tokens, str, NULL, _WORD);
+	if (!data->tokens->d_bot->addr_1)
+		return (_FAILURE);
 	if (data->prompt[*i] && !ft_isspace(data->prompt[*i])
 		&& _tok_id(data->prompt[*i], _JOINERS))
 		data->tokens->d_bot->flag = true;

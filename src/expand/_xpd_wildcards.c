@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   _xpd_wildcards.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 17:38:12 by moha              #+#    #+#             */
-/*   Updated: 2024/09/21 01:17:26 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/25 23:14:44 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 int	_xpd_right_border(t_ppnlst token, t_ppadlst list)
 {
@@ -37,6 +36,7 @@ int	_xpd_right_border(t_ppnlst token, t_ppadlst list)
 	}
 	return (_SUCCESS);
 }
+
 int	_xpd_left_border(t_ppnlst token, t_ppadlst list)
 {
 	t_pnlst	tmp;
@@ -62,9 +62,9 @@ int	_xpd_left_border(t_ppnlst token, t_ppadlst list)
 	return (_SUCCESS);
 }
 
-int _xpd_full_astrix(char *str)
+int	_xpd_full_astrix(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -120,25 +120,27 @@ int	_xpd_merge_list(t_ppnlst token, t_ppadlst list)
 {
 	t_pnlst		tmp;
 	t_ppnlst	to_clear;
+	char		*str;
 
 	to_clear = token;
 	tmp = (*list)->d_top;
 	while (tmp)
 	{
-		_dlst_push_after(&(*token)->manager, *token, ft_strdup(tmp->addr_1), NULL);
+		str = ft_strdup((*token)->addr_1);
+		if (!str)
+			return (_FAILURE);
+		_dlst_push_after(&(*token)->manager, *token, str, NULL);
 		token = &(*token)->next;
 		tmp = tmp->next;
 	}
 	if (list)
 	{
-		
 		free((*to_clear)->addr_1);
 		(*to_clear)->addr_1 = NULL;
 	}
 	_dlst_clear(list);
 	return (_SUCCESS);
 }
-
 
 int	_xpd_wildcards_proc(t_ppnlst token, t_ppadlst list)
 {
@@ -182,6 +184,8 @@ int	_xpd_wildcards(t_pdata data, t_ppnlst token)
 			continue ;
 		}
 		_dlst_push_back(&data->xpd, ft_strdup(entry->d_name), NULL, 0);
+		if (!data->xpd->d_bot->addr_1)
+			return (_FAILURE);
 		entry = readdir(cwd_dir);
 	}
 	closedir(cwd_dir);

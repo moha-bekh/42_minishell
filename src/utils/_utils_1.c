@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _utils_1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 22:35:57 by moha              #+#    #+#             */
-/*   Updated: 2024/09/21 19:20:48 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/25 22:32:43 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int	_path_slasher(t_pdata data)
 	{
 		tmp = path[i];
 		path[i] = ft_strjoin(path[i], "/");
+		if (!path[i])
+			return (_FAILURE);
 		free(tmp);
 		tmp = NULL;
 	}

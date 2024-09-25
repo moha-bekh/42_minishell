@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/09/25 17:04:58 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/25 23:20:28 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,9 @@
 # include <sys/wait.h>
 # include <termios.h>
 
-// /* STRUCT TYPES */
-// typedef struct s_args t_args, *t_pargs;    // Struct Args
-// typedef struct s_redir t_redir, *t_predir; // Struct Redirections
 typedef struct s_data t_data, *t_pdata; // Struct Data
 
-extern int				*_ptr_errno;
+extern int				*g_ptr_errno;
 
 /* UTILS */
 void					_bt_print(t_pbtree node, int i);
@@ -48,11 +45,13 @@ char					*_env_get_value(t_pdata data, char *key);
 int						_varstr_conv(char *str);
 
 /* SIGNALS */
-int						_set_signals(t_pdata data);
+// int						_set_signals(t_pdata data);
 // void					child_hndl(int sig);
 
 /* DATA */
 int						_data_init(t_pdata data, int ac, char **av, char **ev);
+int						_env_init(t_pdata data);
+/* CLEAR */
 int						_data_clear(t_pdata data);
 int						_data_structs_clear(t_pdata data);
 
@@ -78,7 +77,7 @@ int						_exec_builtin_proc(t_pdata data, t_ppncmd cmd);
 int						_exec_builtin_process(t_pdata data, t_ppncmd cmd);
 int						_is_builtin(t_pdata data, char **args);
 
-int						_exec_redirections(t_pdata data, t_ppncmd cmd);
+int						_exec_redirections(t_ppncmd cmd);
 int						_save_stdfds(t_pdata data);
 int						_restore_stdfds(t_pdata data);
 int						_here_doc_proc(t_pdata data, t_ppncmd cmd);
@@ -104,9 +103,8 @@ int						_pars_redirs(t_pdata data, t_ppncmd cmd, t_ppnlst token,
 							bool inside);
 
 /* BUILTINS */
-// int						_echo(t_pdata data, t_pnlst token, char **args);
 int						_cd(t_pdata data, char **args);
-int						_echo(t_pdata data, char **args);
+int						_echo(char **args);
 int						_env(t_pdata data, char **args);
 int						_exit_(t_pdata data, char **args);
 int						_export(t_pdata data, char **args);

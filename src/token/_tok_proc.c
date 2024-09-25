@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _tok_proc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 16:12:52 by moha              #+#    #+#             */
-/*   Updated: 2024/08/31 16:16:08 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/25 23:09:38 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int	_dollar_proc(t_pdata data, int *i)
 	{
 		_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 2), NULL,
 			'$');
+		if (!data->tokens->d_bot->addr_1)
+			return (_FAILURE);
 		*i += 2;
 	}
 	else if (data->prompt[*i + 1] && _is_varchr(data->prompt[*i + 1]))
@@ -36,10 +38,16 @@ int	_dollar_proc(t_pdata data, int *i)
 			*i += 1;
 		_dlst_push_back(&data->tokens, ft_substr(data->prompt, j, (*i - j)),
 			NULL, '$');
+		if (!data->tokens->d_bot->addr_1)
+			return (_FAILURE);
 	}
 	else
+	{
 		_dlst_push_back(&data->tokens, ft_substr(data->prompt, (*i)++, 1), NULL,
 			'W');
+		if (!data->tokens->d_bot->addr_1)
+			return (_FAILURE);
+	}
 	if (data->prompt[*i] && !ft_isspace(data->prompt[*i]))
 		data->tokens->d_bot->flag = true;
 	return (_SUCCESS);
@@ -58,6 +66,8 @@ int	_wildcards_proc(t_pdata data, int *i)
 		*i += 1;
 	}
 	str = ft_substr(data->prompt, j, *i - j);
+	if (!str)
+		return (_FAILURE);
 	_dlst_push_back(&data->tokens, str, NULL, '*');
 	if (data->prompt[*i] && !ft_isspace(data->prompt[*i])
 		&& _tok_id(data->prompt[*i], _JOINERS))
@@ -71,12 +81,16 @@ int	_sub_proc(t_pdata data, int *i)
 	{
 		_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL,
 			'(');
+		if (!data->tokens->d_bot->addr_1)
+			return (_FAILURE);
 		data->args.parentheses++;
 	}
 	else if (data->prompt[*i] == ')')
 	{
 		_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL,
 			')');
+		if (!data->tokens->d_bot->addr_1)
+			return (_FAILURE);
 		data->args.parentheses++;
 	}
 	*i += 1;

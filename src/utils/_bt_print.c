@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _bt_print.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 20:28:49 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/31 16:47:16 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/25 23:12:13 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,37 +30,35 @@ void	_node_print_tokens(t_pnlst tokens)
 	printf("\n");
 }
 
-void	_bt_print(t_pbtree node, int i)
-{
-	int	tab;
+// void	_bt_print(t_pbtree node, int i)
+// {
+// 	int	tab;
 
-	(void)tab;
-	if (!node)
-		return ;
-	tab = 0;
-	if (node->root)
-	{
-		while (tab++ < i)
-			printf("\t");
-		if (node->root->left == node)
-			printf("left: ");
-		else if (node->root->right == node)
-			printf("right: ");
-		// else
-		// 	printf("root: ");
-		_node_print_tokens(node->token);
-		_cmd_print_all(node->cmd_line);
-	}
-	else
-	{
-		while (tab++ < i)
-			printf("\t");
-		if (node->token)
-			printf("root: ( %s )\n", (char *)node->token->addr_1);
-		_cmd_print_all(node->cmd_line);
-	}
-	if (node->left)
-		_bt_print(node->left, i + 1);
-	if (node->right)
-		_bt_print(node->right, i + 1);
-}
+// 	(void)tab;
+// 	if (!node)
+// 		return ;
+// 	tab = 0;
+// 	if (node->root)
+// 	{
+// 		while (tab++ < i)
+// 			printf("\t");
+// 		if (node->root->left == node)
+// 			printf("left: ");
+// 		else if (node->root->right == node)
+// 			printf("right: ");
+// 		_node_print_tokens(node->token);
+// 		_cmd_print_all(node->cmd_line);
+// 	}
+// 	else
+// 	{
+// 		while (tab++ < i)
+// 			printf("\t");
+// 		if (node->token)
+// 			printf("root: ( %s )\n", (char *)node->token->addr_1);
+// 		_cmd_print_all(node->cmd_line);
+// 	}
+// 	if (node->left)
+// 		_bt_print(node->left, i + 1);
+// 	if (node->right)
+// 		_bt_print(node->right, i + 1);
+// }

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   _echo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:54 by moha              #+#    #+#             */
-/*   Updated: 2024/08/31 21:33:18 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/25 23:01:55 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	_echo(t_pdata data, char **args)
+int	_echo(char **args)
 {
 	int		i;
 	bool	new_line;
@@ -28,10 +28,6 @@ int	_echo(t_pdata data, char **args)
 	}
 	while (args && args[++i])
 	{
-		(void)data;
-		// if (!ft_strcmp(args[i], "$?"))
-		// 	printf("%d", data->_errno);
-		// else
 		printf("%s", args[i]);
 		if (args[i + 1])
 			printf(" ");

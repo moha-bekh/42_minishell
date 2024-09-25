@@ -6,17 +6,12 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 07:36:01 by moha              #+#    #+#             */
-/*   Updated: 2024/09/25 15:57:28 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/25 23:22:36 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// void	_wait_pids(t_pdata data, t_padlst cmd_line, t_pncmd limit)
-// if (!tmp->args)
-// 	return ;
-// if (tmp == limit)
-// 	break ;
 void	_wait_pids(t_pdata data, t_padlst cmd_line)
 {
 	t_pncmd	tmp;
@@ -25,8 +20,6 @@ void	_wait_pids(t_pdata data, t_padlst cmd_line)
 	while (tmp)
 	{
 		waitpid(tmp->pid, &data->_errno, 0);
-		/*if (WIFSIGNALED(data->_errno))*/
-		/*	data->_errno = WTERMSIG(data->_errno) + 128;*/
 		if (WIFEXITED(data->_errno))
 			data->_errno = WEXITSTATUS(data->_errno);
 		tmp = tmp->next;
@@ -135,7 +128,8 @@ int	_exec(t_pdata data, t_ppbtree node)
 		return (_SUCCESS);
 	if ((*node)->left)
 		_exec(data, &(*node)->left);
-	if (((*node)->token->x == _AND && data->_errno) || ((*node)->token->x == _OR && !data->_errno))
+	if (((*node)->token->x == _AND && data->_errno) || ((*node)->token->x == _OR
+			&& !data->_errno))
 		return (_SUCCESS);
 	if ((*node)->token->x == '(')
 	{
@@ -143,7 +137,8 @@ int	_exec(t_pdata data, t_ppbtree node)
 			return (_FAILURE);
 		return (_SUCCESS);
 	}
-	if ((*node)->token->x != _AND && (*node)->token->x != _OR && _exec_cmd_line(data, node))
+	if ((*node)->token->x != _AND && (*node)->token->x != _OR
+		&& _exec_cmd_line(data, node))
 		return (_FAILURE);
 	if ((*node)->right)
 		_exec(data, &(*node)->right);

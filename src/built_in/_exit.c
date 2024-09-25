@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _exit.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:43 by moha              #+#    #+#             */
-/*   Updated: 2024/09/21 17:07:42 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/25 23:21:20 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	_str_is_digit(char *str)
 
 int	_many_args(t_pdata data, char **args)
 {
-	char buf[4096];
+	char	buf[4096];
 
 	ft_strlcpy(buf, args[1], 4095);
 	if (!_str_is_digit(args[1]) && _str_is_digit(args[2]))
@@ -46,7 +46,6 @@ int	_exit_arg(t_pdata data, char **args)
 	ft_strlcpy(buf, args[1], 4095);
 	if (_is_overflow(buf))
 	{
-		
 		ft_dprintf(2, _ERR_EXIT_NUM, buf);
 		_data_clear(data);
 		exit(2);

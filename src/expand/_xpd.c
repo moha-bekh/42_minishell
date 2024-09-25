@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 16:22:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/25 16:38:55 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/25 23:15:14 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ int	_join_strings(t_ppnlst token)
 {
 	t_pnlst	tmp;
 	char	*old;
-	char a;
-	char b;
+	char	a;
+	char	b;
 
 	tmp = *token;
 	while (tmp && tmp->x != _PIPE && !_tok_id(tmp->x, _TYP_SEP))
@@ -50,6 +50,8 @@ int	_xpd_var(t_pdata data, t_ppnlst token)
 	{
 		free((*token)->addr_1);
 		(*token)->addr_1 = ft_strdup(tmp);
+		if (!(*token)->addr_1)
+			return (_FAILURE);
 	}
 	else if (!tmp && !ft_strcmp((*token)->addr_1, "$?"))
 	{
@@ -60,15 +62,17 @@ int	_xpd_var(t_pdata data, t_ppnlst token)
 	{
 		free((*token)->addr_1);
 		(*token)->addr_1 = ft_strdup("");
+		if (!(*token)->addr_1)
+			return (_FAILURE);
 	}
 	return (_SUCCESS);
 }
 
 char	*_xpd_errno(t_pdata data, char *buf, int *i)
 {
-	char *tmp;
-	int j;
-	int k;
+	char	*tmp;
+	int		j;
+	int		k;
 
 	*i += 1;
 	tmp = ft_itoa(data->_errno);
@@ -84,10 +88,9 @@ char	*_xpd_errno(t_pdata data, char *buf, int *i)
 
 char	*_xpd_get_var(char *line, int *i)
 {
-	char *key;
-	int start;
-	int len;
-
+	char	*key;
+	int		start;
+	int		len;
 
 	len = 0;
 	start = *i;
@@ -97,15 +100,17 @@ char	*_xpd_get_var(char *line, int *i)
 		len++;
 	}
 	key = ft_substr(line, start, len);
+	if (!key)
+		return (NULL);
 	return (key);
 }
 
 char	*_xpd_env_var(t_pdata data, char *line, char *buf, int *i)
 {
-	char *key;
-	char *value;
-	int j;
-	int k;
+	char	*key;
+	char	*value;
+	int		j;
+	int		k;
 
 	key = _xpd_get_var(line, i);
 	value = _env_get_value(data, key);
@@ -124,9 +129,9 @@ char	*_xpd_env_var(t_pdata data, char *line, char *buf, int *i)
 
 char	*_xpd_str(t_pdata data, char *line)
 {
-	char *buf;
-	int i;
-	int j;
+	char	*buf;
+	int		i;
+	int		j;
 
 	if (!line)
 		return (NULL);
@@ -146,7 +151,7 @@ char	*_xpd_str(t_pdata data, char *line)
 			else
 				buf = _xpd_env_var(data, line, buf, &i);
 			j = ft_strlen(buf);
-			continue;
+			continue ;
 		}
 		buf[j++] = line[i++];
 	}
@@ -167,8 +172,6 @@ int	_xpd_line(t_pdata data, t_ppnlst token)
 			return (_FAILURE);
 		if (tmp->x == '"' && _xpd_needed(tmp->addr_1))
 			tmp->addr_1 = _xpd_str(data, tmp->addr_1);
-		/*if (tmp->x == '"' && _xpd_needed(tmp->addr_1))*/
-		/*	_xpd_str(data, &tmp);*/
 		tmp = tmp->next;
 	}
 	_join_strings(token);

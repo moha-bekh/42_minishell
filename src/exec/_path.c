@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _path.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 11:19:04 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/29 02:53:08 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/25 23:05:04 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,19 +53,31 @@ int	_resolve_path(t_pdata data, t_ppncmd cmd)
 	char	*prog;
 
 	if (!(*cmd)->args)
+	{
 		(*cmd)->path = ft_strdup("");
+		if (!(*cmd)->path)
+			return (_FAILURE);
+	}
 	else
 	{
 		prog = (*cmd)->args[0];
 		if (ft_strchr(prog, '/') && !access(prog, F_OK))
 		{
 			if (!access(prog, X_OK))
+			{
 				(*cmd)->path = ft_strdup(prog);
+				if (!(*cmd)->path)
+					return (_FAILURE);
+			}
 			else
 				exit(_err_print("bash: permission denied\n", prog, true, 126));
 		}
 		else if (_get_path(data, cmd))
+		{
 			(*cmd)->path = ft_strdup("");
+			if (!(*cmd)->path)
+				return (_FAILURE);
+		}
 	}
 	return (_SUCCESS);
 }

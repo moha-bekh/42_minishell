@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _redir.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:25:01 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/31 11:55:52 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/25 22:50:05 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ int	_redir_heredoc(t_pdata data, int *i)
 	}
 	_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 2), NULL,
 		_HERE_DOC);
+	if (!data->tokens->d_bot->addr_1)
+		return (_FAILURE);
 	*i += 2;
 	if (data->tokens && data->tokens->d_bot->prev
 		&& _tok_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
@@ -33,6 +35,8 @@ int	_redir_in(t_pdata data, int *i)
 {
 	_dlst_push_back(&data->tokens, ft_substr(data->prompt, (*i)++, 1), NULL,
 		'<');
+	if (!data->tokens->d_bot->addr_1)
+		return (_FAILURE);
 	if (data->tokens && data->tokens->d_bot->prev
 		&& _tok_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
 		return (_err_print(_ERR_TOKEN, "<", true, 2));
@@ -43,6 +47,8 @@ int	_redir_outa(t_pdata data, int *i)
 {
 	_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 2), NULL,
 		_REDIR_OUTA);
+	if (!data->tokens->d_bot->addr_1)
+		return (_FAILURE);
 	*i += 2;
 	if (data->tokens && data->tokens->d_bot->prev
 		&& _tok_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
@@ -54,6 +60,8 @@ int	_redir_outt(t_pdata data, int *i)
 {
 	_dlst_push_back(&data->tokens, ft_substr(data->prompt, (*i)++, 1), NULL,
 		'>');
+	if (!data->tokens->d_bot->addr_1)
+		return (_FAILURE);
 	if (data->tokens && data->tokens->d_bot->prev
 		&& _tok_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
 		return (_err_print(_ERR_TOKEN, ">", true, 2));

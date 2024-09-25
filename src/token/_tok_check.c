@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _tok_check.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 16:12:25 by moha              #+#    #+#             */
-/*   Updated: 2024/08/31 16:19:07 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/25 23:12:34 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,3 @@ int	_check_bot(t_pdata data)
 		return (_FAILURE);
 	return (_SUCCESS);
 }
-

@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 20:54:03 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/25 16:00:34 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/25 23:22:53 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,8 @@ int	_exec_builtin(t_pdata data, t_ppncmd cmd)
 {
 	if (!ft_strncmp((*cmd)->args[0], "cd", 2))
 		return (_cd(data, (*cmd)->args));
-	// if (!ft_strncmp((*cmd)->args[0], "echo", 4))
-	// 	return (_echo(data, (*cmd)->token->next, (*cmd)->args));
 	if (!ft_strncmp((*cmd)->args[0], "echo", 4))
-		return (_echo(data, (*cmd)->args));
+		return (_echo((*cmd)->args));
 	if (!ft_strncmp((*cmd)->args[0], "env", 3))
 		return (_env(data, (*cmd)->args));
 	if (!ft_strncmp((*cmd)->args[0], "exit", 4))
@@ -52,15 +50,14 @@ int	_exec_builtin(t_pdata data, t_ppncmd cmd)
 int	_exec_builtin_proc(t_pdata data, t_ppncmd cmd)
 {
 	_save_stdfds(data);
-	_exec_redirections(data, cmd);
+	_exec_redirections(cmd);
 	data->_errno = _exec_builtin(data, cmd);
 	_restore_stdfds(data);
 	return (_SUCCESS);
 }
 
-int  _exec_builtin_process(t_pdata data, t_ppncmd cmd)
+int	_exec_builtin_process(t_pdata data, t_ppncmd cmd)
 {
-	// data->s_sig.sa_handler = child_hndl;
 	if ((*cmd)->next)
 	{
 		if (pipe((*cmd)->redirs.pfd) < 0)

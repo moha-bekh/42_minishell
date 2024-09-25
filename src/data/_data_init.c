@@ -6,16 +6,18 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 23:44:34 by moha              #+#    #+#             */
-/*   Updated: 2024/09/25 17:03:59 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/25 23:22:18 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		*_ptr_errno;
+int	*g_ptr_errno;
 
-void	_data_init_builtins(t_pdata data)
+int	_builtins_init(t_pdata data)
 {
+	t_pnlst	tmp;
+
 	_dlst_push_back(&data->builtins, ft_strdup("cd"), NULL, 0);
 	_dlst_push_back(&data->builtins, ft_strdup("echo"), NULL, 0);
 	_dlst_push_back(&data->builtins, ft_strdup("env"), NULL, 0);
@@ -23,70 +25,18 @@ void	_data_init_builtins(t_pdata data)
 	_dlst_push_back(&data->builtins, ft_strdup("export"), NULL, 0);
 	_dlst_push_back(&data->builtins, ft_strdup("pwd"), NULL, 0);
 	_dlst_push_back(&data->builtins, ft_strdup("unset"), NULL, 0);
-}
-
-void	_data_env_filled(t_pdata data, t_ppadlst dlst)
-{
-	int		i;
-	int		sep;
-	char	**env;
-
-	if (!dlst || !*data->args.env)
-		return ;
-	env = data->args.env;
-	i = -1;
-	while (env[++i])
+	tmp = data->builtins->d_top;
+	while (tmp)
 	{
-		sep = _sep(env[i]);
-		if (sep == 1 && env[i][0] == '_')
-			continue ;
-		_dlst_push_back(dlst, ft_substr(env[i], 0, sep), ft_strdup(env[i] + (sep + 1)), 0);
+		if (!tmp->addr_1)
+			return (_FAILURE);
+		tmp = tmp->next;
 	}
+	return (_SUCCESS);
 }
 
-void _set_oldpwd(t_pdata data)
+int	_path_init(t_pdata data)
 {
-	char **tmp;
-	int i;
-
-	tmp = data->args.env;
-	i = -1;
-	while (tmp[++i])
-	{
-		if (!ft_strncmp(tmp[i], "OLDPWD", 6))
-			return ;
-	}
-	_dlst_push_back(&data->env, ft_strdup("OLDPWD"), NULL, 0);
-	_dlst_push_back(&data->export, ft_strdup("OLDPWD"), NULL, 0);
-	return ;
-}
-
-void	_data_init_env_n_export(t_pdata data)
-{
-	char	*buf;
-	
-	buf = NULL;
-	if (!*data->args.env)
-	{
-		_dlst_push_back(&data->env, ft_strdup("OLDPWD"), NULL, 0);
-		_dlst_push_back(&data->env, ft_strdup("PWD"), getcwd(buf, 4096), 0);
-		_dlst_push_back(&data->export, ft_strdup("OLDPWD"), NULL, 0);
-		_dlst_push_back(&data->export, ft_strdup("PWD"), getcwd(buf, 4096), 0);
-		_dlst_sort(&data->export, false);
-		return ;
-	}
-	_set_oldpwd(data);
-	_data_env_filled(data, &data->env);
-	_data_env_filled(data, &data->export);
-	_dlst_sort(&data->export, false);
-}
-
-int	_data_init(t_pdata data, int ac, char **av, char **ev)
-{
-	data->args.ac = ac;
-	data->args.av = av;
-	data->args.env = ev;
-	_ptr_errno = &data->_errno;
 	data->args.env_path = ft_split(getenv("PATH"), ':');
 	if (!data->args.env_path)
 	{
@@ -94,9 +44,22 @@ int	_data_init(t_pdata data, int ac, char **av, char **ev)
 		if (!data->args.hard_path)
 			return (_FAILURE);
 	}
-	_path_slasher(data);
-	_data_init_builtins(data);
-	_data_init_env_n_export(data);
-	_set_signals(data);
+	if (_path_slasher(data))
+		return (_FAILURE);
+	return (_SUCCESS);
+}
+
+int	_data_init(t_pdata data, int ac, char **av, char **ev)
+{
+	data->args.ac = ac;
+	data->args.av = av;
+	data->args.env = ev;
+	g_ptr_errno = &data->_errno;
+	if (_path_init(data))
+		return (perror("PATH"), _FAILURE);
+	if (_builtins_init(data))
+		return (perror("builtins"), _FAILURE);
+	if (_env_init(data))
+		return (perror("env"), _FAILURE);
 	return (_SUCCESS);
 }

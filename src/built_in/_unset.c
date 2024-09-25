@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   _unset.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 21:55:55 by moha              #+#    #+#             */
-/*   Updated: 2024/08/29 05:03:28 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/25 22:57:07 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	_update_export(t_pdata data)
+int	_update_export(t_pdata data)
 {
 	t_pnlst	tmp;
 
@@ -21,13 +21,21 @@ void	_update_export(t_pdata data)
 	while (tmp)
 	{
 		if (tmp->addr_2)
+		{
 			_dlst_push_back(&data->export, ft_strdup(tmp->addr_1),
 				ft_strdup(tmp->addr_2), 0);
+			if (!data->export->d_bot->addr_1 || !data->export->d_bot->addr_2)
+				return (_FAILURE);
+		}
 		else
+		{
 			_dlst_push_back(&data->export, ft_strdup(tmp->addr_1), NULL, 0);
+			if (!data->export->d_bot->addr_1)
+				return (_FAILURE);
+		}
 		tmp = tmp->next;
 	}
-	_dlst_sort(&data->export, false);
+	return (_dlst_sort(&data->export, false), _SUCCESS);
 }
 
 int	_unset(t_pdata data, char **args)
@@ -54,6 +62,7 @@ int	_unset(t_pdata data, char **args)
 	}
 	ft_free_arr(data->args.hard_path);
 	ft_free_arr(data->args.env_path);
-	_update_export(data);
+	if (_update_export(data))
+		return (_FAILURE);
 	return (_SUCCESS);
 }

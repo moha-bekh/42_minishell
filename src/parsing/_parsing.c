@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/25 16:09:05 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/25 23:14:16 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ int	_pars_pipe_lines(t_ppbtree node)
 
 	_cmd_push_back(&(*node)->cmd_line, (*node)->token);
 	tmp = (*node)->token;
-	while (tmp && (!(*node)->root || ((*node)->root && tmp != (*node)->root->token)))
+	while (tmp && (!(*node)->root || ((*node)->root
+				&& tmp != (*node)->root->token)))
 	{
 		if (tmp->x == _PIPE)
 			_cmd_push_back(&(*node)->cmd_line, tmp->next);
@@ -60,6 +61,8 @@ int	_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 		else if (inside && tmp->addr_1)
 		{
 			(*cmd)->args[i++] = ft_strdup(tmp->addr_1);
+			if (!(*cmd)->args[i - 1])
+				return (_FAILURE);
 		}
 		else if (!inside && tmp->addr_1)
 		{
@@ -70,7 +73,8 @@ int	_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 	}
 	if (inside && (*cmd)->args)
 		(*cmd)->args[i] = NULL;
-	if (tmp && tmp->x == ')' && tmp->next && _pars_args_line(data, cmd, &tmp->next, false))
+	if (tmp && tmp->x == ')' && tmp->next && _pars_args_line(data, cmd,
+			&tmp->next, false))
 		return (_FAILURE);
 	return (_SUCCESS);
 }

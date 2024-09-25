@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _redirs.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 06:39:42 by moha              #+#    #+#             */
-/*   Updated: 2024/09/18 18:57:22 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/25 23:15:49 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,8 @@ int	_write_to_pipe(t_ppncmd cmd)
 	return (_SUCCESS);
 }
 
-int	_exec_redirections(t_pdata data, t_ppncmd cmd)
+int	_exec_redirections(t_ppncmd cmd)
 {
-	(void)data;
-	// if ((*cmd)->redirs.in_name && !(*cmd)->redirs.here_fd)
-	// 	_swap_fd_redir_in(cmd);
-	// else if ((*cmd)->redirs.here_fd && (*cmd)->redirs.here_name)
-	// 	_here_doc_proc(cmd);
-	// if ((*cmd)->redirs.here_fd)
-		// _xpd_here_doc(cmd);
 	if ((*cmd)->redirs.in_name)
 		_swap_fd_redir_in(cmd);
 	if ((*cmd)->redirs.out_name)

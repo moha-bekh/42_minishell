@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _cd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:50 by moha              #+#    #+#             */
-/*   Updated: 2024/09/18 18:46:16 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/25 22:58:26 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ int	_cd_home(t_pdata data)
 	return (_err_print("bash: cd: HOME not set\n", NULL, false, 1));
 }
 
-int _set_old_pwd(t_pdata data)
+int	_set_old_pwd(t_pdata data)
 {
-	char **oldpwd;
-	char *tmp;
+	char	**oldpwd;
+	char	*tmp;
 
 	oldpwd = malloc(sizeof(char *) * 3);
 	if (!oldpwd)
@@ -44,6 +44,8 @@ int _set_old_pwd(t_pdata data)
 	if (!tmp)
 	{
 		tmp = ft_strdup(_env_get_value(data, "PWD"));
+		if (!tmp)
+			return (_FAILURE);
 		_err_print(_ERR_PWD, NULL, true, 1);
 	}
 	oldpwd[1] = ft_strjoin("OLDPWD=", tmp);
@@ -55,10 +57,10 @@ int _set_old_pwd(t_pdata data)
 	return (_SUCCESS);
 }
 
-int _set_new_pwd(t_pdata data)
+int	_set_new_pwd(t_pdata data)
 {
-	char **pwd;
-	char *tmp;
+	char	**pwd;
+	char	*tmp;
 
 	pwd = malloc(sizeof(char *) * 3);
 	if (!pwd)
@@ -77,7 +79,6 @@ int _set_new_pwd(t_pdata data)
 
 int	_cd(t_pdata data, char **args)
 {
-
 	if (_set_old_pwd(data))
 		return (_FAILURE);
 	if (!args[1] && _cd_home(data))
@@ -93,4 +94,3 @@ int	_cd(t_pdata data, char **args)
 		return (_FAILURE);
 	return (_SUCCESS);
 }
-

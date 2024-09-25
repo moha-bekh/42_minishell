@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _data_clear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 15:44:21 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/21 19:16:24 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/25 23:17:56 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,8 @@
 
 int	_data_structs_clear(t_pdata data)
 {
-	// data->_errno = 0;
 	data->args.here_doc = 0;
 	data->args.parentheses = 0;
-	// free(data->prompt);
 	data->prompt = NULL;
 	_dlst_clear(&data->tokens);
 	_dlst_clear(&data->xpd);

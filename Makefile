@@ -78,6 +78,7 @@ _UTILS			:= 		_bt_print\
 						_is_varchr\
 						_join_strings\
 						_limit_quoted\
+						_ltoa\
 						_nb_lnargs\
 						_path_slasher\
 						_resolve_path\

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _parsing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/26 02:54:24 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/26 21:55:48 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,7 @@ int	_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 	}
 	if (inside && (*cmd)->args)
 		(*cmd)->args[i] = NULL;
-	if (tmp && tmp->x == ')' && tmp->next && _pars_args_line(data, cmd,
-			&tmp->next, false))
+	if (tmp && tmp->x == ')' && tmp->next && _pars_args_line(data, cmd, &tmp->next, false))
 		return (_FAILURE);
 	return (_SUCCESS);
 }

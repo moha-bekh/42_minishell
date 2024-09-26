@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 16:22:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/26 16:12:08 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 22:52:28 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ int	_xpd_line(t_pdata data, t_ppnlst token)
 			return (_FAILURE);
 		else if (tmp->x == '$' && _xpd_var(data, &tmp))
 			return (_FAILURE);
-		// if (tmp->x == '"' && _xpd_needed(tmp->addr_1))
-		// 	tmp->addr_1 = _xpd_str(data, tmp->addr_1);
+		if (tmp->x == '"' && _xpd_needed(tmp->addr_1))
+			tmp->addr_1 = _xpd_str(data, tmp->addr_1);
 		tmp = tmp->next;
 	}
 	_join_strings(token);

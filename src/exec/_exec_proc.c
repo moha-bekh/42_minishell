@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 20:53:14 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/26 19:15:18 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 22:45:02 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,13 @@ int	_exec_parent_proc(t_pdata data, t_ppncmd cmd)
 
 int	_exec_child_proc(t_pdata data, t_ppncmd cmd)
 {
-	_exec_redirections(cmd);
-	execve((*cmd)->path, (*cmd)->args, data->args.env);
+	char	**env;
+
+	env = _ltoa(data->env);
+	execve((*cmd)->path, (*cmd)->args, env);
 	if ((*cmd)->args)
 		_err_print(_ERR_NOT_FOUND, (*cmd)->args[0], true, 127);
+	ft_free_arr(env);
 	_data_clear(data);
 	exit(127);
 	return (_FAILURE);
@@ -49,8 +52,13 @@ int	_exec_proc(t_pdata data, t_ppncmd cmd)
 	{
 		if (_set_child_signals(data))
 			return (_FAILURE);
-		if (_is_builtin(data, (*cmd)->args) && _exec_builtin(data, cmd))
-			return (_FAILURE);
+		_exec_redirections(cmd);
+		if (_is_builtin(data, (*cmd)->args))
+		{
+			data->_errno = _exec_builtin(data, cmd);
+			_data_clear(data);
+			exit(data->_errno);
+		}
 		else
 		{
 			if (_resolve_path(data, cmd))

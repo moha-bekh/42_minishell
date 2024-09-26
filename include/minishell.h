@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/09/26 19:17:01 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 22:16:25 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ int						_is_overflow(char *str);
 int						_is_varchr(char c);
 int						_join_strings(t_ppnlst token);
 int						_limit_quoted(char *str);
+char					**_ltoa(t_padlst dlst);
 int						_nb_lnargs(t_pnlst token);
 int						_path_slasher(t_pdata data);
 int						_tok_id(char a, char *str);

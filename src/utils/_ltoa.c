@@ -1,27 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _env.c                                             :+:      :+:    :+:   */
+/*   _ltoa.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/16 22:01:58 by moha              #+#    #+#             */
-/*   Updated: 2024/09/26 22:19:39 by mbekheir         ###   ########.fr       */
+/*   Created: 2024/09/26 22:10:26 by mbekheir          #+#    #+#             */
+/*   Updated: 2024/09/26 22:17:00 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	_env(t_pdata data, char **args)
+char	**_ltoa(t_padlst dlst)
 {
-	int i;
+	char	**arr;
+	t_pnlst	tmp;
+	int		i;
 
-	i = -1;
-	while (args[++i])
+	if (_alloc((void *)&arr, sizeof(char *) * (dlst->d_size + 1)) || !arr)
+		return (NULL);
+	tmp = dlst->d_top;
+	i = 0;
+	while (tmp)
 	{
-		if (ft_strcmp(args[i], "env"))
-			return (_err_print(_ERR_ENV_NO_FILE, args[i], true, 127));
+		arr[i++] = ft_strdup(tmp->addr_1);
+		if (!arr[i])
+			return (NULL);
+		tmp = tmp->next;
 	}
-	_dlst_print_env(data->env);
-	return (_SUCCESS);
+	return (arr);
 }

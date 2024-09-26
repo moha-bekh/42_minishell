@@ -36,6 +36,8 @@ _DATA			:= 		_data_init\
 						_env_init\
 						_data_clear
 
+_SIG			:=		_signal
+
 _BULTIN		= 			_cd\
 						_echo\
 						_env\

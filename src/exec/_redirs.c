@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 06:39:42 by moha              #+#    #+#             */
-/*   Updated: 2024/09/25 23:15:49 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 19:37:35 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	_exec_redirections(t_ppncmd cmd)
 		_write_to_pipe(cmd);
 	if ((*cmd)->prev && !(*cmd)->redirs.in_name)
 		_read_from_pipe(cmd);
-	if ((*cmd)->redirs.here_name)
-		unlink((*cmd)->redirs.here_name);
+	// if ((*cmd)->redirs.here_name)
+	// 	unlink((*cmd)->redirs.here_name);
 	return (_SUCCESS);
 }

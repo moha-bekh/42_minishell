@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 07:36:01 by moha              #+#    #+#             */
-/*   Updated: 2024/09/26 12:32:08 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 19:43:42 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ int	_exec_subshell(t_pdata data, t_ppbtree node)
 		waitpid(pid, &data->_errno, 0);
 		if (WIFEXITED(data->_errno))
 			data->_errno = WEXITSTATUS(data->_errno);
+		else if (WIFSIGNALED(data->_errno))
+			data->_errno = WTERMSIG(data->_errno) + 128;
 	}
 	return (_SUCCESS);
 }

@@ -6,14 +6,16 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 20:53:14 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/26 12:32:20 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 19:15:18 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	_exec_parent_proc(t_ppncmd cmd)
+int	_exec_parent_proc(t_pdata data, t_ppncmd cmd)
 {
+	if (_set_parent_ignore_signals(data))
+		return (_FAILURE);
 	if ((*cmd)->prev)
 	{
 		close((*cmd)->prev->redirs.pfd[1]);
@@ -45,6 +47,8 @@ int	_exec_proc(t_pdata data, t_ppncmd cmd)
 		return (_err_print("bash: fork failed", NULL, false, 1));
 	if (!(*cmd)->pid)
 	{
+		if (_set_child_signals(data))
+			return (_FAILURE);
 		if (_is_builtin(data, (*cmd)->args) && _exec_builtin(data, cmd))
 			return (_FAILURE);
 		else
@@ -56,6 +60,6 @@ int	_exec_proc(t_pdata data, t_ppncmd cmd)
 		}
 	}
 	else
-		_exec_parent_proc(cmd);
+		_exec_parent_proc(data, cmd);
 	return (_SUCCESS);
 }

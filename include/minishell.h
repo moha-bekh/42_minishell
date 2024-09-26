@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/09/26 18:38:18 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 19:17:01 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,10 @@ typedef struct s_data t_data, *t_pdata; // Struct Data
 extern int				*g_ptr_errno;
 
 /* SIGNALS */
-// int						_set_signals(t_pdata data);
-// void					child_hndl(int sig);
+int						_set_child_signals(t_pdata data);
+int						_set_parent_ignore_signals(t_pdata data);
+int						_set_parent_signals(t_pdata data);
+int						_signals_init(t_pdata data);
 
 /* DATA */
 int						_data_init(t_pdata data, int ac, char **av, char **ev);

@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/09/26 16:17:30 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 19:43:28 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,31 +45,6 @@ int	_shell_init(t_pdata data)
 	return (_SUCCESS);
 }
 
-void	_sigint_handler(int sig)
-{
-	(void)sig;
-	*g_ptr_errno = 130;
-	write(STDOUT_FILENO, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
-
-int	_signals_init(t_pdata data)
-{
-	sigemptyset(&data->shell.s_sigint.sa_mask);
-	data->shell.s_sigint.sa_flags = 0;
-	data->shell.s_sigint.sa_handler = _sigint_handler;
-	if (sigaction(SIGINT, &data->shell.s_sigint, NULL) == -1)
-		return (_FAILURE);
-	sigemptyset(&data->shell.s_sigquit.sa_mask);
-	data->shell.s_sigquit.sa_flags = 0;
-	data->shell.s_sigquit.sa_handler = SIG_IGN;
-	if (sigaction(SIGQUIT, &data->shell.s_sigquit, NULL) == -1)
-		return (_FAILURE);
-	return (_SUCCESS);
-}
-
 int	main(int ac, char **av, char **ev)
 {
 	static t_data	data;
@@ -86,13 +61,10 @@ int	main(int ac, char **av, char **ev)
 		add_history(data.prompt);
 		if (_tok_list(&data) && !_data_structs_clear(&data))
 			continue ;
-		_dlst_print_tokens(data.tokens);
-		// _tree_builder(&data.tree, data.tokens->d_top);
-		// if (_exec(&data, &data.tree) && !_data_structs_clear(&data))
-		// {
-		// 	printf("exec error\n");
-		// 	continue ;
-		// }
+		// _dlst_print_tokens(data.tokens);
+		_tree_builder(&data.tree, data.tokens->d_top);
+		if (_exec(&data, &data.tree) && !_data_structs_clear(&data))
+			continue ;
 		_data_structs_clear(&data);
 	}
 	return (_data_clear(&data), _SUCCESS);

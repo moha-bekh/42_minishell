@@ -1,23 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   _get_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/06 11:19:52 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/26 02:59:37 by oek              ###   ########.fr       */
+/*   Created: 2024/09/26 02:40:11 by oek               #+#    #+#             */
+/*   Updated: 2024/09/26 02:40:12 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-size_t	ft_strlen(const char *s)
+t_pdata	_get_data(void)
 {
-	size_t	i;
+	static t_data	data = {0};
 
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
+	return (&data);
 }

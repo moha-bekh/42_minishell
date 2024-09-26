@@ -36,11 +36,17 @@ _DATA			:= 		_data_init\
 						_env_init\
 						_data_clear
 
-_UTILS			:= 		_utils_1\
-						_utils_2\
+_UTILS			:= 		_bt_print\
 						_cmd_foreach\
 						_dlst_print\
-						_bt_print
+						_err_print\
+						_get_data\
+						_get_env_value\
+						_get_rname\
+						_is_overflow\
+						_nb_lnargs\
+						_path_slasher\
+						_varstr_conv\
 
 _SIG			:= 		
 

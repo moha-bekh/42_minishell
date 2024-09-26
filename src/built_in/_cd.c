@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _cd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:50 by moha              #+#    #+#             */
-/*   Updated: 2024/09/25 22:58:26 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 02:44:48 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	_set_old_pwd(t_pdata data)
 	tmp = getcwd(NULL, 0);
 	if (!tmp)
 	{
-		tmp = ft_strdup(_env_get_value(data, "PWD"));
+		tmp = ft_strdup(_get_env_value(data, "PWD"));
 		if (!tmp)
 			return (_FAILURE);
 		_err_print(_ERR_PWD, NULL, true, 1);

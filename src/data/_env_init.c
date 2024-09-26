@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _env_init.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 22:38:51 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/25 22:44:16 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 02:52:12 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,38 +14,43 @@
 
 int	_data_env_filled(t_pdata data, t_ppadlst dlst)
 {
-	int		i;
-	int		sep;
 	char	**env;
+	char *value;
+	char *key;
+	int		i;
 
-	if (!dlst || !*data->args.env)
+	if (!dlst)
 		return (_FAILURE);
 	env = data->args.env;
 	i = -1;
 	while (env[++i])
 	{
-		sep = _sep(env[i]);
-		if (sep == 1 && env[i][0] == '_')
+		if (env[i][0] == '_')
 			continue ;
-		_dlst_push_back(dlst, ft_substr(env[i], 0, sep), ft_strdup(env[i] + (sep
-					+ 1)), 0);
-		if (!(*dlst)->d_bot->addr_1 || !(*dlst)->d_bot->addr_2)
+		key = ft_substr(env[i], 0, ft_strchr(env[i], '=') - env[i]);
+		if (!key)
 			return (_FAILURE);
+		value = ft_strdup(ft_strchr(env[i], '=') + 1);
+		if (!value)
+		{
+			free(key);
+			return (_FAILURE);
+		}
+		_dlst_push_back(dlst, key, value, 0);
 	}
 	return (_SUCCESS);
 }
 
 int	_set_oldpwd(t_pdata data)
 {
-	char	**tmp;
-	int		i;
+	t_pnlst tmp;
 
-	tmp = data->args.env;
-	i = -1;
-	while (tmp[++i])
+	tmp = data->export->d_top;
+	while (tmp)
 	{
-		if (!ft_strncmp(tmp[i], "OLDPWD", 6))
+		if (!ft_strcmp(tmp->addr_1, "OLDPWD"))
 			return (_SUCCESS);
+		tmp = tmp->next;
 	}
 	_dlst_push_back(&data->env, ft_strdup("OLDPWD"), NULL, 0);
 	if (!data->env->d_bot->addr_1)
@@ -82,10 +87,9 @@ int	_env_init(t_pdata data)
 		return (_FAILURE);
 	else
 	{
-		if (_set_oldpwd(data))
+		if (_data_env_filled(data, &data->env) || _data_env_filled(data, &data->export))
 			return (_FAILURE);
-		if (_data_env_filled(data, &data->env) || _data_env_filled(data,
-				&data->export))
+		if (_set_oldpwd(data))
 			return (_FAILURE);
 	}
 	return (_dlst_sort(&data->export, false), _SUCCESS);

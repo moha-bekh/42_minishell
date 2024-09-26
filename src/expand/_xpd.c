@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _xpd.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 16:22:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/25 23:43:12 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 02:44:55 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	_xpd_var(t_pdata data, t_ppnlst token)
 {
 	char	*tmp;
 
-	tmp = _env_get_value(data, (*token)->addr_1);
+	tmp = _get_env_value(data, (*token)->addr_1);
 	if (tmp)
 	{
 		free((*token)->addr_1);
@@ -113,7 +113,7 @@ char	*_xpd_env_var(t_pdata data, char *line, char *buf, int *i)
 	int		k;
 
 	key = _xpd_get_var(line, i);
-	value = _env_get_value(data, key);
+	value = _get_env_value(data, key);
 	free(key);
 	if (!value)
 	{

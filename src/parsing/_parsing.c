@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _parsing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/25 23:14:16 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 02:54:24 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	_pars_args_proc(t_ppncmd cmd)
 {
 	int	i;
 
-	i = _count_args((*cmd)->token);
+	i = _nb_lnargs((*cmd)->token);
 	if (i && (_alloc((void **)&(*cmd)->args, sizeof(char *) * (i + 1))
 			|| !(*cmd)->args))
 		return (_ALLOC);

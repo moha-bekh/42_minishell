@@ -3,52 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   _export.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:34:32 by moha              #+#    #+#             */
-/*   Updated: 2024/09/25 23:40:06 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 03:25:49 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*_get_key(char *arg, int *idx)
-{
-	char	*key;
-
-	*idx = _sep(arg);
-	if (!*idx)
-		key = ft_strdup(arg);
-	else
-	{
-		key = ft_substr(arg, 0, *idx);
-		if (!key)
-			return (NULL);
-	}
-	return (key);
-}
-
 int	_add_value(t_pdata data, char *arg)
 {
 	char	*key;
-	int		idx;
+	char *value;
 
-	key = _get_key(arg, &idx);
-	if (!ft_strcmp(key, data->env->d_bot->addr_1))
+	key = ft_substr(arg, 0, ft_strchr(arg, '=') - arg);
+	if (!key)
+		return (_FAILURE);
+	value = ft_strchr(arg, '=');
+	if (value)
 	{
-		free(key);
-		return (_SUCCESS);
+		if (value[1])
+			value = ft_strdup(value + 1);
+		else
+			value = ft_strdup("");
 	}
-	if (!idx)
-	{
-		_dlst_push_back(&data->env, key, NULL, 0);
-		_dlst_push_back(&data->export, key, NULL, 0);
-	}
-	else
-	{
-		_dlst_push_back(&data->env, key, ft_strdup(arg + (idx + 1)), 0);
-		_dlst_push_back(&data->export, key, ft_strdup(arg + (idx + 1)), 0);
-	}
+	_dlst_push_back(&data->env, key, value, 0);
+	_dlst_push_back(&data->export, key, value, 0);
 	_dlst_sort(&data->export, false);
 	return (_SUCCESS);
 }
@@ -66,45 +47,50 @@ int	_search_and_replace(t_ppadlst env, char *key, char *value)
 			if (tmp->addr_2)
 				free(tmp->addr_2);
 			tmp->addr_2 = value;
-			return (1);
+			return (_SUCCESS);
 		}
 		tmp = tmp->next;
 	}
-	return (_SUCCESS);
+	return (_FAILURE);
 }
 
 int	_replace_env_value(t_ppadlst env, char *arg)
 {
 	char	*key;
 	char	*value;
-	int		idx;
 
-	idx = _sep(arg);
-	key = ft_substr(arg, 0, idx);
+	key = ft_substr(arg, 0, ft_strchr(arg, '=') - arg);
 	if (!key)
 		return (_FAILURE);
-	value = ft_strdup(arg + (idx + 1));
-	if (!value)
+	value = ft_strchr(arg, '=');
+	if (value)
 	{
-		free(key);
-		return (_FAILURE);
+		if (value[1])
+		{
+			value = ft_strdup(value + 1);
+			if (!value)
+				return (_FAILURE);
+		}
+		else
+		{
+			value = ft_strdup("");
+			if (!value)
+				return (_FAILURE);
+		}
 	}
-	_search_and_replace(env, key, value);
-	free(key);
-	free(value);
-	return (0);
+	if (!_search_and_replace(env, key, value))
+		return (_SUCCESS);
+	return (_FAILURE);
 }
 
 int	_bad_value(char *value)
 {
-	int	sep;
 	int	i;
 
 	if (*value == '=')
 		return (_err_print(_ERR_EXPORT_INVALID, value, true, 1));
-	sep = _sep(value);
 	i = -1;
-	while (value[++i] && i < sep)
+	while (value[++i] && value[i] != '=')
 	{
 		if (!ft_isalpha(value[i]) && value[i] != '_')
 			return (_err_print(_ERR_EXPORT_INVALID, value, true, 1));
@@ -123,7 +109,7 @@ int	_export(t_pdata data, char **args)
 	{
 		if (_bad_value(args[i]))
 			continue ;
-		else if (_replace_env_value(&data->env, args[i]))
+		else if (!_replace_env_value(&data->env, args[i]))
 		{
 			_replace_env_value(&data->export, args[i]);
 			continue ;

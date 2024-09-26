@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _redirs.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 13:02:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/25 23:23:26 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 02:54:32 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	_pars_heredoc(t_pdata data, t_ppncmd cmd, t_pnlst token, bool inside)
 			|| _alloc((void **)&(*cmd)->redirs.here_limit, sizeof(char *) * 17))
 			return (_FAILURE);
 	}
-	name = _get_random_name();
+	name = _get_rname();
 	path_name = ft_strjoin("/tmp/", name);
 	free(name);
 	(*cmd)->redirs.here_names[(*cmd)->redirs.here_idx] = path_name;

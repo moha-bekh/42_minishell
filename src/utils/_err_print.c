@@ -1,23 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _utils_2.c                                         :+:      :+:    :+:   */
+/*   _err_print.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/27 12:55:16 by moha              #+#    #+#             */
-/*   Updated: 2024/09/18 19:02:57 by oek              ###   ########.fr       */
+/*   Created: 2024/09/26 02:38:08 by oek               #+#    #+#             */
+/*   Updated: 2024/09/26 02:38:15 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-t_pdata	_get_data(void)
-{
-	static t_data	data = {0};
-
-	return (&data);
-}
 
 int	_err_print(char *str, void *arg, bool ptr, int _errno)
 {
@@ -33,32 +26,4 @@ int	_err_print(char *str, void *arg, bool ptr, int _errno)
 	if (_errno)
 		data->_errno = _errno;
 	return (_errno);
-}
-
-char	*_env_get_value(t_pdata data, char *key)
-{
-	t_pnlst	tmp;
-
-	tmp = data->env->d_top;
-	while (tmp)
-	{
-		if (!ft_strcmp(tmp->addr_1, key))
-			return ((char *)tmp->addr_2);
-		tmp = tmp->next;
-	}
-	return (NULL);
-}
-
-int	_varstr_conv(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (!ft_isalpha(str[i]) && str[i] != '_')
-			return (1);
-		i++;
-	}
-	return (0);
 }

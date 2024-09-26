@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/09/25 23:20:28 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 02:44:18 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,22 +27,6 @@
 typedef struct s_data t_data, *t_pdata; // Struct Data
 
 extern int				*g_ptr_errno;
-
-/* UTILS */
-void					_bt_print(t_pbtree node, int i);
-int						_cmd_foreach(t_pdata data, t_pncmd cmd,
-							int (*f)(t_pdata, t_pncmd), char *limiters);
-
-int						_sep(char *str);
-int						_path_slasher(t_pdata data);
-int						_is_overflow(char *str);
-char					*_get_random_name(void);
-int						_count_args(t_pnlst token);
-
-int						_err_print(char *str, void *arg, bool ptr, int _errno);
-t_pdata					_get_data(void);
-char					*_env_get_value(t_pdata data, char *key);
-int						_varstr_conv(char *str);
 
 /* SIGNALS */
 // int						_set_signals(t_pdata data);
@@ -111,11 +95,21 @@ int						_export(t_pdata data, char **args);
 int						_pwd(t_pdata data);
 int						_unset(t_pdata data, char **args);
 
-/* GENERIC LINKED LIST */
+/* UTILS */
+void					_bt_print(t_pbtree node, int i);
+int						_cmd_foreach(t_pdata data, t_pncmd cmd, int (*f)(t_pdata, t_pncmd), char *limiters);
 void					_dlst_print_builtins(t_padlst dlst);
 void					_dlst_print_env(t_padlst dlst);
 void					_dlst_print_export(t_padlst dlst);
 void					_dlst_print_tokens(t_padlst dlst);
+int						_err_print(char *str, void *arg, bool ptr, int _errno);
+t_pdata					_get_data(void);
+char					*_get_env_value(t_pdata data, char *key);
+char					*_get_rname(void);
+int						_is_overflow(char *str);
+int						_nb_lnargs(t_pnlst token);
+int						_path_slasher(t_pdata data);
+int						_varstr_conv(char *str);
 
 struct					s_args
 {

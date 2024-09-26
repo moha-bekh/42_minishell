@@ -1,23 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   _get_env_value.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/06 11:19:52 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/26 02:59:37 by oek              ###   ########.fr       */
+/*   Created: 2024/09/26 02:39:25 by oek               #+#    #+#             */
+/*   Updated: 2024/09/26 02:39:54 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-size_t	ft_strlen(const char *s)
+
+char	*_get_env_value(t_pdata data, char *key)
 {
-	size_t	i;
+	t_pnlst	tmp;
 
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
+	tmp = data->env->d_top;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->addr_1, key))
+			return ((char *)tmp->addr_2);
+		tmp = tmp->next;
+	}
+	return (NULL);
 }

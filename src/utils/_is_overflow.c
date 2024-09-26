@@ -1,23 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   _is_overflow.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/06 11:19:52 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/26 02:59:37 by oek              ###   ########.fr       */
+/*   Created: 2024/09/26 02:33:03 by oek               #+#    #+#             */
+/*   Updated: 2024/09/26 02:33:08 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-size_t	ft_strlen(const char *s)
+int	_is_overflow(char *str)
 {
-	size_t	i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
+	if (str[0] == '-' && (ft_strlen(str) <= 20))
+	{
+		if (ft_strncmp(str, "-9223372036854775808", 20) > 0)
+			return (1);
+	}
+	else if (ft_strlen(str) <= 19)
+	{
+		if (ft_strncmp(str, "9223372036854775807", 19) > 0)
+			return (1);
+	}
+	return (0);
 }

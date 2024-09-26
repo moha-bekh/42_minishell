@@ -1,23 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   _nb_lnargs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/06 11:19:52 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/26 02:59:37 by oek              ###   ########.fr       */
+/*   Created: 2024/09/26 02:34:44 by oek               #+#    #+#             */
+/*   Updated: 2024/09/26 02:34:48 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-size_t	ft_strlen(const char *s)
+int	_nb_lnargs(t_pnlst token)
 {
-	size_t	i;
+	t_pnlst	tmp;
+	int		i;
 
+	if (!token)
+		return (0);
+	tmp = token;
 	i = 0;
-	while (s[i])
+	while (tmp && tmp->x != _PIPE && !_tok_id(tmp->x, _TYP_SEP))
+	{
+		if (tmp && _tok_id(tmp->x, _TYP_REDIRS))
+		{
+			tmp = tmp->next;
+			if (tmp)
+				tmp = tmp->next;
+			continue ;
+		}
 		i++;
+		tmp = tmp->next;
+	}
 	return (i);
 }

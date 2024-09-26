@@ -6,18 +6,18 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 16:12:52 by moha              #+#    #+#             */
-/*   Updated: 2024/09/25 23:41:20 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 16:59:24 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	_is_varchr(char c)
-{
-	if (ft_isalnum(c) || c == '_')
-		return (true);
-	return (false);
-}
+// int	_is_varchr(char c)
+// {
+// 	if (ft_isalnum(c) || c == '_')
+// 		return (true);
+// 	return (false);
+// }
 
 int	_errno_proc(t_pdata data, int *i)
 {
@@ -25,6 +25,10 @@ int	_errno_proc(t_pdata data, int *i)
 	if (!data->tokens->d_bot->addr_1)
 		return (_FAILURE);
 	*i += 2;
+	// if (data->prompt[*i] && !ft_isspace(data->prompt[*i]))
+	// 	data->tokens->d_bot->flag = true;
+	// else
+	// 	data->tokens->d_bot->flag = false;
 	return (_SUCCESS);
 }
 
@@ -32,9 +36,14 @@ int	_dollar_proc(t_pdata data, int *i)
 {
 	int	j;
 
-	if (data->prompt[*i + 1] && data->prompt[*i + 1] == '?' && _errno_proc(data,
-			i))
-		return (_FAILURE);
+	if (data->prompt[*i + 1] && data->prompt[*i + 1] == '?')
+	{
+		_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 2), NULL,
+			'$');
+		if (!data->tokens->d_bot->addr_1)
+			return (_FAILURE);
+		*i += 2;
+	}
 	else if (data->prompt[*i + 1] && _is_varchr(data->prompt[*i + 1]))
 	{
 		j = ++(*i);
@@ -47,13 +56,19 @@ int	_dollar_proc(t_pdata data, int *i)
 	}
 	else
 	{
-		_dlst_push_back(&data->tokens, ft_substr(data->prompt, (*i)++, 1), NULL,
-			'W');
+		j = *i;
+		while (data->prompt[++(*i)] && !ft_isspace(data->prompt[*i])
+			&& data->prompt[*i] != '$')
+			*i += 1;
+		_dlst_push_back(&data->tokens, ft_substr(data->prompt, j, (*i - j)),
+			NULL, 'W');
 		if (!data->tokens->d_bot->addr_1)
 			return (_FAILURE);
 	}
 	if (data->prompt[*i] && !ft_isspace(data->prompt[*i]))
 		data->tokens->d_bot->flag = true;
+	else
+		data->tokens->d_bot->flag = false;
 	return (_SUCCESS);
 }
 
@@ -87,7 +102,7 @@ int	_sub_proc(t_pdata data, int *i)
 			'(');
 		if (!data->tokens->d_bot->addr_1)
 			return (_FAILURE);
-		data->args.parentheses++;
+		data->args.parnth++;
 	}
 	else if (data->prompt[*i] == ')')
 	{
@@ -95,7 +110,7 @@ int	_sub_proc(t_pdata data, int *i)
 			')');
 		if (!data->tokens->d_bot->addr_1)
 			return (_FAILURE);
-		data->args.parentheses++;
+		data->args.parnth++;
 	}
 	*i += 1;
 	return (_SUCCESS);

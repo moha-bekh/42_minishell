@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 15:44:21 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/25 23:17:56 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 16:59:01 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	_data_structs_clear(t_pdata data)
 {
-	data->args.here_doc = 0;
-	data->args.parentheses = 0;
+	data->args.nb_hd = 0;
+	data->args.parnth = 0;
 	data->prompt = NULL;
 	_dlst_clear(&data->tokens);
 	_dlst_clear(&data->xpd);
@@ -34,7 +34,7 @@ int	_data_clear(t_pdata data)
 	_dlst_clear(&data->tokens);
 	_dlst_clear(&data->xpd);
 	_bt_clear(&data->tree);
-	close(data->args._stdin);
-	close(data->args._stdout);
+	close(data->shell._stdin);
+	close(data->shell._stdout);
 	return (_SUCCESS);
 }

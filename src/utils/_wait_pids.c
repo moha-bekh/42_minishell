@@ -1,33 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _xpd_utils.c                                       :+:      :+:    :+:   */
+/*   _wait_pids.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/31 22:10:09 by moha              #+#    #+#             */
-/*   Updated: 2024/09/25 23:23:10 by mbekheir         ###   ########.fr       */
+/*   Created: 2024/09/26 12:28:27 by mbekheir          #+#    #+#             */
+/*   Updated: 2024/09/26 12:28:34 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	_xpd_needed(char *str)
+void	_wait_pids(t_pdata data, t_padlst cmd_line)
 {
-	int	i;
+	t_pncmd	tmp;
 
-	i = -1;
-	while (str[++i])
+	tmp = cmd_line->c_top;
+	while (tmp)
 	{
-		if (str[i] == '$')
-			return (true);
+		waitpid(tmp->pid, &data->_errno, 0);
+		if (WIFEXITED(data->_errno))
+			data->_errno = WEXITSTATUS(data->_errno);
+		tmp = tmp->next;
 	}
-	return (true);
-}
-
-int	_xpd_conv(char c)
-{
-	if (ft_isalpha(c) || c == '_' || c == '?')
-		return (true);
-	return (false);
 }

@@ -36,20 +36,6 @@ _DATA			:= 		_data_init\
 						_env_init\
 						_data_clear
 
-_UTILS			:= 		_bt_print\
-						_cmd_foreach\
-						_dlst_print\
-						_err_print\
-						_get_data\
-						_get_env_value\
-						_get_rname\
-						_is_overflow\
-						_nb_lnargs\
-						_path_slasher\
-						_varstr_conv\
-
-_SIG			:= 		
-
 _BULTIN		= 			_cd\
 						_echo\
 						_env\
@@ -66,18 +52,37 @@ _TOKEN			:=		_op\
 
 _TREE			:=		_tree_builder
 
-_EXEC			:= 		_path\
-						_exec_1\
-						_exec_2\
+_EXEC			:= 		_exec_process\
+						_exec_proc\
 						_exec_builtin\
-						_redirs
+						_redirs\
 
 _EXPAND			:= 		_xpd\
-						_xpd_utils\
-						_xpd_wildcards
+						_xpd_str\
+						_xpd_wildcards\
+						_xpd_wildcards_utils\
 
 _PARS			:= 		_parsing\
 						_redirs
+
+_UTILS			:= 		_bt_print\
+						_dlst_print\
+						_err_print\
+						_get_data\
+						_get_env_value\
+						_get_rname\
+						_is_builtin\
+						_is_overflow\
+						_is_varchr\
+						_join_strings\
+						_nb_lnargs\
+						_path_slasher\
+						_resolve_path\
+						_tok_id\
+						_varstr_conv\
+						_wait_pids\
+						_xpd_conv\
+						_xpd_needed\
 
 SRCS			+=		$(addprefix $(SRC_DIR), $(addsuffix .c, $(_SRC)))
 SRCS			+=		$(addprefix $(SRC_DIR), $(addprefix $(BULTIN_DIR), $(addsuffix .c, $(_BULTIN))))

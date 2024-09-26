@@ -3,43 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   _xpd.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 16:22:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/26 02:44:55 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/26 16:12:08 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	_join_strings(t_ppnlst token)
-{
-	t_pnlst	tmp;
-	char	*old;
-	char	a;
-	char	b;
-
-	tmp = *token;
-	while (tmp && tmp->x != _PIPE && !_tok_id(tmp->x, _TYP_SEP))
-	{
-		if (tmp->flag)
-		{
-			tmp = tmp->next;
-			old = tmp->addr_1;
-			tmp->addr_1 = ft_strjoin(tmp->prev->addr_1, tmp->addr_1);
-			free(old);
-			a = tmp->prev->x;
-			b = tmp->x;
-			old = tmp->addr_2;
-			tmp->addr_2 = ft_strjoin(&a, &b);
-			free(old);
-			_dlst_pop_in(&(*token)->manager, &tmp->prev);
-			continue ;
-		}
-		tmp = tmp->next;
-	}
-	return (_SUCCESS);
-}
 
 int	_xpd_var(t_pdata data, t_ppnlst token)
 {
@@ -68,93 +39,6 @@ int	_xpd_var(t_pdata data, t_ppnlst token)
 	return (_SUCCESS);
 }
 
-char	*_xpd_errno(t_pdata data, char *buf, int *i)
-{
-	char	*tmp;
-	int		j;
-	int		k;
-
-	*i += 1;
-	tmp = ft_itoa(data->_errno);
-	if (!tmp)
-		return (buf);
-	k = ft_strlen(buf);
-	j = 0;
-	while (tmp[j])
-		buf[k++] = tmp[j++];
-	free(tmp);
-	return (buf);
-}
-
-char	*_xpd_get_var(char *line, int *i)
-{
-	char	*key;
-	int		start;
-	int		len;
-
-	len = 0;
-	start = *i;
-	while (line[*i] && _xpd_conv(line[*i]))
-	{
-		*i += 1;
-		len++;
-	}
-	key = ft_substr(line, start, len);
-	if (!key)
-		return (NULL);
-	return (key);
-}
-
-char	*_xpd_env_var(t_pdata data, char *line, char *buf, int *i)
-{
-	char	*key;
-	char	*value;
-	int		j;
-	int		k;
-
-	key = _xpd_get_var(line, i);
-	value = _get_env_value(data, key);
-	free(key);
-	if (!value)
-	{
-		*i += 1;
-		return (buf);
-	}
-	k = ft_strlen(buf);
-	j = 0;
-	while (value[j])
-		buf[k++] = value[j++];
-	return (buf);
-}
-
-char	*_xpd_str(t_pdata data, char *line)
-{
-	char	*buf;
-	int		i;
-	int		j;
-
-	if (!line || _alloc((void **)&buf, sizeof(char) * 4096))
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (line[i])
-	{
-		if (line[i] == '$' && line[i + 1] != '$')
-		{
-			i++;
-			if (line[i] == '?')
-				buf = _xpd_errno(data, buf, &i);
-			else
-				buf = _xpd_env_var(data, line, buf, &i);
-			j = ft_strlen(buf);
-			continue ;
-		}
-		buf[j++] = line[i++];
-	}
-	free(line);
-	return (buf);
-}
-
 int	_xpd_line(t_pdata data, t_ppnlst token)
 {
 	t_pnlst	tmp;
@@ -166,8 +50,8 @@ int	_xpd_line(t_pdata data, t_ppnlst token)
 			return (_FAILURE);
 		else if (tmp->x == '$' && _xpd_var(data, &tmp))
 			return (_FAILURE);
-		if (tmp->x == '"' && _xpd_needed(tmp->addr_1))
-			tmp->addr_1 = _xpd_str(data, tmp->addr_1);
+		// if (tmp->x == '"' && _xpd_needed(tmp->addr_1))
+		// 	tmp->addr_1 = _xpd_str(data, tmp->addr_1);
 		tmp = tmp->next;
 	}
 	_join_strings(token);

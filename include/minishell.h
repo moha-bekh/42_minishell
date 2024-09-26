@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/09/26 02:44:18 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/26 16:58:28 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,31 +53,20 @@ int						_check_bot(t_pdata data);
 t_pnlst					_tree_builder(t_ppbtree node, t_pnlst token);
 
 /* EXEC */
-int						_exec(t_pdata data, t_ppbtree node);
-int						_exec_child_proc(t_pdata data, t_ppncmd cmd);
-int						_resolve_path(t_pdata data, t_ppncmd cmd);
-
+int						_exec_builtin(t_pdata data, t_ppncmd cmd);
 int						_exec_builtin_proc(t_pdata data, t_ppncmd cmd);
-int						_exec_builtin_process(t_pdata data, t_ppncmd cmd);
-int						_is_builtin(t_pdata data, char **args);
-
+int						_exec_proc(t_pdata data, t_ppncmd cmd);
+int						_exec(t_pdata data, t_ppbtree node);
 int						_exec_redirections(t_ppncmd cmd);
-int						_save_stdfds(t_pdata data);
-int						_restore_stdfds(t_pdata data);
-int						_here_doc_proc(t_pdata data, t_ppncmd cmd);
 
 /* EXPAND */
 int						_xpd_line(t_pdata data, t_ppnlst token);
 int						_xpd_wildcards(t_pdata data, t_ppnlst token);
 char					*_xpd_str(t_pdata data, char *line);
-
-// int						_xpd_str(t_pdata data, t_ppnlst token);
-char					*_xpd_xpd_str(t_pdata data, char *line);
-
-int						_xpd_needed(char *str);
-int						_xpd_conv(char c);
-// int						_xpd_errno(t_pdata data);
-// int						_xpd_var_env(t_pdata data, char *tmp);
+/* EXPAND UTILS */
+int						_xpd_right_border(t_ppnlst token, t_ppadlst list);
+int						_xpd_left_border(t_ppnlst token, t_ppadlst list);
+int						_xpd_full_astrix(char *str);
 
 /* PARSING */
 int						_pars_pipe_lines(t_ppbtree node);
@@ -97,7 +86,6 @@ int						_unset(t_pdata data, char **args);
 
 /* UTILS */
 void					_bt_print(t_pbtree node, int i);
-int						_cmd_foreach(t_pdata data, t_pncmd cmd, int (*f)(t_pdata, t_pncmd), char *limiters);
 void					_dlst_print_builtins(t_padlst dlst);
 void					_dlst_print_env(t_padlst dlst);
 void					_dlst_print_export(t_padlst dlst);
@@ -106,10 +94,19 @@ int						_err_print(char *str, void *arg, bool ptr, int _errno);
 t_pdata					_get_data(void);
 char					*_get_env_value(t_pdata data, char *key);
 char					*_get_rname(void);
+int						_is_builtin(t_pdata data, char **args);
 int						_is_overflow(char *str);
+int						_is_varchr(char c);
+int						_join_strings(t_ppnlst token);
 int						_nb_lnargs(t_pnlst token);
 int						_path_slasher(t_pdata data);
+int						_tok_id(char a, char *str);
 int						_varstr_conv(char *str);
+void					_wait_pids(t_pdata data, t_padlst cmd_line);
+int						_xpd_conv(char c);
+int						_xpd_needed(char *str);
+
+int						_resolve_path(t_pdata data, t_ppncmd cmd);
 
 struct					s_args
 {
@@ -118,14 +115,14 @@ struct					s_args
 	char				**env;
 	char				**env_path;
 	char				**hard_path;
-	int					_stdin;
-	int					_stdout;
-	int					parentheses;
-	int					here_doc;
+	int					parnth;
+	int					nb_hd;
 };
 
 struct					s_shell
 {
+	int					_stdin;
+	int					_stdout;
 	struct termios		org_term;
 	struct termios		new_term;
 	struct sigaction	s_sigint;
@@ -180,6 +177,9 @@ enum					e_return
 
 # define _ERR_EXIT_NUM "exit\nbash: exit: %s: numeric argument required\n"
 # define _ERR_EXIT_MANY "exit\nbash: exit: too many arguments\n"
+
+# define _ERR_PERM "bash: %s: permission denied\n"
+# define _ERR_HERE_EOF "bash: warning: here-document delimited by end-of-file (wanted `%s')\n"
 
 # define _PATH "/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
 

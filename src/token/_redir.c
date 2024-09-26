@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:25:01 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/25 22:50:05 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 16:59:12 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,24 @@
 
 int	_redir_heredoc(t_pdata data, int *i)
 {
-	if (++data->args.here_doc > 16)
+	char	*path;
+
+	if (++data->args.nb_hd > 16)
 	{
 		ft_dprintf(2, _ERR_HEREDOC);
 		_data_clear(data);
 		exit(2);
 	}
-	_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 2), NULL,
-		_HERE_DOC);
+	_dlst_push_back(&data->tokens, _get_rname(), NULL, _HERE_DOC);
 	if (!data->tokens->d_bot->addr_1)
 		return (_FAILURE);
+	path = ft_strjoin("/tmp/", data->tokens->d_bot->addr_1);
+	if (!path)
+		return (_FAILURE);
+	free(data->tokens->d_bot->addr_1);
+	data->tokens->d_bot->addr_1 = path;
 	*i += 2;
-	if (data->tokens && data->tokens->d_bot->prev
-		&& _tok_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
+	if (data->tokens && data->tokens->d_bot->prev && _tok_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
 		return (_err_print(_ERR_TOKEN, "<<", true, 2));
 	return (_SUCCESS);
 }

@@ -6,26 +6,30 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 20:54:03 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/25 23:22:53 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 14:37:08 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	_is_builtin(t_pdata data, char **args)
+int	_save_stdfds(t_pdata data)
 {
-	t_pnlst	tmp;
+	data->shell._stdin = dup(STDIN_FILENO);
+	if (data->shell._stdin == -1)
+		return (_FAILURE);
+	data->shell._stdout = dup(STDOUT_FILENO);
+	if (data->shell._stdout == -1)
+		return (_FAILURE);
+	return (_SUCCESS);
+}
 
-	if (!args || !args[0])
-		return (0);
-	tmp = data->builtins->d_top;
-	while (tmp)
-	{
-		if (!ft_strcmp(tmp->addr_1, args[0]))
-			return (1);
-		tmp = tmp->next;
-	}
-	return (0);
+int	_restore_stdfds(t_pdata data)
+{
+	if (dup2(data->shell._stdin, STDIN_FILENO) == -1)
+		return (_FAILURE);
+	if (dup2(data->shell._stdout, STDOUT_FILENO) == -1)
+		return (_FAILURE);
+	return (_SUCCESS);
 }
 
 int	_exec_builtin(t_pdata data, t_ppncmd cmd)
@@ -53,23 +57,5 @@ int	_exec_builtin_proc(t_pdata data, t_ppncmd cmd)
 	_exec_redirections(cmd);
 	data->_errno = _exec_builtin(data, cmd);
 	_restore_stdfds(data);
-	return (_SUCCESS);
-}
-
-int	_exec_builtin_process(t_pdata data, t_ppncmd cmd)
-{
-	if ((*cmd)->next)
-	{
-		if (pipe((*cmd)->redirs.pfd) < 0)
-			return (_err_print("bash: pipe failed", NULL, false, 1));
-	}
-	(*cmd)->pid = fork();
-	if ((*cmd)->pid < 0)
-		return (_err_print("bash: fork failed", NULL, false, 1));
-	if (!(*cmd)->pid)
-	{
-		if (_exec_builtin_proc(data, cmd))
-			return (_FAILURE);
-	}
 	return (_SUCCESS);
 }

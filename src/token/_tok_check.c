@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 16:12:25 by moha              #+#    #+#             */
-/*   Updated: 2024/09/25 23:12:34 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 16:59:34 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,12 @@ int	_check_bot(t_pdata data)
 	tmp = data->tokens->d_bot;
 	if (_tok_id(tmp->x, _STX_OP) || _tok_id(tmp->x, _TYP_REDIRS))
 		return (_err_print(_ERR_NEWLINE, NULL, false, 2));
-	if (data->args.parentheses % 2)
+	if (data->args.parnth % 2)
 	{
-		data->args.parentheses = 0;
+		data->args.parnth = 0;
 		return (_err_print(_ERR_TOKEN, "(", true, 2));
 	}
-	data->args.parentheses = 0;
+	data->args.parnth = 0;
 	if (_check_sub(data))
 		return (_FAILURE);
 	return (_SUCCESS);

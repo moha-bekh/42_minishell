@@ -1,30 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _cmd_foreach.c                                     :+:      :+:    :+:   */
+/*   _is_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/28 13:49:45 by moha              #+#    #+#             */
-/*   Updated: 2024/08/31 16:40:38 by moha             ###   ########.fr       */
+/*   Created: 2024/09/26 12:32:45 by mbekheir          #+#    #+#             */
+/*   Updated: 2024/09/26 12:32:51 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	_cmd_foreach(t_pdata data, t_pncmd cmd, int (*f)(t_pdata, t_pncmd),
-		char *limiters)
+int	_is_builtin(t_pdata data, char **args)
 {
-	t_pncmd	tmp;
+	t_pnlst	tmp;
 
-	tmp = cmd;
+	if (!args || !args[0])
+		return (0);
+	tmp = data->builtins->d_top;
 	while (tmp)
 	{
-		if (limiters && _tok_id(tmp->token->x, limiters))
-			break ;
-		if (f(data, tmp))
-			return (_FAILURE);
+		if (!ft_strcmp(tmp->addr_1, args[0]))
+			return (1);
 		tmp = tmp->next;
 	}
-	return (_SUCCESS);
+	return (0);
 }

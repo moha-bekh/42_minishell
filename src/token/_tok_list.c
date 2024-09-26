@@ -6,22 +6,11 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/26 17:05:04 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 18:53:38 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// int	_tok_id(char a, char *str)
-// {
-// 	int	i;
-
-// 	i = -1;
-// 	while (str[++i])
-// 		if (str[i] == a)
-// 			return (true);
-// 	return (false);
-// }
 
 int	_quote_proc(t_pdata data, int *i)
 {
@@ -59,14 +48,6 @@ int	_quote_proc(t_pdata data, int *i)
 		data->tokens->d_bot->flag = false;
 	return (_SUCCESS);
 }
-// {
-// if (data->prompt[*i] && data->prompt[*i] == type_quote)
-// {
-// str = _xpd_str(data, str);
-// if (!str)
-// 	return (_FAILURE);
-// }
-// }
 
 int	_tok_word(t_pdata data, int *i)
 {
@@ -124,22 +105,29 @@ int	_first_tok(t_pdata data, int *i)
 
 int	_hd_fill(t_pdata data, t_pnlst token)
 {
-	int		hd;
+	int		fd;
 	char	*line;
 
-	hd = open(token->addr_1, O_RDWR);
+	fd = open(token->addr_1, O_RDWR);
 	while (true)
 	{
-		line = readline(">");
-		if (!line || !ft_strcmp(line, token->next->addr_1))
-			break ;
-		line = _xpd_str(data, line);
+		line = readline("> ");
 		if (!line)
-			return (_FAILURE);
-		write(hd, line, ft_strlen(line));
-		write(hd, "\n", 1);
+		{
+			ft_dprintf(2, _ERR_HERE_EOF, token->next->addr_1);
+			break ;
+		}
+		if (!ft_strcmp(line, token->next->addr_1))
+			break ;
+		if (line && !_limit_quoted(token->addr_2))
+			line = _xpd_str(data, line);
+		if (line)
+			ft_dprintf(fd, "%s\n", line);
 		free(line);
+		line = NULL;
 	}
+	free(line);
+	close(fd);
 	token = token->next;
 	return (_SUCCESS);
 }

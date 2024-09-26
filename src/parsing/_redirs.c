@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 13:02:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/26 17:06:29 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/26 18:36:40 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,20 +61,7 @@ int	_pars_redir_outa(t_ppncmd cmd, t_pnlst token, bool inside)
 	return (_SUCCESS);
 }
 
-int	_limit_quoted(char *str)
-{
-	int	i;
 
-	if (!str)
-		return (false);
-	i = -1;
-	while (str[++i])
-	{
-		if (str[i] == '\'' || str[i] == '\"')
-			return (true);
-	}
-	return (false);
-}
 
 int	_pars_heredoc(t_pdata data, t_ppncmd cmd, t_pnlst token, bool inside)
 {
@@ -108,9 +95,7 @@ int	_pars_heredoc(t_pdata data, t_ppncmd cmd, t_pnlst token, bool inside)
 				ft_dprintf((*cmd)->redirs.here_fd, "%s\n", line);
 			if (!line)
 			{
-				ft_dprintf(2,
-					"bash: warning: here-document delimited by end-of-file (wanted `%s')\n",
-					(*cmd)->redirs.here_limit[idx]);
+				ft_dprintf(2, "bash: warning: here-document delimited by end-of-file (wanted `%s')\n", (*cmd)->redirs.here_limit[idx]);
 				break ;
 			}
 			free(line);

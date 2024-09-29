@@ -6,20 +6,12 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 19:14:13 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/28 19:24:37 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/29 19:08:30 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-
-void _hndl_hd_sigint(int sig)
-{
-	(void)sig;
-	*g_ptr_errno = 130;
-	exit(130);
-}
 
 // int	_set_sigint(t_pdata data)
 // {

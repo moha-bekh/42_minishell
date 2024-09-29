@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/28 19:08:47 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/29 19:20:09 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,6 @@ int	_tok_word(t_pdata data, int *i)
 	if (data->tokens && data->tokens->d_bot->flag
 		&& data->tokens->d_bot->prev->x == 'H')
 	{
-
-
-
-
-
-
 		str = ft_substr(data->prompt, j, (*i - j));
 		tmp = ft_strjoin(data->tokens->d_bot->addr_1, str);
 		free(str);
@@ -112,6 +106,17 @@ int	_first_tok(t_pdata data, int *i)
 	return (_SUCCESS);
 }
 
+void	_hndl_hd_sigint(int sig)
+{
+	t_pdata	data;
+
+	(void)sig;
+	data = _get_data();
+	*g_ptr_errno = 130;
+	write(STDOUT_FILENO, "\n", 1);
+	_data_clear(data);
+}
+
 int	_hd_fill(t_pdata data, t_pnlst token)
 {
 	int		fd;
@@ -125,16 +130,13 @@ int	_hd_fill(t_pdata data, t_pnlst token)
 		data->shell.s_sigint.sa_handler = _hndl_hd_sigint;
 		sigaction(SIGINT, &data->shell.s_sigint, NULL);
 		fd = open(token->addr_1, O_RDWR | O_CREAT | O_APPEND, 0644);
-		while (true)
+		while (true && data->_errno != 130)
 		{
-			if (data->_errno == 130)
-			{
-				exit(130);
-			}
 			line = readline("> ");
-			if (!line)
+			if (!line && data->_errno != 130)
 			{
 				ft_dprintf(2, _ERR_HERE_EOF, token->next->addr_1);
+				close(fd);
 				_data_clear(data);
 				exit(0);
 			}
@@ -147,9 +149,14 @@ int	_hd_fill(t_pdata data, t_pnlst token)
 			free(line);
 			line = NULL;
 		}
-		if (line)
-			free(line);
+		free(line);
 		close(fd);
+		if (data->_errno == 130)
+		{
+			_data_clear(data);
+			exit(130);
+		}
+		_data_clear(data);
 		exit(0);
 	}
 	else
@@ -157,15 +164,15 @@ int	_hd_fill(t_pdata data, t_pnlst token)
 		token = token->next;
 		data->shell.s_sigint.sa_handler = SIG_IGN;
 		sigaction(SIGINT, &data->shell.s_sigint, NULL);
-
 		waitpid(pid, &data->_errno, 0);
 		if (WIFEXITED(data->_errno))
 			data->_errno = WEXITSTATUS(data->_errno);
 		else if (WIFSIGNALED(data->_errno))
 			data->_errno = WTERMSIG(data->_errno) + 128;
-
 		data->shell.s_sigint.sa_handler = _hndl_sigint;
 		sigaction(SIGINT, &data->shell.s_sigint, NULL);
+		if (data->_errno == 130)
+			return (_FAILURE);
 	}
 	return (_SUCCESS);
 }

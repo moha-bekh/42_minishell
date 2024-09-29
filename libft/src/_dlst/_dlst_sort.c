@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _dlst_sort.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 16:10:20 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/31 16:02:49 by moha             ###   ########.fr       */
+/*   Updated: 2024/09/27 14:22:51 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ void	_dlst_sort(t_ppadlst dlst, bool reverse)
 		tmp = (*dlst)->d_top;
 		while (tmp->next)
 		{
-			if (ft_strcmp(tmp->addr_1, tmp->next->addr_1) > 0
-				&& !reverse)
+			if (ft_strcmp(tmp->addr_1, tmp->next->addr_1) > 0 && !reverse)
 			{
 				ft_memswap(&tmp->addr_1, &tmp->next->addr_1, sizeof(void *));
 				ft_memswap(&tmp->addr_2, &tmp->next->addr_2, sizeof(void *));

@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/09/26 22:16:25 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/28 20:09:08 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,15 @@ typedef struct s_data t_data, *t_pdata; // Struct Data
 extern int				*g_ptr_errno;
 
 /* SIGNALS */
-int						_set_child_signals(t_pdata data);
-int						_set_parent_ignore_signals(t_pdata data);
-int						_set_parent_signals(t_pdata data);
-int						_signals_init(t_pdata data);
+void					_hndl_sigint(int sig);
+void					_hndl_hd_sigint(int sig);
+
+int						_set_sigint(t_pdata data);
+int						_ign_sigint(t_pdata data);
+int						_dfl_sigint(t_pdata data);
+int						_ign_sigquit(t_pdata data);
+int						_dfl_sigquit(t_pdata data);
+int						_sig_init_sas(t_pdata data);
 
 /* DATA */
 int						_data_init(t_pdata data, int ac, char **av, char **ev);
@@ -55,11 +60,14 @@ int						_check_bot(t_pdata data);
 t_pnlst					_tree_builder(t_ppbtree node, t_pnlst token);
 
 /* EXEC */
-int						_exec_builtin(t_pdata data, t_ppncmd cmd);
-int						_exec_builtin_proc(t_pdata data, t_ppncmd cmd);
-int						_exec_proc(t_pdata data, t_ppncmd cmd);
 int						_exec(t_pdata data, t_ppbtree node);
 int						_exec_redirections(t_ppncmd cmd);
+
+// int						_exec_builtin(t_pdata data, t_ppncmd cmd);
+// int						_exec_builtin_proc(t_pdata data, t_ppncmd cmd);
+// int						_exec_proc(t_pdata data, t_ppncmd cmd);
+// int						_exec(t_pdata data, t_ppbtree node);
+// int						_exec_redirections(t_ppncmd cmd);
 
 /* EXPAND */
 int						_xpd_line(t_pdata data, t_ppnlst token);
@@ -100,6 +108,7 @@ int						_is_builtin(t_pdata data, char **args);
 int						_is_overflow(char *str);
 int						_is_varchr(char c);
 int						_join_strings(t_ppnlst token);
+int						_key_exist(t_padlst env, char *arg);
 int						_limit_quoted(char *str);
 char					**_ltoa(t_padlst dlst);
 int						_nb_lnargs(t_pnlst token);
@@ -162,8 +171,6 @@ enum					e_return
 {
 	_SUCCESS = 0,
 	_FAILURE = 1,
-	_ERROR = -1,
-	_ALLOC = -2
 };
 
 # define _ERR_TOKEN "bash: syntax error near unexpected token `%s'\n"

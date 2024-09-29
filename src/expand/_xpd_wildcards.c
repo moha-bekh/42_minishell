@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 17:38:12 by moha              #+#    #+#             */
-/*   Updated: 2024/09/26 12:44:23 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/27 13:47:21 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	_xpd_merge_list(t_ppnlst token, t_ppadlst list)
 	tmp = (*list)->d_top;
 	while (tmp)
 	{
-		str = ft_strdup((*token)->addr_1);
+		str = ft_strdup(tmp->addr_1);
 		if (!str)
 			return (_FAILURE);
 		_dlst_push_after(&(*token)->manager, *token, str, NULL);

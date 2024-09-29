@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 09:41:33 by ajordan-          #+#    #+#             */
-/*   Updated: 2024/09/21 16:58:55 by oek              ###   ########.fr       */
+/*   Updated: 2024/09/28 12:54:49 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ void				_dlst_sort(t_ppadlst dlst, bool reverse);
 
 /* SIMPLE LIST */
 
-# ifndef BF
-#  define BF 4096
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 4096
 # endif
 
 void				ft_lstadd_back(t_list **lst, t_list *new);
@@ -162,14 +162,32 @@ int					ft_toupper(int c);
 void				ft_swap(int *a, int *b);
 int					ft_atoi_base(const char *str, int base);
 
-/* GNL */
-char				*get_next_line(int fd, t_pplist lst);
-/* GNL UTILS */
-int					is_new_line(t_plist lst);
-t_plist				get_last_node(t_plist lst);
-void				generate_line(t_plist lst, char **line);
-void				free_list(t_pplist lst);
+typedef struct s_list
+{
+	char			*value;
+	struct s_list	*next;
+}					t_list;
+// get_next_line
+char				*get_next_line(int fd);
+void				read_and_stock(int fd, t_list **line_list);
+void				add_to_list(t_list **line_list, char *buf, int readed);
+void				extract_line(t_list *line_list, char **line);
+void				clean_list(t_list **line_list);
+// get_next_line_utils
+int					is_new_line(t_list *line_list);
+t_list				*get_last_node(t_list *line_list);
+void				generate_line(t_list *line_list, char **line);
+void				free_list(t_list *line_list);
 size_t				ft_strlen(const char *s);
+
+// /* GNL */
+// char				*get_next_line(int fd, t_pplist lst);
+// /* GNL UTILS */
+// int					is_new_line(t_plist lst);
+// t_plist				get_last_node(t_plist lst);
+// void				generate_line(t_plist lst, char **line);
+// void				free_list(t_pplist lst);
+// size_t				ft_strlen(const char *s);
 
 /* SORT */
 void				quick_sort(int *tab, int start, int end);
@@ -245,12 +263,12 @@ struct				s_adlst
 	};
 };
 
-struct				s_list
-{
-	char			*key;
-	char			*value;
-	t_plist			next;
-};
+// struct				s_list
+// {
+// 	char			*key;
+// 	char			*value;
+// 	t_plist			next;
+// };
 
 struct				s_ft_dprintf
 {

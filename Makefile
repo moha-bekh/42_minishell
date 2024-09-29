@@ -54,10 +54,13 @@ _TOKEN			:=		_op\
 
 _TREE			:=		_tree_builder
 
-_EXEC			:= 		_exec_process\
-						_exec_proc\
-						_exec_builtin\
+_EXEC			:=		_exec\
 						_redirs\
+
+# _EXEC			:= 		_exec_process\
+# 						_exec_proc\
+# 						_exec_builtin\
+# 						_redirs\
 
 _EXPAND			:= 		_xpd\
 						_xpd_str\
@@ -77,6 +80,7 @@ _UTILS			:= 		_bt_print\
 						_is_overflow\
 						_is_varchr\
 						_join_strings\
+						_key_exist\
 						_limit_quoted\
 						_ltoa\
 						_nb_lnargs\

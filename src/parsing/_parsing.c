@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/26 21:55:48 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/28 18:44:10 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	_pars_args_proc(t_ppncmd cmd)
 	i = _nb_lnargs((*cmd)->token);
 	if (i && (_alloc((void **)&(*cmd)->args, sizeof(char *) * (i + 1))
 			|| !(*cmd)->args))
-		return (_ALLOC);
+		return (_FAILURE);
 	return (_SUCCESS);
 }
 
@@ -73,7 +73,8 @@ int	_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 	}
 	if (inside && (*cmd)->args)
 		(*cmd)->args[i] = NULL;
-	if (tmp && tmp->x == ')' && tmp->next && _pars_args_line(data, cmd, &tmp->next, false))
+	if (tmp && tmp->x == ')' && tmp->next && _pars_args_line(data, cmd,
+			&tmp->next, false))
 		return (_FAILURE);
 	return (_SUCCESS);
 }

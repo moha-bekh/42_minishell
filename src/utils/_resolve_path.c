@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _path.c                                            :+:      :+:    :+:   */
+/*   _resolve_path.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 11:19:04 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/26 12:25:21 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/29 14:43:24 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,11 @@ int	_resolve_path(t_pdata data, t_ppncmd cmd)
 	else
 	{
 		prog = (*cmd)->args[0];
-		if (ft_strchr(prog, '/') && !access(prog, F_OK) && _is_path(cmd))
-			return (_FAILURE);
+		if (ft_strchr(prog, '/') && !access(prog, F_OK))
+		{
+			if (_is_path(cmd))
+				return (_FAILURE);
+		}
 		else if (_get_path(data, cmd))
 		{
 			(*cmd)->path = ft_strdup("");

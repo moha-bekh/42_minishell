@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/26 23:28:58 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/28 19:08:47 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int	_quote_proc(t_pdata data, int *i)
 		*i += 1;
 	if (!data->prompt[*i])
 		return (_err_print(_ERR_CLOSE, &type_quote, false, 2));
-	if (data->tokens && data->tokens->d_bot->flag && data->tokens->d_bot->prev->x == 'H')
+	if (data->tokens && data->tokens->d_bot->flag
+		&& data->tokens->d_bot->prev->x == 'H')
 	{
 		str = ft_substr(data->prompt, j + 1, (*i - j - 1));
 		tmp = ft_strjoin(data->tokens->d_bot->addr_1, str);
@@ -60,8 +61,15 @@ int	_tok_word(t_pdata data, int *i)
 	while (data->prompt[*i] && !ft_isspace(data->prompt[*i])
 		&& !_tok_id(data->prompt[*i], _TOKENS))
 		*i += 1;
-	if (data->tokens && data->tokens->d_bot->flag && data->tokens->d_bot->prev->x == 'H')
+	if (data->tokens && data->tokens->d_bot->flag
+		&& data->tokens->d_bot->prev->x == 'H')
 	{
+
+
+
+
+
+
 		str = ft_substr(data->prompt, j, (*i - j));
 		tmp = ft_strjoin(data->tokens->d_bot->addr_1, str);
 		free(str);
@@ -108,28 +116,57 @@ int	_hd_fill(t_pdata data, t_pnlst token)
 {
 	int		fd;
 	char	*line;
+	pid_t	pid;
 
-	fd = open(token->addr_1, O_RDWR | O_CREAT | O_APPEND, 0644);
-	while (true)
+	line = NULL;
+	pid = fork();
+	if (pid == 0)
 	{
-		line = readline("> ");
-		if (!line)
+		data->shell.s_sigint.sa_handler = _hndl_hd_sigint;
+		sigaction(SIGINT, &data->shell.s_sigint, NULL);
+		fd = open(token->addr_1, O_RDWR | O_CREAT | O_APPEND, 0644);
+		while (true)
 		{
-			ft_dprintf(2, _ERR_HERE_EOF, token->next->addr_1);
-			break ;
+			if (data->_errno == 130)
+			{
+				exit(130);
+			}
+			line = readline("> ");
+			if (!line)
+			{
+				ft_dprintf(2, _ERR_HERE_EOF, token->next->addr_1);
+				_data_clear(data);
+				exit(0);
+			}
+			if (!ft_strcmp(line, token->next->addr_1))
+				break ;
+			if (line && !_tok_id(token->next->x, _QUOTES))
+				line = _xpd_str(data, line);
+			if (line)
+				ft_dprintf(fd, "%s\n", line);
+			free(line);
+			line = NULL;
 		}
-		if (!ft_strcmp(line, token->next->addr_1))
-			break ;
-		if (line && !_tok_id(token->next->x, _QUOTES))
-			line = _xpd_str(data, line);
 		if (line)
-			ft_dprintf(fd, "%s\n", line);
-		free(line);
-		line = NULL;
+			free(line);
+		close(fd);
+		exit(0);
 	}
-	free(line);
-	close(fd);
-	token = token->next;
+	else
+	{
+		token = token->next;
+		data->shell.s_sigint.sa_handler = SIG_IGN;
+		sigaction(SIGINT, &data->shell.s_sigint, NULL);
+
+		waitpid(pid, &data->_errno, 0);
+		if (WIFEXITED(data->_errno))
+			data->_errno = WEXITSTATUS(data->_errno);
+		else if (WIFSIGNALED(data->_errno))
+			data->_errno = WTERMSIG(data->_errno) + 128;
+
+		data->shell.s_sigint.sa_handler = _hndl_sigint;
+		sigaction(SIGINT, &data->shell.s_sigint, NULL);
+	}
 	return (_SUCCESS);
 }
 

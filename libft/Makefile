@@ -54,8 +54,11 @@ FTTO_DIR			:=		ft_to/
 FTTO				:=		ft_atoi ft_atol ft_itoa ft_tolower ft_toupper ft_swap\
 							ft_atoi_base
 
-GNL_DIR				:=		get_next_line/
+GNL_DIR				:=		_gnl/
 GNL					:=		get_next_line get_next_line_utils
+
+# GNL_DIR				:=		get_next_line/
+# GNL					:=		get_next_line get_next_line_utils
 
 SORT_DIR			:=		sort/
 SORT				:=		ft_quick_sort\

@@ -1,30 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _wait_pids.c                                       :+:      :+:    :+:   */
+/*   _key_exist.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/26 12:28:27 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/28 20:10:57 by mbekheir         ###   ########.fr       */
+/*   Created: 2024/09/27 13:51:01 by mbekheir          #+#    #+#             */
+/*   Updated: 2024/09/27 14:10:16 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	_wait_pids(t_pdata data, t_padlst cmd_line)
+int	_key_exist(t_padlst env, char *arg)
 {
-	t_pncmd	tmp;
+	t_pnlst	tmp;
+	char	*key;
 
-	tmp = cmd_line->c_top;
+	key = ft_substr(arg, 0, ft_strchr(arg, '=') - arg);
+	if (!key)
+		return (_FAILURE);
+	tmp = env->d_top;
 	while (tmp)
 	{
-		waitpid(tmp->pid, &data->_errno, 0);
-		if (WIFEXITED(data->_errno))
-			data->_errno = WEXITSTATUS(data->_errno);
-		else if (WIFSIGNALED(data->_errno))
-			data->_errno = WTERMSIG(data->_errno) + 128;
-		printf("status: %d\n", data->_errno);
+		if (!ft_strcmp(tmp->addr_1, key))
+		{
+			free(key);
+			return (true);
+		}
 		tmp = tmp->next;
 	}
+	free(key);
+	return (false);
 }

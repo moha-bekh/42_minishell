@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/29 19:20:09 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/29 21:57:50 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,7 @@ int	_tok_word(t_pdata data, int *i)
 	while (data->prompt[*i] && !ft_isspace(data->prompt[*i])
 		&& !_tok_id(data->prompt[*i], _TOKENS))
 		*i += 1;
-	if (data->tokens && data->tokens->d_bot->flag
-		&& data->tokens->d_bot->prev->x == 'H')
+	if (data->tokens && data->tokens->d_bot->flag && data->tokens->d_bot->prev->x == 'H')
 	{
 		str = ft_substr(data->prompt, j, (*i - j));
 		tmp = ft_strjoin(data->tokens->d_bot->addr_1, str);

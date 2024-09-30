@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 23:44:34 by moha              #+#    #+#             */
-/*   Updated: 2024/09/25 23:22:18 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/30 18:31:48 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int	_path_init(t_pdata data)
 
 int	_data_init(t_pdata data, int ac, char **av, char **ev)
 {
+	*data = (t_data){0};
 	data->args.ac = ac;
 	data->args.av = av;
 	data->args.env = ev;

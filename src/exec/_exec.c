@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 18:20:38 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/29 14:43:37 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/30 18:56:03 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ int	_exec_builtin(t_pdata data, t_ppncmd cmd)
 
 int	_exec_builtin_proc(t_pdata data, t_ppncmd cmd)
 {
-	_save_stdfds(data);
+	// _save_stdfds(data);
 	_exec_redirections(cmd);
 	data->_errno = _exec_builtin(data, cmd);
-	_restore_stdfds(data);
+	// _restore_stdfds(data);
 	return (_SUCCESS);
 }
 
@@ -95,6 +95,8 @@ int	_exec_process(t_pdata data, t_pncmd cmd)
 			sigaction(SIGINT, &data->shell.s_sigint, NULL);
 			data->shell.s_sigquit.sa_handler = SIG_DFL;
 			sigaction(SIGQUIT, &data->shell.s_sigquit, NULL);
+
+			_exec_redirections(&cmd);
 			if (_is_builtin(data, cmd->args))
 			{
 				data->_errno = _exec_builtin(data, &cmd);
@@ -103,7 +105,6 @@ int	_exec_process(t_pdata data, t_pncmd cmd)
 			}
 			else
 			{
-				_exec_redirections(&cmd);
 				if (_resolve_path(data, &cmd))
 					return (_FAILURE);
 				env = _ltoa(data->env);
@@ -141,6 +142,8 @@ int	_exec_loop(t_pdata data, t_ppbtree node)
 		cmd = cmd->next;
 	}
 	cmd = (*node)->cmd_line->c_top;
+	if (!cmd->next && _is_builtin(data, cmd->args))
+		return (_SUCCESS);
 	while (cmd)
 	{
 		data->shell.s_sigint.sa_handler = SIG_IGN;
@@ -165,11 +168,6 @@ int	_exec_loop(t_pdata data, t_ppbtree node)
 		sigaction(SIGQUIT, &data->shell.s_sigquit, NULL);
 		cmd = cmd->next;
 	}
-	// waitpid(cmd->pid, &data->_errno, 0);
-	// if (WIFEXITED(data->_errno))
-	// 	data->_errno = WEXITSTATUS(data->_errno);
-	// else if (WIFSIGNALED(data->_errno))
-	// 	data->_errno = WTERMSIG(data->_errno) + 128;
 	return (_SUCCESS);
 }
 

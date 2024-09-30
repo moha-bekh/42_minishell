@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 12:47:09 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/26 14:04:23 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/30 17:47:44 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char	*_xpd_str(t_pdata data, char *line)
 	j = 0;
 	while (line[i])
 	{
-		if (line[i] == '$' && line[i + 1] != '$')
+		if (line[i] == '$' && _is_varchr(line[i + 1]))
 		{
 			i++;
 			if (line[i] == '?')

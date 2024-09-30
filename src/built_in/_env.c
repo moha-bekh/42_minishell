@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:58 by moha              #+#    #+#             */
-/*   Updated: 2024/09/26 22:19:39 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/09/30 16:30:48 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	_env(t_pdata data, char **args)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (args[++i])

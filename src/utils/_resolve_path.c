@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 11:19:04 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/29 14:43:24 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/04 16:43:55 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	_is_path(t_ppncmd cmd)
 
 int	_resolve_path(t_pdata data, t_ppncmd cmd)
 {
+	struct stat buf;
 	char	*prog;
 
 	if (!(*cmd)->args)
@@ -65,8 +66,14 @@ int	_resolve_path(t_pdata data, t_ppncmd cmd)
 	else
 	{
 		prog = (*cmd)->args[0];
+		if (ft_strchr(prog, '/') && access(prog, F_OK))
+			exit (_err_print(_ERR_NO_FILE, prog, true, 127));
 		if (ft_strchr(prog, '/') && !access(prog, F_OK))
 		{
+			if (lstat(prog, &buf) == -1)
+				perror("lstat");
+			if (S_ISDIR(buf.st_mode))
+				exit (_err_print(_ERR_IS_DIR, prog, true, 126));
 			if (_is_path(cmd))
 				return (_FAILURE);
 		}

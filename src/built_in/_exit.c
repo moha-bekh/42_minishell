@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:43 by moha              #+#    #+#             */
-/*   Updated: 2024/09/25 23:21:20 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/03 17:35:47 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	_exit_arg(t_pdata data, char **args)
 	ft_strlcpy(buf, args[1], 4095);
 	if (_is_overflow(buf))
 	{
-		ft_dprintf(2, _ERR_EXIT_NUM, buf);
+		ft_dprintf(STDERR_FILENO, _ERR_EXIT_NUM, buf);
 		_data_clear(data);
 		exit(2);
 	}

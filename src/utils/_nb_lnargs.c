@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _nb_lnargs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 02:34:44 by oek               #+#    #+#             */
-/*   Updated: 2024/09/26 02:34:48 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/03 12:42:24 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ int	_nb_lnargs(t_pnlst token)
 				tmp = tmp->next;
 			continue ;
 		}
-		i++;
+		if (tmp && tmp->addr_1)
+			i++;
 		tmp = tmp->next;
 	}
 	return (i);

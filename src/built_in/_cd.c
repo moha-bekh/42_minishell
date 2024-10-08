@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _cd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:50 by moha              #+#    #+#             */
-/*   Updated: 2024/09/26 02:44:48 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/03 10:45:08 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ int	_cd(t_pdata data, char **args)
 {
 	if (_set_old_pwd(data))
 		return (_FAILURE);
+	if (args[2])
+		return (_err_print("bash: cd: too many arguments\n", NULL, false, 1));
 	if (!args[1] && _cd_home(data))
 		return (_FAILURE);
 	if (args[1])

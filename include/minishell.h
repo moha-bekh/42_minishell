@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/09/28 20:09:08 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/08 18:47:53 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,13 +189,13 @@ enum					e_return
 # define _ERR_EXIT_NUM "exit\nbash: exit: %s: numeric argument required\n"
 # define _ERR_EXIT_MANY "exit\nbash: exit: too many arguments\n"
 
-# define _ERR_PERM "bash: %s: permission denied\n"
+# define _ERR_PERM "bash: %s: Permission denied\n"
 # define _ERR_HERE_EOF "bash: warning: here-document delimited by end-of-file (wanted `%s')\n"
 
-# define _PATH "/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
+# define _PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
-# define _O_RWCT O_RDWR | O_CREAT | O_TRUNC, 0644
-# define _O_RWCA O_RDWR | O_CREAT | O_APPEND, 0644
+# define _O_RWCT O_WRONLY | O_CREAT | O_TRUNC, 0644
+# define _O_RWCA O_WRONLY | O_CREAT | O_APPEND, 0644
 
 # define _TOKENS "*'\"()$|&<>"
 # define _OPERATORS "&|"

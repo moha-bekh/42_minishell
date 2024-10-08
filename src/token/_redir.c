@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:25:01 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/26 16:59:12 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/04 18:42:31 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ int	_redir_heredoc(t_pdata data, int *i)
 
 int	_redir_in(t_pdata data, int *i)
 {
-	_dlst_push_back(&data->tokens, ft_substr(data->prompt, (*i)++, 1), NULL,
-		'<');
+	_dlst_push_back(&data->tokens, ft_substr(data->prompt, (*i)++, 1), NULL, '<');
 	if (!data->tokens->d_bot->addr_1)
 		return (_FAILURE);
 	if (data->tokens && data->tokens->d_bot->prev

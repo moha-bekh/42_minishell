@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 16:12:52 by moha              #+#    #+#             */
-/*   Updated: 2024/09/26 16:59:24 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/08 14:57:36 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,30 +38,32 @@ int	_dollar_proc(t_pdata data, int *i)
 
 	if (data->prompt[*i + 1] && data->prompt[*i + 1] == '?')
 	{
-		_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 2), NULL,
-			'$');
+		_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 2), NULL, '$');
 		if (!data->tokens->d_bot->addr_1)
 			return (_FAILURE);
 		*i += 2;
 	}
 	else if (data->prompt[*i + 1] && _is_varchr(data->prompt[*i + 1]))
 	{
-		j = ++(*i);
+		if (data->tokens && data->tokens->d_bot->x == 'H')
+		{
+			j = (*i);
+			(*i) += 1;
+		}
+		else
+			j = ++(*i);
 		while (data->prompt[*i] && _is_varchr(data->prompt[*i]))
 			*i += 1;
-		_dlst_push_back(&data->tokens, ft_substr(data->prompt, j, (*i - j)),
-			NULL, '$');
+		_dlst_push_back(&data->tokens, ft_substr(data->prompt, j, (*i - j)), NULL, '$');
 		if (!data->tokens->d_bot->addr_1)
 			return (_FAILURE);
 	}
 	else
 	{
 		j = *i;
-		while (data->prompt[++(*i)] && !ft_isspace(data->prompt[*i])
-			&& data->prompt[*i] != '$')
+		while (data->prompt[++(*i)] && !ft_isspace(data->prompt[*i]) && data->prompt[*i] != '$')
 			*i += 1;
-		_dlst_push_back(&data->tokens, ft_substr(data->prompt, j, (*i - j)),
-			NULL, 'W');
+		_dlst_push_back(&data->tokens, ft_substr(data->prompt, j, (*i - j)), NULL, 'W');
 		if (!data->tokens->d_bot->addr_1)
 			return (_FAILURE);
 	}

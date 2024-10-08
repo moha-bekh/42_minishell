@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/09/29 19:07:33 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/08 15:06:55 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	_stdio_init(void)
 
 int	_shell_init(t_pdata data)
 {
+	return (_SUCCESS);
 	if (isatty(STDIN_FILENO))
 	{
 		if (tcgetattr(STDIN_FILENO, &data->shell.org_term) == -1)
@@ -43,6 +44,7 @@ int	_shell_init(t_pdata data)
 		if (tcsetattr(STDIN_FILENO, TCSANOW, &data->shell.new_term) == -1)
 			return (_FAILURE);
 	}
+	(void)data;
 	return (_SUCCESS);
 }
 

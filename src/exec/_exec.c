@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 18:20:38 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/30 18:56:03 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/08 18:44:53 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,19 @@
 int	_save_stdfds(t_pdata data)
 {
 	data->shell._stdin = dup(STDIN_FILENO);
-	if (data->shell._stdin == -1)
+	if (data->shell._stdin < 0)
 		return (_FAILURE);
 	data->shell._stdout = dup(STDOUT_FILENO);
-	if (data->shell._stdout == -1)
+	if (data->shell._stdout < 0)
 		return (_FAILURE);
 	return (_SUCCESS);
 }
 
 int	_restore_stdfds(t_pdata data)
 {
-	if (dup2(data->shell._stdin, STDIN_FILENO) == -1)
+	if (dup2(data->shell._stdin, STDIN_FILENO) < 0)
 		return (_FAILURE);
-	if (dup2(data->shell._stdout, STDOUT_FILENO) == -1)
+	if (dup2(data->shell._stdout, STDOUT_FILENO) < 0)
 		return (_FAILURE);
 	return (_SUCCESS);
 }
@@ -53,21 +53,24 @@ int	_exec_builtin(t_pdata data, t_ppncmd cmd)
 
 int	_exec_builtin_proc(t_pdata data, t_ppncmd cmd)
 {
-	// _save_stdfds(data);
-	_exec_redirections(cmd);
+	if (_save_stdfds(data))
+		return (_FAILURE);
+	if (_exec_redirections(cmd))
+		return (_FAILURE);
 	data->_errno = _exec_builtin(data, cmd);
-	// _restore_stdfds(data);
+	if (_restore_stdfds(data))
+		return (_FAILURE);
 	return (_SUCCESS);
 }
 
-void	_tmp_hndl(int sig)
-{
-	(void)sig;
-	if (sig == SIGINT)
-		printf("sigint\n");
-	if (sig == SIGQUIT)
-		printf("sigquit\n");
-}
+// void	_tmp_hndl(int sig)
+// {
+// 	(void)sig;
+// 	if (sig == SIGINT)
+// 		printf("sigint\n");
+// 	if (sig == SIGQUIT)
+// 		printf("sigquit\n");
+// }
 
 int	_exec_process(t_pdata data, t_pncmd cmd)
 {
@@ -77,8 +80,19 @@ int	_exec_process(t_pdata data, t_pncmd cmd)
 		return (_FAILURE);
 	if (_pars_args_line(data, &cmd, &cmd->token, true))
 		return (_FAILURE);
+	// if (ft_strchr(cmd->args[0], '/'))
+	// {
+	// 	if (access(cmd->args[0], X_OK) < 0)
+	// 	{
+	// 		data->_errno = 126;
+	// 		return (_err_print(_ERR_NOT_FOUND, cmd->args[0], true, 127));
+	// 	}
+	// }
 	if (!cmd->next && !cmd->prev && _is_builtin(data, cmd->args))
-		_exec_builtin_proc(data, &cmd);
+	{
+		if (_exec_builtin_proc(data, &cmd))
+			return (_FAILURE);
+	}
 	else
 	{
 		if (cmd->next)
@@ -95,8 +109,13 @@ int	_exec_process(t_pdata data, t_pncmd cmd)
 			sigaction(SIGINT, &data->shell.s_sigint, NULL);
 			data->shell.s_sigquit.sa_handler = SIG_DFL;
 			sigaction(SIGQUIT, &data->shell.s_sigquit, NULL);
-
-			_exec_redirections(&cmd);
+			if (_exec_redirections(&cmd))
+			{
+				_data_clear(data);
+				exit(1);
+			}
+			if (!cmd->args)
+				return (_SUCCESS);
 			if (_is_builtin(data, cmd->args))
 			{
 				data->_errno = _exec_builtin(data, &cmd);
@@ -108,7 +127,8 @@ int	_exec_process(t_pdata data, t_pncmd cmd)
 				if (_resolve_path(data, &cmd))
 					return (_FAILURE);
 				env = _ltoa(data->env);
-				execve(cmd->path, cmd->args, env);
+				// execve(cmd->path, cmd->args, env);
+				execve(cmd->path, cmd->args, data->args.env);
 				if (cmd->args)
 					_err_print(_ERR_NOT_FOUND, cmd->args[0], true, 127);
 				ft_free_arr(env);
@@ -156,8 +176,8 @@ int	_exec_loop(t_pdata data, t_ppbtree node)
 			data->_errno = WEXITSTATUS(data->_errno);
 		else if (WIFSIGNALED(data->_errno))
 			data->_errno = WTERMSIG(data->_errno) + 128;
-		if (tcsetattr(STDIN_FILENO, TCSANOW, &data->shell.new_term) == -1)
-			return (_FAILURE);
+		// if (tcsetattr(STDIN_FILENO, TCSANOW, &data->shell.new_term) == -1)
+		// 	return (_FAILURE);
 		if (data->_errno == 130)
 			write(1, "\n", 1);
 		if (data->_errno == 131)

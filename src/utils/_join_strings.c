@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 12:46:04 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/26 12:46:13 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/03 12:39:19 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	_join_strings(t_ppnlst token)
 	tmp = *token;
 	while (tmp && tmp->x != _PIPE && !_tok_id(tmp->x, _TYP_SEP))
 	{
-		if (tmp->flag)
+		if (tmp->addr_1 && tmp->flag)
 		{
 			tmp = tmp->next;
 			old = tmp->addr_1;

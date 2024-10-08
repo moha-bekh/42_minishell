@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 16:22:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/26 22:52:28 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/08 18:39:44 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@ int	_xpd_var(t_pdata data, t_ppnlst token)
 {
 	char	*tmp;
 
+	if (!ft_strcmp((*token)->addr_1, "$?"))
+	{
+		free((*token)->addr_1);
+		(*token)->addr_1 = ft_itoa(data->_errno);
+		if (!(*token)->addr_1)
+			return (_FAILURE);
+		return (_SUCCESS);
+	}
 	tmp = _get_env_value(data, (*token)->addr_1);
 	if (tmp)
 	{
@@ -24,17 +32,10 @@ int	_xpd_var(t_pdata data, t_ppnlst token)
 		if (!(*token)->addr_1)
 			return (_FAILURE);
 	}
-	else if (!tmp && !ft_strcmp((*token)->addr_1, "$?"))
-	{
-		free((*token)->addr_1);
-		(*token)->addr_1 = ft_itoa(data->_errno);
-	}
 	else
 	{
 		free((*token)->addr_1);
-		(*token)->addr_1 = ft_strdup("");
-		if (!(*token)->addr_1)
-			return (_FAILURE);
+		(*token)->addr_1 = NULL;
 	}
 	return (_SUCCESS);
 }

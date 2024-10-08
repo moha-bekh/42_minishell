@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/28 18:44:10 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/04 16:37:25 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 {
 	t_pnlst	tmp;
 	int		i;
+	char	*str;
 
 	if (!*cmd)
 		return (_FAILURE);
@@ -52,22 +53,26 @@ int	_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 	tmp = *token;
 	while (tmp && tmp->x != _PIPE && !_tok_id(tmp->x, _TYP_SEP))
 	{
+		str = tmp->addr_1;
 		if (_tok_id(tmp->x, _TYP_REDIRS))
 		{
 			if (_pars_redirs(data, cmd, &tmp, inside))
+			{
+				data->_errno = 1;
 				return (_FAILURE);
+			}
 			continue ;
 		}
-		else if (inside && tmp->addr_1)
+		else if (inside && str && str[0])
 		{
-			(*cmd)->args[i++] = ft_strdup(tmp->addr_1);
+			(*cmd)->args[i++] = ft_strdup(str);
 			if (!(*cmd)->args[i - 1])
 				return (_FAILURE);
 		}
-		else if (!inside && tmp->addr_1)
+		else if (!inside && str && str[0])
 		{
 			data->_errno = 2;
-			return (ft_dprintf(2, _ERR_TOKEN, tmp->addr_1), _FAILURE);
+			return (ft_dprintf(2, _ERR_TOKEN, str), _FAILURE);
 		}
 		tmp = tmp->next;
 	}

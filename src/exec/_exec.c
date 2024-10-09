@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 18:20:38 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/08 18:44:53 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/09 17:22:50 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,10 @@ int	_exec_builtin_proc(t_pdata data, t_ppncmd cmd)
 	if (_save_stdfds(data))
 		return (_FAILURE);
 	if (_exec_redirections(cmd))
+	{
+		data->_errno = 1;
 		return (_FAILURE);
+	}
 	data->_errno = _exec_builtin(data, cmd);
 	if (_restore_stdfds(data))
 		return (_FAILURE);
@@ -74,7 +77,7 @@ int	_exec_builtin_proc(t_pdata data, t_ppncmd cmd)
 
 int	_exec_process(t_pdata data, t_pncmd cmd)
 {
-	char	**env;
+	// char	**env;
 
 	if (_xpd_line(data, &cmd->token))
 		return (_FAILURE);
@@ -126,12 +129,12 @@ int	_exec_process(t_pdata data, t_pncmd cmd)
 			{
 				if (_resolve_path(data, &cmd))
 					return (_FAILURE);
-				env = _ltoa(data->env);
+				// env = _ltoa(data->env);
 				// execve(cmd->path, cmd->args, env);
 				execve(cmd->path, cmd->args, data->args.env);
 				if (cmd->args)
 					_err_print(_ERR_NOT_FOUND, cmd->args[0], true, 127);
-				ft_free_arr(env);
+				// ft_free_arr(env);
 				_data_clear(data);
 				exit(127);
 			}

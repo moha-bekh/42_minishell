@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/10/08 15:06:55 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/09 17:27:05 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ int	_shell_init(t_pdata data)
 		if (tcgetattr(STDIN_FILENO, &data->shell.org_term) == -1)
 			return (_FAILURE);
 		data->shell.new_term = data->shell.org_term;
-		data->shell.new_term.c_lflag |= (ICANON | ECHO | ECHOE | ECHOK | ISIG | IEXTEN); // Active les flags utilisés par bash
-		data->shell.new_term.c_lflag &= ~(ECHONL | ECHOPRT | ECHOKE); // Désactive d'autres options inutiles pour bash
+		data->shell.new_term.c_lflag |= (ICANON | ECHO | ECHOE | ECHOK | ISIG | IEXTEN);
+		data->shell.new_term.c_lflag &= ~(ECHONL | ECHOPRT | ECHOKE);
 		if (tcsetattr(STDIN_FILENO, TCSANOW, &data->shell.new_term) == -1)
 			return (_FAILURE);
 	}
@@ -88,7 +88,6 @@ int	main(int ac, char **av, char **ev)
 		add_history(data.prompt);
 		if (_tok_list(&data) && !_data_structs_clear(&data))
 			continue ;
-		// _dlst_print_tokens(data.tokens);
 		_tree_builder(&data.tree, data.tokens->d_top);
 		if (_exec(&data, &data.tree) && !_data_structs_clear(&data))
 			continue ;
@@ -96,68 +95,3 @@ int	main(int ac, char **av, char **ev)
 	}
 	return (_data_clear(&data), _SUCCESS);
 }
-
-// void _hndl_int(int sig)
-// {
-// 	printf("SIGINT: %d\n", sig);
-// }
-
-// int	main(int ac, char **av, char **ev)
-// {
-// 	char *line;
-// 	pid_t pid;
-// 	int status;
-// 	struct sigaction	_sig_int;
-// 	struct sigaction	_sig_quit;
-
-// 	sigemptyset(&_sig_int.sa_mask);
-// 	_sig_int.sa_flags = 0;
-// 	_sig_int.sa_handler = _hndl_int;
-// 	sigaction(SIGINT, &_sig_int, NULL);
-
-// 	sigemptyset(&_sig_quit.sa_mask);
-// 	_sig_quit.sa_flags = 0;
-// 	_sig_quit.sa_handler = SIG_IGN;
-// 	sigaction(SIGQUIT, &_sig_quit, NULL);
-
-// 	while (true)
-// 	{
-// 		line = readline("main$ ");
-// 		if (!line)
-// 			return (write(1, "exit\n", 5), _SUCCESS);
-
-// 		if (!ft_strcmp(line, "hd"))
-// 		{
-// 			pid = fork();
-// 			if (pid == 0)
-// 			{
-// 				_sig_int.sa_handler = SIG_DFL;
-// 				_sig_quit.sa_handler = SIG_DFL;
-// 				sigaction(SIGINT, &_sig_int, NULL);
-// 				sigaction(SIGQUIT, &_sig_quit, NULL);
-// 				printf("child\n");
-// 				sleep(5);
-// 				exit(0);
-// 			}
-// 			else
-// 			{
-// 				_sig_int.sa_handler = SIG_IGN;
-// 				_sig_quit.sa_handler = SIG_IGN;
-// 				sigaction(SIGINT, &_sig_int, NULL);
-// 				sigaction(SIGQUIT, &_sig_quit, NULL);
-
-// 				waitpid(pid, &status, 0);
-// 				if(WIFEXITED(status))
-// 					printf("exit status: %d\n", WEXITSTATUS(status));
-// 				else if (WIFSIGNALED(status))
-// 					printf("sig status: %d\n", WTERMSIG(status) + 128);
-// 				printf("status: %d\n", status);
-// 			}
-// 		}
-// 		printf("line: %s\n", line);
-// 	}
-// 	(void)ac;
-// 	(void)av;
-// 	(void)ev;
-// 	return (_SUCCESS);
-// }

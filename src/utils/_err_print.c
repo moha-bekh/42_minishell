@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 02:38:08 by oek               #+#    #+#             */
-/*   Updated: 2024/10/04 15:58:35 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/09 16:28:18 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,6 @@ int	_err_print(char *str, void *arg, bool ptr, int _errno)
 	else
 		ft_dprintf(2, str, *((char *)arg));
 	if (_errno)
-		data->_errno = _errno;
+		*g_ptr_errno = _errno;
 	return (_errno);
 }

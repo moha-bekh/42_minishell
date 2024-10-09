@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 06:39:42 by moha              #+#    #+#             */
-/*   Updated: 2024/10/08 19:11:44 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/09 16:06:35 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,9 @@ int	_swap_fd_redir_in(t_ppncmd cmd)
 		return (_err_print(_ERR_NO_FILE, (*cmd)->redirs.in_name, true, 1));
 	else if (access((*cmd)->redirs.in_name, R_OK))
 		return (_err_print(_ERR_PERM, (*cmd)->redirs.in_name, true, 1));
-
 	(*cmd)->redirs.fd[0] = open((*cmd)->redirs.in_name, O_RDONLY);
 	if ((*cmd)->redirs.fd[0] < 0)
 		return (perror("open"), _FAILURE);
-
 	if (dup2((*cmd)->redirs.fd[0], STDIN_FILENO) < 0)
 		return (perror("dup2"), _FAILURE);
 	close((*cmd)->redirs.fd[0]);
@@ -33,15 +31,12 @@ int	_swap_fd_redir_out(t_ppncmd cmd)
 {
 	if (access((*cmd)->redirs.out_name, W_OK))
 		return (_err_print(_ERR_PERM, (*cmd)->redirs.out_name, true, 1));
-
 	if ((*cmd)->redirs.out_trunc)
 		(*cmd)->redirs.fd[1] = open((*cmd)->redirs.out_name, _O_RWCT);
 	else
 		(*cmd)->redirs.fd[1] = open((*cmd)->redirs.out_name, _O_RWCA);
 	if ((*cmd)->redirs.fd[1] < 0)
 		return (perror("open"), _FAILURE);
-
-	
 	if (dup2((*cmd)->redirs.fd[1], STDOUT_FILENO) < 0)
 		return (perror("dup2"), _FAILURE);
 	close((*cmd)->redirs.fd[1]);
@@ -68,9 +63,9 @@ int	_write_to_pipe(t_ppncmd cmd)
 
 int	_exec_redirections(t_ppncmd cmd)
 {
-	if ((*cmd)->redirs.in_name && _swap_fd_redir_in(cmd))
-		return (_FAILURE);
 	if ((*cmd)->redirs.out_name && _swap_fd_redir_out(cmd))
+		return (_FAILURE);
+	if ((*cmd)->redirs.in_name && _swap_fd_redir_in(cmd))
 		return (_FAILURE);
 	if ((*cmd)->next && !(*cmd)->redirs.out_name && _write_to_pipe(cmd))
 		return (_FAILURE);

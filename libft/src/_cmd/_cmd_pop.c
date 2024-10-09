@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _cmd_pop.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 18:57:58 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/31 16:33:50 by moha             ###   ########.fr       */
+/*   Updated: 2024/10/09 15:03:12 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ void	_cmd_pop_back(t_ppadlst dlst)
 	}
 	free(tmp->path);
 	ft_free_arr(tmp->args);
-	ft_free_arr(tmp->redirs.here_names);
-	free(tmp->redirs.here_limit);
+	// ft_free_arr(tmp->redirs.here_names);
+	// free(tmp->redirs.here_limit);
 	*tmp = (t_ncmd){0};
 	free(tmp);
 	tmp = NULL;

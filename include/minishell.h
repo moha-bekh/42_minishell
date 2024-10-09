@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/10/08 18:47:53 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/09 16:25:42 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <sys/wait.h>
 # include <termios.h>
 
-typedef struct s_data t_data, *t_pdata; // Struct Data
+typedef struct s_data t_data, *t_pdata, **t_ppdata; // Struct Data
 
 extern int				*g_ptr_errno;
 

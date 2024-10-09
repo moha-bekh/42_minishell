@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/04 18:40:07 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/09 17:24:16 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ int	_tok_word(t_pdata data, int *i)
 
 int	_first_tok(t_pdata data, int *i)
 {
+	_dlst_push_back(&data->tokens, NULL, NULL, _WORD);
 	if (data->prompt[*i] && _tok_id(data->prompt[*i], _TOKENS))
 	{
 		if (_tok_proc(data, i))

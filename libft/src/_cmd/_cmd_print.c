@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _cmd_print.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 19:10:13 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/08/31 16:33:48 by moha             ###   ########.fr       */
+/*   Updated: 2024/10/09 15:02:58 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ void	_cmd_print_line(t_pncmd cmd)
 		printf(" no path");
 	if (cmd->redirs.in_name)
 		printf("\t\tin_name: %s", cmd->redirs.in_name);
-	if (cmd->redirs.here_name)
-	{
-		printf("\t\there_name: %s", cmd->redirs.here_name);
-		i = -1;
-		while (cmd->redirs.here_limit[++i])
-			printf("\t\tlimiter: %d -> %s", i, cmd->redirs.here_limit[i]);
-	}
+	// if (cmd->redirs.here_name)
+	// {
+	// 	printf("\t\there_name: %s", cmd->redirs.here_name);
+	// 	i = -1;
+	// 	while (cmd->redirs.here_limit[++i])
+	// 		printf("\t\tlimiter: %d -> %s", i, cmd->redirs.here_limit[i]);
+	// }
 	if (cmd->redirs.out_name)
 		printf("\t\tout_name: %s", cmd->redirs.out_name);
 	printf("\n");

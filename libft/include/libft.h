@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 09:41:33 by ajordan-          #+#    #+#             */
-/*   Updated: 2024/09/28 12:54:49 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/09 16:12:47 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct s_adlst t_adlst, *t_padlst, **t_ppadlst; // DOUBLE LIST MANAGER
 typedef struct s_nlst t_nlst, *t_pnlst, **t_ppnlst;     // DOUBLE LIST NODE
 typedef struct s_btree t_btree, *t_pbtree, **t_ppbtree; // BINARY TREE
 
-typedef struct s_ncmd t_ncmd, *t_pncmd, **t_ppncmd;       // CMD LIST
+typedef struct s_ncmd t_ncmd, *t_pncmd, **t_ppncmd; // CMD LIST
 // typedef struct s_redir t_redir, *t_predir;                // REDIRS
 typedef struct s_ft_dprintf t_fd_dprintf, *t_ft_pdprintf; // FT_DPRINTF
 
@@ -54,14 +54,19 @@ void				_cmd_print_line(t_pncmd cmd);
 void				_cmd_print_all(t_padlst dlst);
 
 /* DOUBLE LIST */
-t_pnlst				_dlst_new_node();
-t_padlst			_dlst_new_manager();
-void				_dlst_merge_nodes(t_padlst dlst, t_pnlst prev, t_pnlst node, t_pnlst next);
-void				_dlst_push_before(t_ppadlst dlst, t_pnlst node, void *addr_1, void *addr_2);
-void				_dlst_push_after(t_ppadlst dlst, t_pnlst node, void *addr_1, void *addr_2);
+t_pnlst				_dlst_new_node(void);
+t_padlst			_dlst_new_manager(void);
+void				_dlst_merge_nodes(t_padlst dlst, t_pnlst prev, t_pnlst node,
+						t_pnlst next);
+void				_dlst_push_before(t_ppadlst dlst, t_pnlst node,
+						void *addr_1, void *addr_2);
+void				_dlst_push_after(t_ppadlst dlst, t_pnlst node, void *addr_1,
+						void *addr_2);
 
-void				_dlst_push_front(t_ppadlst dlst, void *addr_1, void *addr_2, int x);
-void				_dlst_push_back(t_ppadlst dlst, void *addr_1, void *addr_2, int x);
+void				_dlst_push_front(t_ppadlst dlst, void *addr_1, void *addr_2,
+						int x);
+void				_dlst_push_back(t_ppadlst dlst, void *addr_1, void *addr_2,
+						int x);
 void				_dlst_pop_front(t_ppadlst dlst);
 void				_dlst_pop_back(t_ppadlst dlst);
 void				_dlst_pop_in(t_ppadlst dlst, t_ppnlst node);
@@ -218,15 +223,11 @@ struct				s_redir
 	char			*out_name;
 	char			*here_name;
 
-	char			**here_names;
-	char			**here_limit;
-	int				here_idx;
-	int				here_fd;
-
 	int				pfd[2];
 	int				fd[2];
 
 	bool			in_access;
+	bool			out_access;
 	bool			out_trunc;
 	bool			out_inside;
 	bool			here_inside;

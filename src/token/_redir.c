@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:25:01 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/04 18:42:31 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/09 16:33:03 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,20 @@ int	_redir_heredoc(t_pdata data, int *i)
 	free(data->tokens->d_bot->addr_1);
 	data->tokens->d_bot->addr_1 = path;
 	*i += 2;
-	if (data->tokens && data->tokens->d_bot->prev && _tok_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
+	if (data->tokens && data->tokens->d_bot->prev
+		&& _tok_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
 		return (_err_print(_ERR_TOKEN, "<<", true, 2));
 	return (_SUCCESS);
 }
 
 int	_redir_in(t_pdata data, int *i)
 {
-	_dlst_push_back(&data->tokens, ft_substr(data->prompt, (*i)++, 1), NULL, '<');
+	_dlst_push_back(&data->tokens, ft_substr(data->prompt, (*i)++, 1), NULL,
+		'<');
 	if (!data->tokens->d_bot->addr_1)
 		return (_FAILURE);
+	if (_tok_id(data->prompt[*i], _OPERATORS))
+		return (_err_print(_ERR_TOKEN, &data->prompt[*i], true, 2));
 	if (data->tokens && data->tokens->d_bot->prev
 		&& _tok_id(data->tokens->d_bot->prev->x, _TYP_REDIRS))
 		return (_err_print(_ERR_TOKEN, "<", true, 2));

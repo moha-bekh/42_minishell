@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _exec.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 18:20:38 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/09 17:22:50 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/11 01:11:17 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ int	_exec_process(t_pdata data, t_pncmd cmd)
 		return (_FAILURE);
 	if (_pars_args_line(data, &cmd, &cmd->token, true))
 		return (_FAILURE);
+	if (!cmd->args)
+		return (_SUCCESS);
 	// if (ft_strchr(cmd->args[0], '/'))
 	// {
 	// 	if (access(cmd->args[0], X_OK) < 0)
@@ -101,11 +103,11 @@ int	_exec_process(t_pdata data, t_pncmd cmd)
 		if (cmd->next)
 		{
 			if (pipe(cmd->redirs.pfd) < 0)
-				return (_err_print("bash: pipe failed", NULL, false, 1));
+				return (perror("pipe"), _FAILURE);
 		}
 		cmd->pid = fork();
 		if (cmd->pid < 0)
-			return (_err_print("bash: fork failed", NULL, false, 1));
+			return (perror("fork"), _FAILURE);
 		if (!cmd->pid)
 		{
 			data->shell.s_sigint.sa_handler = SIG_DFL;
@@ -165,8 +167,8 @@ int	_exec_loop(t_pdata data, t_ppbtree node)
 		cmd = cmd->next;
 	}
 	cmd = (*node)->cmd_line->c_top;
-	if (!cmd->next && _is_builtin(data, cmd->args))
-		return (_SUCCESS);
+	// if (!cmd->next && _is_builtin(data, cmd->args))
+	// 	return (_SUCCESS);
 	while (cmd)
 	{
 		data->shell.s_sigint.sa_handler = SIG_IGN;
@@ -200,7 +202,7 @@ int	_exec_subshell(t_pdata data, t_ppbtree node)
 
 	pid = fork();
 	if (pid < 0)
-		return (_err_print("bash: fork failed", NULL, false, 1));
+		return (perror("fork"), _FAILURE);
 	if (!pid)
 	{
 		if (_exec(data, node))
@@ -228,15 +230,15 @@ int	_exec(t_pdata data, t_ppbtree node)
 	type = (*node)->token->x;
 	if ((*node)->left)
 		_exec(data, &(*node)->left);
-	if ((type == _AND && data->_errno) || (type == _OR && !data->_errno))
-		return (_SUCCESS);
 	if (type == '(')
 	{
 		if (_exec_subshell(data, &(*node)->right))
 			return (_FAILURE);
 		return (_SUCCESS);
 	}
-	if (type != _AND && type != _OR && _exec_loop(data, node))
+	else if ((type == _AND && data->_errno) || (type == _OR && !data->_errno))
+		return (_SUCCESS);
+	else if (type != _AND && type != _OR && _exec_loop(data, node))
 		return (_FAILURE);
 	if ((*node)->right)
 		_exec(data, &(*node)->right);

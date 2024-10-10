@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _unset.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 21:55:55 by moha              #+#    #+#             */
-/*   Updated: 2024/09/30 18:33:51 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/11 00:47:33 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,14 @@ int	_update_export(t_pdata data)
 	return (_dlst_sort(&data->export, false), _SUCCESS);
 }
 
+void _unset_paths(t_pdata data)
+{
+	ft_free_arr(data->args.hard_path);
+	data->args.hard_path = NULL;
+	ft_free_arr(data->args.env_path);
+	data->args.env_path = NULL;
+}
+
 int	_unset(t_pdata data, char **args)
 {
 	t_pnlst	tmp;
@@ -52,12 +60,7 @@ int	_unset(t_pdata data, char **args)
 		while (args[++i])
 		{
 			if (!ft_strcmp(args[i], "PATH"))
-			{
-				ft_free_arr(data->args.hard_path);
-				data->args.hard_path = NULL;
-				ft_free_arr(data->args.env_path);
-				data->args.env_path = NULL;
-			}
+				_unset_paths(data);
 			if (!ft_strcmp(tmp->addr_1, args[i]))
 			{
 				_dlst_pop_in(&data->env, &tmp);

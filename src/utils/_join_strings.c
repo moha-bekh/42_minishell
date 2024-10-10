@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _join_strings.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 12:46:04 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/09 17:23:36 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/11 01:49:19 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ int	_join_strings(t_ppnlst token)
 {
 	t_pnlst	tmp;
 	char	*old;
-	char	a;
-	char	b;
 
 	tmp = *token;
 	while (tmp && tmp->x != _PIPE && !_tok_id(tmp->x, _TYP_SEP))
@@ -28,12 +26,8 @@ int	_join_strings(t_ppnlst token)
 			old = tmp->addr_1;
 			tmp->addr_1 = ft_strjoin(tmp->prev->addr_1, tmp->addr_1);
 			free(old);
-			a = tmp->prev->x;
-			b = tmp->x;
-			old = tmp->addr_2;
-			tmp->addr_2 = ft_strjoin(&a, &b);
-			free(old);
-			_dlst_pop_in(&(*token)->manager, &tmp->prev);
+			free(tmp->prev->addr_1);
+			tmp->prev->addr_1 = NULL;
 			continue ;
 		}
 		tmp = tmp->next;

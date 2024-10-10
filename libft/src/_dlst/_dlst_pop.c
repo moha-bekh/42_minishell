@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:32:54 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/21 00:14:14 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 01:22:23 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	_dlst_pop_front(t_ppadlst dlst)
 
 	if (!*dlst)
 		return ;
-	tmp = (*dlst)->d_bot;
+	tmp = (*dlst)->d_top;
 	if (--(*dlst)->d_size)
 	{
 		tmp = (*dlst)->d_top;

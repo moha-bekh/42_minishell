@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/10/09 16:25:42 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/11 01:47:00 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ int						_sig_init_sas(t_pdata data);
 int						_data_init(t_pdata data, int ac, char **av, char **ev);
 int						_env_init(t_pdata data);
 /* CLEAR */
-int						_data_clear(t_pdata data);
-int						_data_structs_clear(t_pdata data);
+void						_data_clear(t_pdata data);
+void						_data_structs_clear(t_pdata data);
 
 /* TOKENS */
 int						_tok_id(char a, char *str);

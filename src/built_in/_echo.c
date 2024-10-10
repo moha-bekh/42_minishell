@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _echo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:54 by moha              #+#    #+#             */
-/*   Updated: 2024/09/30 16:30:15 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/11 00:47:43 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,10 @@ int	_check_nl_flag(char *arg)
 {
 	int	i;
 
+	if (!arg)
+		return (false);
+	if (arg[0] != '-')
+		return (false);
 	i = 0;
 	while (arg[++i])
 	{
@@ -31,22 +35,25 @@ int	_echo(char **args)
 	bool	new_line;
 
 	new_line = true;
-	if (!args[1])
-		return (printf("\n"), _SUCCESS);
-	if (args[1][0] == '-' && args[1][1] == 'n' && _check_nl_flag(args[1]))
+	i = 1;
+	if (args[i])
 	{
-		new_line = false;
-		i = 1;
-	}
-	else
-		i = 0;
-	while (args && args[++i])
-	{
-		printf("%s", args[i]);
-		if (args[i + 1])
-			printf(" ");
+		if (_check_nl_flag(args[i]))
+		{
+			i++;
+			new_line = false;
+			while (_check_nl_flag(args[i]))
+				i++;
+		}
+		while (args && args[i])
+		{
+			ft_dprintf(1, "%s", args[i]);
+			if (args[i + 1])
+				write(1, " ", 1);
+			i++;
+		}
 	}
 	if (new_line)
-		printf("\n");
+		write(1, "\n", 1);
 	return (_SUCCESS);
 }

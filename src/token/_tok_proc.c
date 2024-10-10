@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _tok_proc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 16:12:52 by moha              #+#    #+#             */
-/*   Updated: 2024/10/08 14:57:36 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/11 01:07:43 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,18 +98,21 @@ int	_wildcards_proc(t_pdata data, int *i)
 
 int	_sub_proc(t_pdata data, int *i)
 {
+	char x;
+
+	x = data->prompt[*i + 1];
+	if (x == '(' || x == ')')
+		return (_err_print(_ERR_TOKEN, &x, true, 2));
 	if (data->prompt[*i] == '(')
 	{
-		_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL,
-			'(');
+		_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL, '(');
 		if (!data->tokens->d_bot->addr_1)
 			return (_FAILURE);
 		data->args.parnth++;
 	}
 	else if (data->prompt[*i] == ')')
 	{
-		_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL,
-			')');
+		_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL, ')');
 		if (!data->tokens->d_bot->addr_1)
 			return (_FAILURE);
 		data->args.parnth++;

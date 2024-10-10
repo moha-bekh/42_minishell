@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _data_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 23:44:34 by moha              #+#    #+#             */
-/*   Updated: 2024/09/30 18:31:48 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/11 01:57:59 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,10 @@ int	_data_init(t_pdata data, int ac, char **av, char **ev)
 	data->args.env = ev;
 	g_ptr_errno = &data->_errno;
 	if (_path_init(data))
-		return (perror("PATH"), _FAILURE);
+		return (_FAILURE);
 	if (_builtins_init(data))
-		return (perror("builtins"), _FAILURE);
+		return (_FAILURE);
 	if (_env_init(data))
-		return (perror("env"), _FAILURE);
+		return (_FAILURE);
 	return (_SUCCESS);
 }

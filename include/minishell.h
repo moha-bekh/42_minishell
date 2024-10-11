@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/10/11 19:52:10 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/12 00:50:53 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ extern int				g_sig_num;
 /* SIGNALS */
 void					_hndl_sigint(int sig);
 void					_hndl_hd_sigint(int sig);
-
 int						_sig_init(t_pdata data);
 int						_sig_child_dfl(t_pdata data);
 int						_sig_parent_ign(t_pdata data);
@@ -40,7 +39,6 @@ int						_sig_parent_restore(t_pdata data);
 /* DATA */
 int						_data_init(t_pdata data, int ac, char **av, char **ev);
 int						_env_init(t_pdata data);
-/* CLEAR */
 void					_data_clear(t_pdata data);
 int						_data_clear_exit(t_pdata data, int exit_code);
 void					_data_structs_clear(t_pdata data);
@@ -53,10 +51,8 @@ int						_dollar_proc(t_pdata data, int *i);
 int						_word_proc(t_pdata data, int *i);
 int						_tok_proc(t_pdata data, int *i);
 int						_atol(t_pdata data);
-
 int						_check_bot(t_pdata data);
 int						_check_top(t_pdata data);
-
 int						_here_doc_filler(t_pdata data);
 
 /* TREE */
@@ -79,9 +75,8 @@ int						_xpd_full_astrix(char *str);
 
 /* PARSING */
 int						_pars_pipe_lines(t_ppbtree node);
-int						_pars_args_line(t_pdata data, t_ppncmd cmd,
-							t_ppnlst token, bool inside);
-int						_pars_redirs(t_ppncmd cmd, t_ppnlst token, bool inside);
+int						_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside);
+int						_pars_redirs_proc(t_ppncmd cmd, t_ppnlst token, bool inside);
 
 /* BUILTINS */
 int						_cd(t_pdata data, char **args);
@@ -113,13 +108,11 @@ int						_limit_quoted(char *str);
 char					**_ltoa(t_padlst dlst);
 int						_nb_lnargs(t_pnlst token);
 int						_path_slasher(t_pdata data);
+int						_resolve_path(t_pdata data, t_ppncmd cmd);
 int						_tok_id(char a, char *str);
 int						_varstr_conv(char *str);
-void					_wait_pids(t_pdata data, t_padlst cmd_line);
 int						_xpd_conv(char c);
 int						_xpd_needed(char *str);
-
-int						_resolve_path(t_pdata data, t_ppncmd cmd);
 
 struct					s_args
 {

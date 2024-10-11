@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _parsing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/11 19:52:00 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/12 00:43:33 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	_pars_pipe_lines(t_ppbtree node)
 	return (_SUCCESS);
 }
 
-int	_pars_args_proc(t_ppncmd cmd)
+int	_pars_args_alloc(t_ppncmd cmd)
 {
 	int	i;
 
@@ -40,44 +40,66 @@ int	_pars_args_proc(t_ppncmd cmd)
 	return (_SUCCESS);
 }
 
-int	_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
+int _pars_args(t_ppncmd cmd, t_ppnlst token)
 {
-	t_pnlst	tmp;
-	int		i;
-	char	*str;
-
-	if (!*cmd)
-		return (_FAILURE);
-	if (inside && _pars_args_proc(cmd))
+	t_pnlst tmp;
+	int i;
+	char *str;
+	
+	if (!*cmd || _pars_args_alloc(cmd))
 		return (_FAILURE);
 	i = 0;
 	tmp = *token;
 	while (tmp && tmp->x != _PIPE && !_tok_id(tmp->x, _TYP_SEP))
 	{
-		str = tmp->addr_1;
 		if (_tok_id(tmp->x, _TYP_REDIRS))
 		{
-			if (_pars_redirs(cmd, &tmp, inside))
+			tmp = tmp->next->next;
+			continue ;
+		}
+		str = tmp->addr_1;
+		if (str && str[0])
+		{
+			(*cmd)->args[i++] = ft_strdup(str);
+			if (!(*cmd)->args[i - 1])
+				return (_FAILURE);
+		}
+		tmp = tmp->next;
+	}
+	return (_SUCCESS);
+}
+
+int _pars_redirs(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
+{
+	t_pnlst tmp;
+
+	tmp = *token;
+	while (tmp && tmp->x != _PIPE && !_tok_id(tmp->x, _TYP_SEP))
+	{
+		if (_tok_id(tmp->x, _TYP_REDIRS))
+		{
+			if (_pars_redirs_proc(cmd, &tmp, inside))
 			{
 				data->_errno = 1;
 				return (_FAILURE);
 			}
 			continue ;
 		}
-		else if (inside && str && str[0])
+		if (!inside && tmp->addr_1)
 		{
-			(*cmd)->args[i++] = ft_strdup(str);
-			if (!(*cmd)->args[i - 1])
-				return (_FAILURE);
+			data->_errno = 2;
+			return (ft_dprintf(2, _ERR_TOKEN, tmp->addr_1), _FAILURE);
 		}
-		else if (!inside && str && str[0])
-			return (_err_print(_ERR_TOKEN, str, true, 2));
 		tmp = tmp->next;
 	}
-	if (inside && (*cmd)->args)
-		(*cmd)->args[i] = NULL;
-	if (tmp && tmp->x == ')' && tmp->next && _pars_args_line(data, cmd,
-			&tmp->next, false))
+	if (tmp && tmp->x == ')' && tmp->next && _pars_redirs(data, cmd, &tmp->next, false))
 		return (_FAILURE);
 	return (_SUCCESS);
+}
+
+int	_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
+{
+	if (!*cmd || _pars_args(cmd, token))
+		return (_FAILURE);
+	return (_pars_redirs(data, cmd, token, inside));
 }

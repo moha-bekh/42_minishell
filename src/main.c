@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/10/11 19:43:57 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/12 00:40:42 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	_canonical_mode(t_pdata data)
 			_data_structs_clear(data);
 			continue ;
 		}
+		// _dlst_print_tokens(data->tokens);
 		_tree_builder(&data->tree, data->tokens->d_top);
 		if (_exec(data, &data->tree))
 		{

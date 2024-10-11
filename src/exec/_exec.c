@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _exec.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 18:20:38 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/11 18:34:36 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/12 00:18:17 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ int	_exec_child_proc(t_pdata data, t_pncmd cmd)
 
 int	_exec_process(t_pdata data, t_pncmd cmd)
 {
-	if (_xpd_line(data, &cmd->token) || _pars_args_line(data, &cmd, &cmd->token,
-			true))
+	if (_xpd_line(data, &cmd->token) || _pars_args_line(data, &cmd, &cmd->token, true))
 		return (_FAILURE);
 	if (!cmd->next && !cmd->prev && _is_builtin(data, cmd->args))
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _hd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:16:30 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/11 16:50:17 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/12 00:34:12 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,8 @@ int	_hd_fill(t_pdata data, t_pnlst token)
 		_hd_fill_loop(data, token, line);
 		free(line);
 		if (data->_errno == 130)
-		{
-			_data_clear(data);
-			exit(130);
-		}
-		_data_clear(data);
-		exit(0);
+			_data_clear_exit(data, 130);
+		_data_clear_exit(data, 0);
 	}
 	else if (pid != 0 && _hd_parent_proc(data, token, &pid))
 		return (_FAILURE);

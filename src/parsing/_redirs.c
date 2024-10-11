@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 13:02:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/11 03:11:51 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 03:20:17 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	_pars_redir_outt(t_ppncmd cmd, t_pnlst token, bool inside)
 		(*cmd)->redirs.out_access = true;
 		return (_SUCCESS);
 	}
-	if (!access(token->addr_1, F_OK))
+	if (access(token->addr_1, F_OK))
 	{
 		(*cmd)->redirs.fd[1] = open(token->addr_1, _O_RWCT);
 		if ((*cmd)->redirs.fd[1] < 0)
@@ -67,7 +67,7 @@ int	_pars_redir_outa(t_ppncmd cmd, t_pnlst token, bool inside)
 		(*cmd)->redirs.out_access = true;
 		return (_SUCCESS);
 	}
-	if (!access(token->addr_1, F_OK))
+	if (access(token->addr_1, F_OK))
 	{
 		(*cmd)->redirs.fd[1] = open(token->addr_1, _O_RWCT);
 		if ((*cmd)->redirs.fd[1] < 0)

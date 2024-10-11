@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _redirs.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 13:02:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/11 03:20:17 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 19:51:56 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,8 @@ int	_pars_redir_outa(t_ppncmd cmd, t_pnlst token, bool inside)
 	return (_SUCCESS);
 }
 
-int	_pars_heredoc(t_pdata data, t_ppncmd cmd, t_pnlst token, bool inside)
+int	_pars_heredoc(t_ppncmd cmd, t_pnlst token, bool inside)
 {
-	(void)data;
 	if (inside || (!inside && !(*cmd)->redirs.here_inside))
 	{
 		if (inside)
@@ -98,12 +97,11 @@ int	_pars_heredoc(t_pdata data, t_ppncmd cmd, t_pnlst token, bool inside)
 	return (_SUCCESS);
 }
 
-int	_pars_redirs(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
+int	_pars_redirs(t_ppncmd cmd, t_ppnlst token, bool inside)
 {
-	if (!inside && !_tok_id((*token)->x, _TYP_REDIRS)
-		&& !_tok_id((*token)->prev->x, _TYP_REDIRS))
+	if (!inside && !_tok_id((*token)->x, _TYP_REDIRS) && !_tok_id((*token)->prev->x, _TYP_REDIRS))
 		return (_err_print(_ERR_TOKEN, (*token)->addr_1, true, 1));
-	if ((*token)->x == 'H' && _pars_heredoc(data, cmd, *token, inside))
+	if ((*token)->x == 'H' && _pars_heredoc(cmd, *token, inside))
 		return (_FAILURE);
 	else if ((*token)->x == '<' && _pars_redir_in(cmd, (*token)->next))
 		return (_FAILURE);
@@ -113,35 +111,5 @@ int	_pars_redirs(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 	else if ((*token)->x == 'N' && _pars_redir_outa(cmd, (*token)->next,
 			inside))
 		return (_FAILURE);
-	(*token) = (*token)->next->next;
 	return (_SUCCESS);
 }
-
-// int	_pars_redirs(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
-// {
-// 	if (!inside && !_tok_id((*token)->x, _TYP_REDIRS)
-// 		&& !_tok_id((*token)->prev->x, _TYP_REDIRS))
-// 		return (_err_print(_ERR_TOKEN, (*token)->addr_1, true, 1));
-// 	if ((*token)->x == 'H')
-// 	{
-// 		if (_pars_heredoc(data, cmd, *token, inside))
-// 			return (_FAILURE);
-// 	}
-// 	else if ((*token)->x == '<')
-// 	{
-// 		if (_pars_redir_in(cmd, (*token)->next))
-// 			return (_FAILURE);
-// 	}
-// 	else if ((*token)->x == '>')
-// 	{
-// 		if (_pars_redir_outt(cmd, (*token)->next, inside))
-// 			return (_FAILURE);
-// 	}
-// 	else if ((*token)->x == 'N')
-// 	{
-// 		if (_pars_redir_outa(cmd, (*token)->next, inside))
-// 			return (_FAILURE);
-// 	}
-// 	(*token) = (*token)->next->next;
-// 	return (_SUCCESS);
-// }

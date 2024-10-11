@@ -3,94 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   _exec.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 18:20:38 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/11 03:17:41 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 18:34:36 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	_save_stdfds(t_pdata data)
+int	_exec_child_proc(t_pdata data, t_pncmd cmd)
 {
-	data->shell._stdin = dup(STDIN_FILENO);
-	if (data->shell._stdin < 0)
+	if (_sig_child_dfl(data))
 		return (_FAILURE);
-	data->shell._stdout = dup(STDOUT_FILENO);
-	if (data->shell._stdout < 0)
-		return (_FAILURE);
-	return (_SUCCESS);
-}
-
-int	_restore_stdfds(t_pdata data)
-{
-	if (dup2(data->shell._stdin, STDIN_FILENO) < 0)
-		return (_FAILURE);
-	if (dup2(data->shell._stdout, STDOUT_FILENO) < 0)
-		return (_FAILURE);
-	return (_SUCCESS);
-}
-
-int	_exec_builtin(t_pdata data, t_ppncmd cmd)
-{
-	if (!ft_strncmp((*cmd)->args[0], "cd", 2))
-		return (_cd(data, (*cmd)->args));
-	if (!ft_strncmp((*cmd)->args[0], "echo", 4))
-		return (_echo((*cmd)->args));
-	if (!ft_strncmp((*cmd)->args[0], "env", 3))
-		return (_env(data, (*cmd)->args));
-	if (!ft_strncmp((*cmd)->args[0], "exit", 4))
-		return (_exit_(data, *cmd, (*cmd)->args));
-	if (!ft_strncmp((*cmd)->args[0], "export", 6))
-		return (_export(data, (*cmd)->args));
-	if (!ft_strncmp((*cmd)->args[0], "pwd", 3))
-		return (_pwd(data));
-	if (!ft_strncmp((*cmd)->args[0], "unset", 5))
-		return (_unset(data, (*cmd)->args));
-	return (_FAILURE);
-}
-
-int	_exec_builtin_proc(t_pdata data, t_ppncmd cmd)
-{
-	if (_save_stdfds(data))
-		return (_FAILURE);
-	if (_exec_redirections(cmd))
+	if (_exec_redirections(&cmd))
+		_data_clear_exit(data, 1);
+	if (!cmd->args)
+		_data_clear_exit(data, 0);
+	if (_is_builtin(data, cmd->args))
 	{
-		data->_errno = 1;
-		return (_FAILURE);
+		data->_errno = _exec_builtin(data, &cmd);
+		_data_clear(data);
 	}
-	data->_errno = _exec_builtin(data, cmd);
-	if (_restore_stdfds(data))
-		return (_FAILURE);
+	else
+	{
+		if (_resolve_path(data, &cmd))
+			return (_FAILURE);
+		execve(cmd->path, cmd->args, data->args.env);
+		if (cmd->args)
+			_err_print(_ERR_NOT_FOUND, cmd->args[0], true, 127);
+		_data_clear(data);
+		exit(127);
+	}
 	return (_SUCCESS);
 }
-
-// void	_tmp_hndl(int sig)
-// {
-// 	(void)sig;
-// 	if (sig == SIGINT)
-// 		printf("sigint\n");
-// 	if (sig == SIGQUIT)
-// 		printf("sigquit\n");
-// }
 
 int	_exec_process(t_pdata data, t_pncmd cmd)
 {
-	// char	**env;
-
-	if (_xpd_line(data, &cmd->token))
+	if (_xpd_line(data, &cmd->token) || _pars_args_line(data, &cmd, &cmd->token,
+			true))
 		return (_FAILURE);
-	if (_pars_args_line(data, &cmd, &cmd->token, true))
-		return (_FAILURE);
-	// if (ft_strchr(cmd->args[0], '/'))
-	// {
-	// 	if (access(cmd->args[0], X_OK) < 0)
-	// 	{
-	// 		data->_errno = 126;
-	// 		return (_err_print(_ERR_NOT_FOUND, cmd->args[0], true, 127));
-	// 	}
-	// }
 	if (!cmd->next && !cmd->prev && _is_builtin(data, cmd->args))
 	{
 		if (_exec_builtin_proc(data, &cmd))
@@ -98,57 +50,17 @@ int	_exec_process(t_pdata data, t_pncmd cmd)
 	}
 	else
 	{
-		if (cmd->next)
-		{
-			if (pipe(cmd->redirs.pfd) < 0)
-				return (perror("pipe"), _FAILURE);
-		}
+		if (cmd->next && pipe(cmd->redirs.pfd) < 0)
+			return (perror("pipe"), _FAILURE);
 		cmd->pid = fork();
 		if (cmd->pid < 0)
 			return (perror("fork"), _FAILURE);
-		if (!cmd->pid)
+		if (!cmd->pid && _exec_child_proc(data, cmd))
+			return (_FAILURE);
+		else if (cmd->pid != 0 && cmd->prev)
 		{
-			data->shell.s_sigint.sa_handler = SIG_DFL;
-			sigaction(SIGINT, &data->shell.s_sigint, NULL);
-			data->shell.s_sigquit.sa_handler = SIG_DFL;
-			sigaction(SIGQUIT, &data->shell.s_sigquit, NULL);
-			if (_exec_redirections(&cmd))
-			{
-				_data_clear(data);
-				exit(1);
-			}
-			if (!cmd->args)
-			{
-				_data_clear(data);
-				exit(0);
-			}
-			if (_is_builtin(data, cmd->args))
-			{
-				data->_errno = _exec_builtin(data, &cmd);
-				_data_clear(data);
-				exit(data->_errno);
-			}
-			else
-			{
-				if (_resolve_path(data, &cmd))
-					return (_FAILURE);
-				// env = _ltoa(data->env);
-				// execve(cmd->path, cmd->args, env);
-				execve(cmd->path, cmd->args, data->args.env);
-				if (cmd->args)
-					_err_print(_ERR_NOT_FOUND, cmd->args[0], true, 127);
-				// ft_free_arr(env);
-				_data_clear(data);
-				exit(127);
-			}
-		}
-		else
-		{
-			if (cmd->prev)
-			{
-				close(cmd->prev->redirs.pfd[1]);
-				close(cmd->prev->redirs.pfd[0]);
-			}
+			close(cmd->prev->redirs.pfd[1]);
+			close(cmd->prev->redirs.pfd[0]);
 		}
 	}
 	return (_SUCCESS);
@@ -167,33 +79,8 @@ int	_exec_loop(t_pdata data, t_ppbtree node)
 			return (_FAILURE);
 		cmd = cmd->next;
 	}
-	cmd = (*node)->cmd_line->c_top;
-	// if (!cmd->next && _is_builtin(data, cmd->args))
-	// 	return (_SUCCESS);
-	while (cmd)
-	{
-		data->shell.s_sigint.sa_handler = SIG_IGN;
-		sigaction(SIGINT, &data->shell.s_sigint, NULL);
-		data->shell.s_sigquit.sa_handler = SIG_IGN;
-		sigaction(SIGQUIT, &data->shell.s_sigquit, NULL);
-		if (cmd->pid)
-			waitpid(cmd->pid, &data->_errno, 0);
-		if (WIFEXITED(data->_errno))
-			data->_errno = WEXITSTATUS(data->_errno);
-		else if (WIFSIGNALED(data->_errno))
-			data->_errno = WTERMSIG(data->_errno) + 128;
-		// if (tcsetattr(STDIN_FILENO, TCSANOW, &data->shell.new_term) == -1)
-		// 	return (_FAILURE);
-		if (data->_errno == 130)
-			write(1, "\n", 1);
-		if (data->_errno == 131)
-			write(1, "Quit (core dumped)\n", 19);
-		data->shell.s_sigint.sa_handler = _hndl_sigint;
-		sigaction(SIGINT, &data->shell.s_sigint, NULL);
-		data->shell.s_sigquit.sa_handler = SIG_IGN;
-		sigaction(SIGQUIT, &data->shell.s_sigquit, NULL);
-		cmd = cmd->next;
-	}
+	if (_exec_parent_wait_loop(data, node))
+		return (_FAILURE);
 	return (_SUCCESS);
 }
 
@@ -208,8 +95,7 @@ int	_exec_subshell(t_pdata data, t_ppbtree node)
 	{
 		if (_exec(data, node))
 			return (_FAILURE);
-		_data_clear(data);
-		exit(data->_errno);
+		_data_clear_exit(data, data->_errno);
 	}
 	else
 	{

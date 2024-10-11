@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   _data_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 23:44:34 by moha              #+#    #+#             */
-/*   Updated: 2024/10/11 03:26:52 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 18:01:36 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	*g_ptr_errno;
+int	g_ptr_errno;
 
 int	_builtins_init(t_pdata data)
 {
@@ -58,7 +58,6 @@ int	_data_init(t_pdata data, int ac, char **av, char **ev)
 	data->args.ac = ac;
 	data->args.av = av;
 	data->args.env = ev;
-	g_ptr_errno = &data->_errno;
 	if (_path_init(data))
 		return (_FAILURE);
 	if (_builtins_init(data))

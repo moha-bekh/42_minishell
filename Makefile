@@ -35,9 +35,11 @@ _SRC			:=		main
 
 _DATA			:= 		_data_init\
 						_env_init\
-						_data_clear
+						_data_clear\
+						_data_clear_exit\
 
-_SIG			:=		_signal
+_SIG			:=		_sig_init\
+						_sig\
 
 _BULTIN		= 			_cd\
 						_echo\
@@ -47,16 +49,21 @@ _BULTIN		= 			_cd\
 						_pwd\
 						_unset
 
-_TOKEN			:=		_op\
-						_redir\
-						_tok_list\
+_TOKEN			:=		_atol\
+						_word\
 						_tok_proc\
-						_tok_check
+						_op\
+						_redir\
+						_quote\
+						_dollar\
+						_hd\
+						_tok_check\
 
 _TREE			:=		_tree_builder
 
 _EXEC			:=		_exec\
 						_redirs\
+						_builtin\
 
 # _EXEC			:= 		_exec_process\
 # 						_exec_proc\
@@ -71,15 +78,16 @@ _EXPAND			:= 		_xpd\
 _PARS			:= 		_parsing\
 						_redirs
 
-_UTILS			:= 		_bt_print\
-						_dlst_print\
+_UTILS			:=		_dlst_print\
 						_err_print\
+						_exec_parent_wait_loop\
 						_get_data\
 						_get_env_value\
 						_get_rname\
 						_is_builtin\
 						_is_overflow\
 						_is_varchr\
+						_join_flag\
 						_join_strings\
 						_key_exist\
 						_limit_quoted\
@@ -89,7 +97,6 @@ _UTILS			:= 		_bt_print\
 						_resolve_path\
 						_tok_id\
 						_varstr_conv\
-						_wait_pids\
 						_xpd_conv\
 						_xpd_needed\
 

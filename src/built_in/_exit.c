@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _exit.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:43 by moha              #+#    #+#             */
-/*   Updated: 2024/10/11 02:18:48 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 18:01:13 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ int	_many_args(t_pdata data, t_pncmd cmd, char **args)
 		_data_clear(data);
 		exit(_err_print(_ERR_EXIT_NUM, buf, true, 2));
 	}
-		if (!cmd->prev && !cmd->next)
-			ft_dprintf(STDERR_FILENO, "exit\n");
+	if (!cmd->prev && !cmd->next)
+		ft_dprintf(STDERR_FILENO, "exit\n");
 	return (_err_print(_ERR_EXIT_MANY, NULL, false, 1));
 }
 
@@ -56,8 +56,8 @@ int	_exit_arg(t_pdata data, t_pncmd cmd, char **args)
 		_data_clear(data);
 		exit(2);
 	}
-		if (!cmd->prev && !cmd->next)
-			ft_dprintf(STDERR_FILENO, "exit\n");
+	if (!cmd->prev && !cmd->next)
+		ft_dprintf(STDERR_FILENO, "exit\n");
 	_data_clear(data);
 	exit(ft_atoi(buf) % 256);
 }

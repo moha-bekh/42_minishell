@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 17:38:12 by moha              #+#    #+#             */
-/*   Updated: 2024/10/09 16:54:22 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/11 18:03:06 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,10 @@ int	_xpd_wildcards_proc(t_ppnlst token, t_ppadlst list)
 	char	**patterns;
 
 	str = (*token)->addr_1;
-	// if (str[0] != '*')
-	// 	return (_xpd_left_border(token, list));
-	// if (str[ft_strlen(str) - 1] != '*')
-	// 	return (_xpd_right_border(token, list));
+	if (str[0] != '*')
+		return (_xpd_left_border(token, list));
+	if (str[ft_strlen(str) - 1] != '*')
+		return (_xpd_right_border(token, list));
 	if (_xpd_full_astrix(str))
 	{
 		_xpd_merge_list(token, list);

@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:34:32 by moha              #+#    #+#             */
-/*   Updated: 2024/10/09 16:28:50 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/11 19:46:09 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,7 @@ int	_export(t_pdata data, char **args)
 	while (args[++i])
 	{
 		if (_bad_value(args[i]))
-		{
-			data->_errno = 1;
 			continue ;
-		}
 		else if (_key_exist(data->export, args[i]))
 		{
 			_replace_env_value(&data->env, args[i]);
@@ -111,5 +108,5 @@ int	_export(t_pdata data, char **args)
 		}
 	}
 	_dlst_sort(&data->export, false);
-	return (data->_errno);
+	return (_SUCCESS);
 }

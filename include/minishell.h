@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/10/11 03:25:06 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 19:52:10 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,37 +24,40 @@
 # include <sys/wait.h>
 # include <termios.h>
 
-typedef struct s_data t_data, *t_pdata, **t_ppdata; // Struct Data
+typedef struct s_data t_data, *t_pdata, **t_ppdata;
 
-extern int				*g_ptr_errno;
+extern int				g_sig_num;
 
 /* SIGNALS */
 void					_hndl_sigint(int sig);
 void					_hndl_hd_sigint(int sig);
 
-int						_set_sigint(t_pdata data);
-int						_ign_sigint(t_pdata data);
-int						_dfl_sigint(t_pdata data);
-int						_ign_sigquit(t_pdata data);
-int						_dfl_sigquit(t_pdata data);
-int						_sig_init_sas(t_pdata data);
+int						_sig_init(t_pdata data);
+int						_sig_child_dfl(t_pdata data);
+int						_sig_parent_ign(t_pdata data);
+int						_sig_parent_restore(t_pdata data);
 
 /* DATA */
 int						_data_init(t_pdata data, int ac, char **av, char **ev);
 int						_env_init(t_pdata data);
 /* CLEAR */
-void						_data_clear(t_pdata data);
-void						_data_structs_clear(t_pdata data);
+void					_data_clear(t_pdata data);
+int						_data_clear_exit(t_pdata data, int exit_code);
+void					_data_structs_clear(t_pdata data);
 
 /* TOKENS */
-int						_tok_id(char a, char *str);
-int						_tok_list(t_pdata data);
-int						_tok_proc(t_pdata data, int *i);
 int						_op_proc(t_pdata data, int *i);
 int						_redir_proc(t_pdata data, int *i);
 int						_quote_proc(t_pdata data, int *i);
-int						_check_top(t_pdata data);
+int						_dollar_proc(t_pdata data, int *i);
+int						_word_proc(t_pdata data, int *i);
+int						_tok_proc(t_pdata data, int *i);
+int						_atol(t_pdata data);
+
 int						_check_bot(t_pdata data);
+int						_check_top(t_pdata data);
+
+int						_here_doc_filler(t_pdata data);
 
 /* TREE */
 t_pnlst					_tree_builder(t_ppbtree node, t_pnlst token);
@@ -62,12 +65,8 @@ t_pnlst					_tree_builder(t_ppbtree node, t_pnlst token);
 /* EXEC */
 int						_exec(t_pdata data, t_ppbtree node);
 int						_exec_redirections(t_ppncmd cmd);
-
-// int						_exec_builtin(t_pdata data, t_ppncmd cmd);
-// int						_exec_builtin_proc(t_pdata data, t_ppncmd cmd);
-// int						_exec_proc(t_pdata data, t_ppncmd cmd);
-// int						_exec(t_pdata data, t_ppbtree node);
-// int						_exec_redirections(t_ppncmd cmd);
+int						_exec_builtin(t_pdata data, t_ppncmd cmd);
+int						_exec_builtin_proc(t_pdata data, t_ppncmd cmd);
 
 /* EXPAND */
 int						_xpd_line(t_pdata data, t_ppnlst token);
@@ -82,8 +81,7 @@ int						_xpd_full_astrix(char *str);
 int						_pars_pipe_lines(t_ppbtree node);
 int						_pars_args_line(t_pdata data, t_ppncmd cmd,
 							t_ppnlst token, bool inside);
-int						_pars_redirs(t_pdata data, t_ppncmd cmd, t_ppnlst token,
-							bool inside);
+int						_pars_redirs(t_ppncmd cmd, t_ppnlst token, bool inside);
 
 /* BUILTINS */
 int						_cd(t_pdata data, char **args);
@@ -101,12 +99,14 @@ void					_dlst_print_env(t_padlst dlst);
 void					_dlst_print_export(t_padlst dlst);
 void					_dlst_print_tokens(t_padlst dlst);
 int						_err_print(char *str, void *arg, bool ptr, int _errno);
+int						_exec_parent_wait_loop(t_pdata data, t_ppbtree node);
 t_pdata					_get_data(void);
 char					*_get_env_value(t_pdata data, char *key);
 char					*_get_rname(void);
 int						_is_builtin(t_pdata data, char **args);
 int						_is_overflow(char *str);
 int						_is_varchr(char c);
+void					_join_flag(t_pdata data, int i);
 int						_join_strings(t_ppnlst token);
 int						_key_exist(t_padlst env, char *arg);
 int						_limit_quoted(char *str);
@@ -127,7 +127,7 @@ struct					s_args
 	char				**av;
 	char				**env;
 	char				**env_path;
-	char 				*_hard_path;
+	char				*_hard_path;
 	char				**hard_paths;
 	int					parnth;
 	int					nb_hd;

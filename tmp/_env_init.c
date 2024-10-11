@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 22:38:51 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/11 18:02:40 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/11 18:02:31 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,12 @@ int	_env_empty(t_pdata data)
 	_dlst_push_back(&data->export, ft_strdup("PWD"), getcwd(buf, 4096), 0);
 	if (!data->export->d_bot->addr_1 || !data->export->d_bot->addr_2)
 		return (_FAILURE);
+	// _dlst_push_back(&data->env, ft_strdup("SHLVL"), ft_strdup("1"), 0);
+	// if (!data->env->d_bot->addr_1)
+	// 	return (_FAILURE);
+	// _dlst_push_back(&data->export, ft_strdup("SHLVL"), ft_strdup("1"), 0);
+	// if (!data->export->d_bot->addr_1)
+	// 	return (_FAILURE);
 	_dlst_push_back(&data->env, ft_strdup("OLDPWD"), NULL, 0);
 	if (!data->env->d_bot->addr_1)
 		return (_FAILURE);
@@ -80,6 +86,33 @@ int	_env_empty(t_pdata data)
 		return (_FAILURE);
 	return (_SUCCESS);
 }
+
+// int	_inc_shlvl(t_pdata data, t_ppadlst env)
+// {
+// 	t_pnlst	tmp;
+// 	int		shlvl;
+
+// 	if (!*data->args.env)
+// 		return (_SUCCESS);
+// 	tmp = (*env)->d_top;
+// 	while (tmp)
+// 	{
+// 		if (!ft_strcmp(tmp->addr_1, "SHLVL"))
+// 		{
+// 			shlvl = ft_atoi(tmp->addr_2);
+// 			printf("shlvl: %d\n", shlvl);
+// 			shlvl++;
+// 			printf("shlvl: %d\n", shlvl);
+// 			free(tmp->addr_2);
+// 			tmp->addr_2 = ft_itoa(shlvl);
+// 			if (!tmp->addr_2)
+// 				return (_FAILURE);
+// 			return (_SUCCESS);
+// 		}
+// 		tmp = tmp->next;
+// 	}
+// 	return (_FAILURE);
+// }
 
 int	_env_init(t_pdata data)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _parsing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/11 01:45:25 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 19:52:00 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 		str = tmp->addr_1;
 		if (_tok_id(tmp->x, _TYP_REDIRS))
 		{
-			if (_pars_redirs(data, cmd, &tmp, inside))
+			if (_pars_redirs(cmd, &tmp, inside))
 			{
 				data->_errno = 1;
 				return (_FAILURE);
@@ -71,10 +71,7 @@ int	_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 				return (_FAILURE);
 		}
 		else if (!inside && str && str[0])
-		{
-			data->_errno = 2;
-			return (ft_dprintf(2, _ERR_TOKEN, str), _FAILURE);
-		}
+			return (_err_print(_ERR_TOKEN, str, true, 2));
 		tmp = tmp->next;
 	}
 	if (inside && (*cmd)->args)

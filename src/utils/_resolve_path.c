@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _resolve_path.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 11:19:04 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/11 03:25:54 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 18:07:06 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,37 +52,37 @@ int	_is_path(t_ppncmd cmd)
 	return (_SUCCESS);
 }
 
+int	_empty_path(t_ppncmd cmd)
+{
+	(*cmd)->path = ft_strdup("");
+	if (!(*cmd)->path)
+		return (_FAILURE);
+	return (_SUCCESS);
+}
+
 int	_resolve_path(t_pdata data, t_ppncmd cmd)
 {
-	struct stat buf;
-	char	*prog;
+	struct stat	buf;
+	char		*prog;
 
 	if (!(*cmd)->args)
-	{
-		(*cmd)->path = ft_strdup("");
-		if (!(*cmd)->path)
-			return (_FAILURE);
-	}
+		return (_empty_path(cmd));
 	else
 	{
 		prog = (*cmd)->args[0];
 		if (ft_strchr(prog, '/') && access(prog, F_OK))
-			exit (_err_print(_ERR_NO_FILE, prog, true, 127));
+			exit(_err_print(_ERR_NO_FILE, prog, true, 127));
 		if (ft_strchr(prog, '/') && !access(prog, F_OK))
 		{
 			if (lstat(prog, &buf) == -1)
 				perror("lstat");
 			if (S_ISDIR(buf.st_mode))
-				exit (_err_print(_ERR_IS_DIR, prog, true, 126));
+				exit(_err_print(_ERR_IS_DIR, prog, true, 126));
 			if (_is_path(cmd))
 				return (_FAILURE);
 		}
 		else if (_get_path(data, cmd))
-		{
-			(*cmd)->path = ft_strdup("");
-			if (!(*cmd)->path)
-				return (_FAILURE);
-		}
+			return (_empty_path(cmd));
 	}
 	return (_SUCCESS);
 }

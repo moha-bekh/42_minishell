@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _unset.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 21:55:55 by moha              #+#    #+#             */
-/*   Updated: 2024/10/11 03:31:17 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 18:01:22 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	_update_export(t_pdata data)
 	return (_dlst_sort(&data->export, false), _SUCCESS);
 }
 
-void _unset_paths(t_pdata data)
+void	_unset_paths(t_pdata data)
 {
 	free(data->args._hard_path);
 	data->args._hard_path = NULL;

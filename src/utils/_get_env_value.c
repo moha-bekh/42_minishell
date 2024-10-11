@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   _get_env_value.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 02:39:25 by oek               #+#    #+#             */
-/*   Updated: 2024/10/11 03:29:30 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 18:03:58 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 char	*_get_env_value(t_pdata data, char *key)
 {

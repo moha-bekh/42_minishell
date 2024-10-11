@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 18:20:38 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/11 01:11:17 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 02:10:03 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	_exec_builtin(t_pdata data, t_ppncmd cmd)
 	if (!ft_strncmp((*cmd)->args[0], "env", 3))
 		return (_env(data, (*cmd)->args));
 	if (!ft_strncmp((*cmd)->args[0], "exit", 4))
-		return (_exit_(data, (*cmd)->args));
+		return (_exit_(data, *cmd, (*cmd)->args));
 	if (!ft_strncmp((*cmd)->args[0], "export", 6))
 		return (_export(data, (*cmd)->args));
 	if (!ft_strncmp((*cmd)->args[0], "pwd", 3))

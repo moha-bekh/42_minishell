@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/10/11 01:47:00 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 02:14:39 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int						_pars_redirs(t_pdata data, t_ppncmd cmd, t_ppnlst token,
 int						_cd(t_pdata data, char **args);
 int						_echo(char **args);
 int						_env(t_pdata data, char **args);
-int						_exit_(t_pdata data, char **args);
+int						_exit_(t_pdata data, t_pncmd cmd, char **args);
 int						_export(t_pdata data, char **args);
 int						_pwd(t_pdata data);
 int						_unset(t_pdata data, char **args);
@@ -186,8 +186,8 @@ enum					e_return
 # define _ERR_ENV_NO_FILE "env: %s: No such file or directory\n"
 # define _ERR_EXPORT_INVALID "bash: export: `%s': not a valid identifier\n"
 
-# define _ERR_EXIT_NUM "exit\nbash: exit: %s: numeric argument required\n"
-# define _ERR_EXIT_MANY "exit\nbash: exit: too many arguments\n"
+# define _ERR_EXIT_NUM "bash: exit: %s: numeric argument required\n"
+# define _ERR_EXIT_MANY "bash: exit: too many arguments\n"
 
 # define _ERR_PERM "bash: %s: Permission denied\n"
 # define _ERR_HERE_EOF "bash: warning: here-document delimited by end-of-file (wanted `%s')\n"

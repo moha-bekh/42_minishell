@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 15:44:21 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/11 00:49:23 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 03:25:35 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ void	_data_clear(t_pdata data)
 	data->prompt = NULL;
 	ft_free_arr(data->args.env_path);
 	data->args.env_path = NULL;
-	ft_free_arr(data->args.hard_path);
-	data->args.hard_path = NULL;
+	ft_free_arr(data->args.hard_paths);
+	data->args.hard_paths = NULL;
 	_dlst_clear(&data->builtins);
 	_dlst_clear(&data->env);
 	_dlst_clear(&data->export);

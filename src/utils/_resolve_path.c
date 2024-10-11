@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _resolve_path.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 11:19:04 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/04 16:43:55 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/11 03:25:54 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ int	_get_path(t_pdata data, t_ppncmd cmd)
 
 	if (data->args.env_path)
 		path = data->args.env_path;
-	else if (*data->args.hard_path)
-		path = data->args.hard_path;
+	else if (*data->args.hard_paths)
+		path = data->args.hard_paths;
 	else
 		return (_FAILURE);
 	prog = (*cmd)->args[0];

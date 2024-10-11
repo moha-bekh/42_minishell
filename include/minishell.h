@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/10/11 03:11:31 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 03:25:06 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,8 @@ struct					s_args
 	char				**av;
 	char				**env;
 	char				**env_path;
-	char				**hard_path;
+	char 				*_hard_path;
+	char				**hard_paths;
 	int					parnth;
 	int					nb_hd;
 };

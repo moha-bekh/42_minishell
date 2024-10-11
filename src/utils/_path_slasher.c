@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 02:37:18 by oek               #+#    #+#             */
-/*   Updated: 2024/09/26 02:37:22 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 03:25:43 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	_path_slasher(t_pdata data)
 	if (data->args.env_path)
 		path = data->args.env_path;
 	else
-		path = data->args.hard_path;
+		path = data->args.hard_paths;
 	i = -1;
 	while (path[++i])
 	{

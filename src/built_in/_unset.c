@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 21:55:55 by moha              #+#    #+#             */
-/*   Updated: 2024/10/11 00:47:33 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 03:31:17 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,10 @@ int	_update_export(t_pdata data)
 
 void _unset_paths(t_pdata data)
 {
-	ft_free_arr(data->args.hard_path);
-	data->args.hard_path = NULL;
+	free(data->args._hard_path);
+	data->args._hard_path = NULL;
+	ft_free_arr(data->args.hard_paths);
+	data->args.hard_paths = NULL;
 	ft_free_arr(data->args.env_path);
 	data->args.env_path = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 23:44:34 by moha              #+#    #+#             */
-/*   Updated: 2024/10/11 01:57:59 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 03:26:52 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,11 @@ int	_path_init(t_pdata data)
 	data->args.env_path = ft_split(getenv("PATH"), ':');
 	if (!data->args.env_path)
 	{
-		data->args.hard_path = ft_split(_PATH, ':');
-		if (!data->args.hard_path)
+		data->args.hard_paths = ft_split(_PATH, ':');
+		if (!data->args.hard_paths)
+			return (_FAILURE);
+		data->args._hard_path = ft_strdup(_PATH);
+		if (!data->args._hard_path)
 			return (_FAILURE);
 	}
 	if (_path_slasher(data))

@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 12:46:04 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/11 01:49:19 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 02:40:45 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,14 @@ int	_join_strings(t_ppnlst token)
 		if (tmp->addr_1 && tmp->flag)
 		{
 			tmp = tmp->next;
-			old = tmp->addr_1;
-			tmp->addr_1 = ft_strjoin(tmp->prev->addr_1, tmp->addr_1);
-			free(old);
+			if (!tmp->addr_1)
+				tmp->addr_1 = ft_strdup(tmp->prev->addr_1);
+			else
+			{
+				old = tmp->addr_1;
+				tmp->addr_1 = ft_strjoin(tmp->prev->addr_1, tmp->addr_1);
+				free(old);
+			}
 			free(tmp->prev->addr_1);
 			tmp->prev->addr_1 = NULL;
 			continue ;

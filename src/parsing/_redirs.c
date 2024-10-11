@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _redirs.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 13:02:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/09 16:13:49 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/11 03:11:51 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,15 @@ int	_pars_redir_in(t_ppncmd cmd, t_pnlst token)
 {
 	if ((*cmd)->redirs.in_access || (*cmd)->redirs.out_access)
 		return (_SUCCESS);
-	if (access(token->addr_1, F_OK | R_OK))
+	if (!token->addr_1)
+	{
+		(*cmd)->redirs.in_name = token->addr_2;
 		(*cmd)->redirs.in_access = true;
-	(*cmd)->redirs.in_name = (char *)token->addr_1;
+		return (_SUCCESS);
+	}
+	if (!access(token->addr_1, F_OK | R_OK))
+		(*cmd)->redirs.in_access = true;
+	(*cmd)->redirs.in_name = token->addr_1;
 	return (_SUCCESS);
 }
 
@@ -26,7 +32,13 @@ int	_pars_redir_outt(t_ppncmd cmd, t_pnlst token, bool inside)
 {
 	if ((*cmd)->redirs.out_access || (*cmd)->redirs.in_access)
 		return (_SUCCESS);
-	if (access(token->addr_1, F_OK))
+	if (!token->addr_1)
+	{
+		(*cmd)->redirs.out_name = token->addr_2;
+		(*cmd)->redirs.out_access = true;
+		return (_SUCCESS);
+	}
+	if (!access(token->addr_1, F_OK))
 	{
 		(*cmd)->redirs.fd[1] = open(token->addr_1, _O_RWCT);
 		if ((*cmd)->redirs.fd[1] < 0)
@@ -39,7 +51,7 @@ int	_pars_redir_outt(t_ppncmd cmd, t_pnlst token, bool inside)
 	{
 		if (inside)
 			(*cmd)->redirs.out_inside = true;
-		(*cmd)->redirs.out_name = (char *)token->addr_1;
+		(*cmd)->redirs.out_name = token->addr_1;
 		(*cmd)->redirs.out_trunc = true;
 	}
 	return (_SUCCESS);
@@ -49,7 +61,13 @@ int	_pars_redir_outa(t_ppncmd cmd, t_pnlst token, bool inside)
 {
 	if ((*cmd)->redirs.out_access || (*cmd)->redirs.in_access)
 		return (_SUCCESS);
-	if (access(token->addr_1, F_OK))
+	if (!token->addr_1)
+	{
+		(*cmd)->redirs.out_name = token->addr_2;
+		(*cmd)->redirs.out_access = true;
+		return (_SUCCESS);
+	}
+	if (!access(token->addr_1, F_OK))
 	{
 		(*cmd)->redirs.fd[1] = open(token->addr_1, _O_RWCT);
 		if ((*cmd)->redirs.fd[1] < 0)

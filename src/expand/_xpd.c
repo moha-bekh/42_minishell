@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 16:22:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/11 01:47:18 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 03:08:00 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	_xpd_var(t_pdata data, t_ppnlst token)
 	}
 	else
 	{
+		(*token)->addr_2 = ft_strjoin("$", (*token)->addr_1);
 		free((*token)->addr_1);
 		(*token)->addr_1 = NULL;
 	}

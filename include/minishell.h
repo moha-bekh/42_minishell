@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/10/11 02:14:39 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/11 03:11:31 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,6 +190,7 @@ enum					e_return
 # define _ERR_EXIT_MANY "bash: exit: too many arguments\n"
 
 # define _ERR_PERM "bash: %s: Permission denied\n"
+# define _ERR_AMBIGOUS "bash: %s: ambiguous redirect\n"
 # define _ERR_HERE_EOF "bash: warning: here-document delimited by end-of-file (wanted `%s')\n"
 
 # define _PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"

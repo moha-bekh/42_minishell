@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _xpd_str.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 12:47:09 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/03 10:40:58 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/11 02:37:31 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,7 @@ char	*_xpd_env_var(t_pdata data, char *line, char *buf, int *i)
 	value = _get_env_value(data, key);
 	free(key);
 	if (!value)
-	{
-		*i += 1;
 		return (buf);
-	}
 	k = ft_strlen(buf);
 	j = 0;
 	while (value[j])

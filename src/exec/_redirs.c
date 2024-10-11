@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _redirs.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 06:39:42 by moha              #+#    #+#             */
-/*   Updated: 2024/10/09 16:06:35 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/11 03:12:26 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	_swap_fd_redir_in(t_ppncmd cmd)
 {
+	if ((*cmd)->redirs.in_name[0] == '$')
+		return (_err_print(_ERR_AMBIGOUS, (*cmd)->redirs.in_name, true, 1));
 	if (access((*cmd)->redirs.in_name, F_OK))
 		return (_err_print(_ERR_NO_FILE, (*cmd)->redirs.in_name, true, 1));
 	else if (access((*cmd)->redirs.in_name, R_OK))
@@ -29,6 +31,8 @@ int	_swap_fd_redir_in(t_ppncmd cmd)
 
 int	_swap_fd_redir_out(t_ppncmd cmd)
 {
+	if ((*cmd)->redirs.out_name[0] == '$')
+		return (_err_print(_ERR_AMBIGOUS, (*cmd)->redirs.out_name, true, 1));
 	if (access((*cmd)->redirs.out_name, W_OK))
 		return (_err_print(_ERR_PERM, (*cmd)->redirs.out_name, true, 1));
 	if ((*cmd)->redirs.out_trunc)

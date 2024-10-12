@@ -62,7 +62,7 @@ _TREE			:=		_tree_builder
 
 _EXEC			:=		_exec\
 						_redirs\
-						_builtin\
+						_exec_utils\
 
 # _EXEC			:= 		_exec_process\
 # 						_exec_proc\

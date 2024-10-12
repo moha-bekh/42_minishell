@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _builtin.c                                         :+:      :+:    :+:   */
+/*   _exec_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 18:16:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/12 02:35:42 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/12 10:15:54 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,20 @@ int	_exec_builtin_proc(t_pdata data, t_ppncmd cmd)
 	if (_restore_stdfds(data))
 		return (_FAILURE);
 	return (_SUCCESS);
+}
+
+void	_execution(t_pdata data, t_pncmd cmd)
+{
+	char	**env;
+
+	if (_resolve_path(data, &cmd))
+		_data_clear_exit(data, 1);
+	env = _ltoa(data->env);
+	if (!env)
+		_data_clear_exit(data, 1);
+	execve(cmd->path, cmd->args, env);
+	if (cmd->args)
+		_err_print(_ERR_NOT_FOUND, cmd->args[0], true, 127);
+	ft_free_arr(env);
+	_data_clear_exit(data, 127);
 }

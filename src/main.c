@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/10/12 02:40:10 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/12 10:01:10 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ int	_shell_init(t_pdata data)
 		if (tcgetattr(STDIN_FILENO, &data->shell.org_term) == -1)
 			return (_FAILURE);
 		data->shell.new_term = data->shell.org_term;
-		data->shell.new_term.c_lflag |= (ICANON | ECHO | ECHOE | ECHOK | ISIG | IEXTEN);
+		data->shell.new_term.c_lflag |= (ICANON | ECHO | ECHOE
+				| ECHOK | ISIG | IEXTEN);
 		data->shell.new_term.c_lflag &= ~(ECHONL | ECHOPRT | ECHOKE);
 		if (tcsetattr(STDIN_FILENO, TCSANOW, &data->shell.new_term) == -1)
 			return (_FAILURE);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _exec.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 18:20:38 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/12 02:29:41 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/12 10:15:22 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,14 @@ int	_exec_child_proc(t_pdata data, t_pncmd cmd)
 		data->_errno = _exec_builtin(data, &cmd);
 		_data_clear_exit(data, data->_errno);
 	}
-	else
-	{
-		if (_resolve_path(data, &cmd))
-			return (_FAILURE);
-		execve(cmd->path, cmd->args, data->args.env);
-		if (cmd->args)
-			_err_print(_ERR_NOT_FOUND, cmd->args[0], true, 127);
-		_data_clear_exit(data, 127);
-	}
+	_execution(data, cmd);
 	return (_SUCCESS);
 }
 
 int	_exec_process(t_pdata data, t_pncmd cmd)
 {
-	if (_xpd_line(data, &cmd->token) || _pars_args_line(data, &cmd, &cmd->token, true))
+	if (_xpd_line(data, &cmd->token) || _pars_args_line(data, &cmd, &cmd->token,
+			true))
 		return (_FAILURE);
 	if (!cmd->next && !cmd->prev && _is_builtin(data, cmd->args))
 		return (_exec_builtin_proc(data, &cmd));

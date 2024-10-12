@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 22:10:26 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/04 11:54:26 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/12 10:10:47 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 char	**_ltoa(t_padlst dlst)
 {
 	char	**arr;
-	t_pnlst	tmp;
+	char	*pmt;
 	int		i;
+	t_pnlst	tmp;
 
 	if (_alloc((void *)&arr, sizeof(char *) * (dlst->d_size + 1)) || !arr)
 		return (NULL);
@@ -24,9 +25,15 @@ char	**_ltoa(t_padlst dlst)
 	i = 0;
 	while (tmp)
 	{
-		arr[i++] = ft_strdup(tmp->addr_1);
+		pmt = ft_strjoin(tmp->addr_1, "=");
+		if (!pmt)
+			return (NULL);
+		arr[i] = ft_strjoin(pmt, tmp->addr_2);
+		free(pmt);
+		pmt = NULL;
 		if (!arr[i])
 			return (NULL);
+		i++;
 		tmp = tmp->next;
 	}
 	return (arr);

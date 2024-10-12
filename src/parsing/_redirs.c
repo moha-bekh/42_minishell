@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _redirs.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 13:02:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/12 02:00:09 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/12 10:00:40 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,15 +93,18 @@ int	_pars_heredoc(t_ppncmd cmd, t_pnlst token, bool inside)
 
 int	_pars_redirs_proc(t_ppncmd cmd, t_ppnlst token, bool inside)
 {
-	if (!inside && !_tok_id((*token)->x, _TYP_REDIRS) && !_tok_id((*token)->prev->x, _TYP_REDIRS))
+	if (!inside && !_tok_id((*token)->x, _TYP_REDIRS)
+		&& !_tok_id((*token)->prev->x, _TYP_REDIRS))
 		return (_err_print(_ERR_TOKEN, (*token)->addr_1, true, 1));
 	if ((*token)->x == 'H' && _pars_heredoc(cmd, *token, inside))
 		return (_FAILURE);
 	else if ((*token)->x == '<' && _pars_redir_in(cmd, (*token)->next))
 		return (_FAILURE);
-	else if ((*token)->x == '>' && _pars_redir_outt(cmd, (*token)->next, inside))
+	else if ((*token)->x == '>' && _pars_redir_outt(cmd, (*token)->next,
+			inside))
 		return (_FAILURE);
-	else if ((*token)->x == 'N' && _pars_redir_outa(cmd, (*token)->next, inside))
+	else if ((*token)->x == 'N' && _pars_redir_outa(cmd, (*token)->next,
+			inside))
 		return (_FAILURE);
 	*token = (*token)->next->next;
 	return (_SUCCESS);

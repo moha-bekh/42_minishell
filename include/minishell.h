@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/10/12 00:50:53 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/12 10:16:11 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int						_exec(t_pdata data, t_ppbtree node);
 int						_exec_redirections(t_ppncmd cmd);
 int						_exec_builtin(t_pdata data, t_ppncmd cmd);
 int						_exec_builtin_proc(t_pdata data, t_ppncmd cmd);
+void					_execution(t_pdata data, t_pncmd cmd);
 
 /* EXPAND */
 int						_xpd_line(t_pdata data, t_ppnlst token);
@@ -75,8 +76,10 @@ int						_xpd_full_astrix(char *str);
 
 /* PARSING */
 int						_pars_pipe_lines(t_ppbtree node);
-int						_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside);
-int						_pars_redirs_proc(t_ppncmd cmd, t_ppnlst token, bool inside);
+int						_pars_args_line(t_pdata data, t_ppncmd cmd,
+							t_ppnlst token, bool inside);
+int						_pars_redirs_proc(t_ppncmd cmd, t_ppnlst token,
+							bool inside);
 
 /* BUILTINS */
 int						_cd(t_pdata data, char **args);

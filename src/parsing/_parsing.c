@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _parsing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/12 00:43:33 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/12 10:00:34 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ int	_pars_pipe_lines(t_ppbtree node)
 
 	_cmd_push_back(&(*node)->cmd_line, (*node)->token);
 	tmp = (*node)->token;
-	while (tmp && (!(*node)->root || ((*node)->root && tmp != (*node)->root->token)))
+	while (tmp && (!(*node)->root || ((*node)->root
+				&& tmp != (*node)->root->token)))
 	{
 		if (tmp->x == _PIPE)
 			_cmd_push_back(&(*node)->cmd_line, tmp->next);
@@ -35,17 +36,18 @@ int	_pars_args_alloc(t_ppncmd cmd)
 		return (_FAILURE);
 	(*cmd)->args = NULL;
 	i = _nb_lnargs((*cmd)->token);
-	if (i && (_alloc((void **)&(*cmd)->args, sizeof(char *) * (i + 1)) || !(*cmd)->args))
+	if (i && (_alloc((void **)&(*cmd)->args, sizeof(char *) * (i + 1))
+			|| !(*cmd)->args))
 		return (_FAILURE);
 	return (_SUCCESS);
 }
 
-int _pars_args(t_ppncmd cmd, t_ppnlst token)
+int	_pars_args(t_ppncmd cmd, t_ppnlst token)
 {
-	t_pnlst tmp;
-	int i;
-	char *str;
-	
+	t_pnlst	tmp;
+	int		i;
+	char	*str;
+
 	if (!*cmd || _pars_args_alloc(cmd))
 		return (_FAILURE);
 	i = 0;
@@ -69,9 +71,9 @@ int _pars_args(t_ppncmd cmd, t_ppnlst token)
 	return (_SUCCESS);
 }
 
-int _pars_redirs(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
+int	_pars_redirs(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 {
-	t_pnlst tmp;
+	t_pnlst	tmp;
 
 	tmp = *token;
 	while (tmp && tmp->x != _PIPE && !_tok_id(tmp->x, _TYP_SEP))
@@ -92,7 +94,8 @@ int _pars_redirs(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 		}
 		tmp = tmp->next;
 	}
-	if (tmp && tmp->x == ')' && tmp->next && _pars_redirs(data, cmd, &tmp->next, false))
+	if (tmp && tmp->x == ')' && tmp->next && _pars_redirs(data, cmd, &tmp->next,
+			false))
 		return (_FAILURE);
 	return (_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 15:44:21 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/12 01:55:38 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/12 02:27:44 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,11 @@ void	_data_clear(t_pdata data)
 		close(data->shell._stdout);
 		data->shell._stdout = -1;
 	}
+}
+
+int	_data_clear_exit(t_pdata data, int exit_code)
+{
+	_data_clear(data);
+	exit(exit_code);
+	return (exit_code);
 }

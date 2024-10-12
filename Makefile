@@ -36,7 +36,6 @@ _SRC			:=		main
 _DATA			:= 		_data_init\
 						_env_init\
 						_data_clear\
-						_data_clear_exit\
 
 _SIG			:=		_sig_init\
 						_sig\

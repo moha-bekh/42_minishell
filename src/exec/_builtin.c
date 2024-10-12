@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _builtin.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 18:16:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/11 18:16:52 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/12 02:35:42 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,18 @@ int	_restore_stdfds(t_pdata data)
 {
 	if (dup2(data->shell._stdin, STDIN_FILENO) < 0)
 		return (_FAILURE);
+	if (data->shell._stdin > 0)
+	{
+		close(data->shell._stdin);
+		data->shell._stdin = -1;
+	}
 	if (dup2(data->shell._stdout, STDOUT_FILENO) < 0)
 		return (_FAILURE);
+	if (data->shell._stdout > 0)
+	{
+		close(data->shell._stdout);
+		data->shell._stdout = -1;
+	}
 	return (_SUCCESS);
 }
 

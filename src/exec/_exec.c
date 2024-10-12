@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 18:20:38 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/12 00:18:17 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/12 02:18:30 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	_exec_child_proc(t_pdata data, t_pncmd cmd)
 	if (_is_builtin(data, cmd->args))
 	{
 		data->_errno = _exec_builtin(data, &cmd);
-		_data_clear(data);
+		_data_clear_exit(data, data->_errno);
 	}
 	else
 	{
@@ -32,8 +32,7 @@ int	_exec_child_proc(t_pdata data, t_pncmd cmd)
 		execve(cmd->path, cmd->args, data->args.env);
 		if (cmd->args)
 			_err_print(_ERR_NOT_FOUND, cmd->args[0], true, 127);
-		_data_clear(data);
-		exit(127);
+		_data_clear_exit(data, 127);
 	}
 	return (_SUCCESS);
 }
@@ -43,10 +42,7 @@ int	_exec_process(t_pdata data, t_pncmd cmd)
 	if (_xpd_line(data, &cmd->token) || _pars_args_line(data, &cmd, &cmd->token, true))
 		return (_FAILURE);
 	if (!cmd->next && !cmd->prev && _is_builtin(data, cmd->args))
-	{
-		if (_exec_builtin_proc(data, &cmd))
-			return (_FAILURE);
-	}
+		return (_exec_builtin_proc(data, &cmd));
 	else
 	{
 		if (cmd->next && pipe(cmd->redirs.pfd) < 0)
@@ -56,7 +52,7 @@ int	_exec_process(t_pdata data, t_pncmd cmd)
 			return (perror("fork"), _FAILURE);
 		if (!cmd->pid && _exec_child_proc(data, cmd))
 			return (_FAILURE);
-		else if (cmd->pid != 0 && cmd->prev)
+		if (cmd->pid && cmd->prev)
 		{
 			close(cmd->prev->redirs.pfd[1]);
 			close(cmd->prev->redirs.pfd[0]);

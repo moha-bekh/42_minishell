@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/10/12 00:40:42 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/12 02:15:51 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	_stdio_init(void)
 {
 	int	fd;
 
-	return (_SUCCESS);
 	fd = open("/dev/stdin", O_RDWR);
 	if (fd == -1)
 		return (_FAILURE);
@@ -63,7 +62,6 @@ void	_canonical_mode(t_pdata data)
 			_data_structs_clear(data);
 			continue ;
 		}
-		// _dlst_print_tokens(data->tokens);
 		_tree_builder(&data->tree, data->tokens->d_top);
 		if (_exec(data, &data->tree))
 		{

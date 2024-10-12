@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 06:39:42 by moha              #+#    #+#             */
-/*   Updated: 2024/10/11 03:12:26 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/12 02:17:28 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,18 +50,22 @@ int	_swap_fd_redir_out(t_ppncmd cmd)
 int	_read_from_pipe(t_ppncmd cmd)
 {
 	close((*cmd)->prev->redirs.pfd[1]);
+	(*cmd)->prev->redirs.pfd[1] = -1;
 	if (dup2((*cmd)->prev->redirs.pfd[0], STDIN_FILENO) < 0)
 		return (perror("dup2"), _FAILURE);
 	close((*cmd)->prev->redirs.pfd[0]);
+	(*cmd)->prev->redirs.pfd[0] = -1;
 	return (_SUCCESS);
 }
 
 int	_write_to_pipe(t_ppncmd cmd)
 {
 	close((*cmd)->redirs.pfd[0]);
+	(*cmd)->redirs.pfd[0] = -1;
 	if (dup2((*cmd)->redirs.pfd[1], STDOUT_FILENO) < 0)
 		return (perror("dup2"), _FAILURE);
 	close((*cmd)->redirs.pfd[1]);
+	(*cmd)->redirs.pfd[1] = -1;
 	return (_SUCCESS);
 }
 
@@ -71,9 +75,23 @@ int	_exec_redirections(t_ppncmd cmd)
 		return (_FAILURE);
 	if ((*cmd)->redirs.in_name && _swap_fd_redir_in(cmd))
 		return (_FAILURE);
-	if ((*cmd)->next && !(*cmd)->redirs.out_name && _write_to_pipe(cmd))
-		return (_FAILURE);
 	if ((*cmd)->prev && !(*cmd)->redirs.in_name && _read_from_pipe(cmd))
 		return (_FAILURE);
+	if ((*cmd)->next && !(*cmd)->redirs.out_name && _write_to_pipe(cmd))
+		return (_FAILURE);
+	if ((*cmd)->prev && (*cmd)->redirs.in_name)
+	{
+		if ((*cmd)->prev->redirs.pfd[0] > 0)
+			close((*cmd)->prev->redirs.pfd[0]);
+		if ((*cmd)->prev->redirs.pfd[1] > 0)
+			close((*cmd)->prev->redirs.pfd[1]);
+	}
+	if ((*cmd)->next && (*cmd)->redirs.out_name)
+	{
+		if ((*cmd)->redirs.pfd[0] > 0)
+			close((*cmd)->redirs.pfd[0]);
+		if ((*cmd)->redirs.pfd[1] > 0)
+			close((*cmd)->redirs.pfd[1]);
+	}
 	return (_SUCCESS);
 }

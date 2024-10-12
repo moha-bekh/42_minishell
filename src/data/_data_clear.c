@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 15:44:21 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/11 03:25:35 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/12 01:55:38 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,16 @@ void	_data_structs_clear(t_pdata data)
 	_dlst_clear(&data->tokens);
 	_dlst_clear(&data->xpd);
 	_bt_clear(&data->tree);
+	if (data->shell._stdin > 0)
+	{
+		close(data->shell._stdin);
+		data->shell._stdin = -1;
+	}
+	if (data->shell._stdout > 0)
+	{
+		close(data->shell._stdout);
+		data->shell._stdout = -1;
+	}
 }
 
 void	_data_clear(t_pdata data)
@@ -36,6 +46,14 @@ void	_data_clear(t_pdata data)
 	_dlst_clear(&data->tokens);
 	_dlst_clear(&data->xpd);
 	_bt_clear(&data->tree);
-	close(data->shell._stdin);
-	close(data->shell._stdout);
+	if (data->shell._stdin > 0)
+	{
+		close(data->shell._stdin);
+		data->shell._stdin = -1;
+	}
+	if (data->shell._stdout > 0)
+	{
+		close(data->shell._stdout);
+		data->shell._stdout = -1;
+	}
 }

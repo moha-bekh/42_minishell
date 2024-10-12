@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:16:30 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/12 00:34:12 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/12 02:01:11 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,7 @@ void	_hd_open_fd(t_pdata data, t_pnlst token, int *fd)
 {
 	*fd = open(token->addr_1, O_RDWR | O_CREAT | O_APPEND, 0644);
 	if (*fd < 0)
-	{
-		_data_clear(data);
-		exit(1);
-	}
+		_data_clear_exit(data, 1);
 }
 
 void	_hd_fill_loop(t_pdata data, t_pnlst token, char *line)
@@ -34,8 +31,7 @@ void	_hd_fill_loop(t_pdata data, t_pnlst token, char *line)
 		{
 			ft_dprintf(2, _ERR_HERE_EOF, token->next->addr_1);
 			close(fd);
-			_data_clear(data);
-			exit(0);
+			_data_clear_exit(data, 0);
 		}
 		if (!ft_strcmp(line, token->next->addr_1))
 			break ;

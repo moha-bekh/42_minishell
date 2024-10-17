@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _xpd_wildcards_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 12:43:56 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/26 12:44:09 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/17 19:52:18 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	_xpd_right_border(t_ppnlst token, t_ppadlst list)
 	char	*str;
 	char	*rts;
 
+	if (!*list)
+		return (_SUCCESS);
 	str = (*token)->addr_1;
 	tmp = (*list)->d_top;
 	while (tmp)
@@ -43,6 +45,8 @@ int	_xpd_left_border(t_ppnlst token, t_ppadlst list)
 	char	*str;
 	char	*rts;
 
+	if (!*list)
+		return (_SUCCESS);
 	str = (*token)->addr_1;
 	tmp = (*list)->d_top;
 	while (tmp)
@@ -60,18 +64,4 @@ int	_xpd_left_border(t_ppnlst token, t_ppadlst list)
 			tmp = tmp->next;
 	}
 	return (_SUCCESS);
-}
-
-int	_xpd_full_astrix(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] != '*')
-			return (false);
-		i++;
-	}
-	return (true);
 }

@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:16:30 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/12 02:01:11 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/17 16:55:08 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	_hd_fill_loop(t_pdata data, t_pnlst token, char *line)
 		if (!ft_strcmp(line, token->next->addr_1))
 			break ;
 		if (line && !_tok_id(token->next->x, _QUOTES))
-			line = _xpd_str(data, line);
+			line = _xpd_str(data, line, true);
 		if (line)
 			ft_dprintf(fd, "%s\n", line);
 		free(line);

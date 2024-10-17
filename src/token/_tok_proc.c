@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _tok_proc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 16:12:52 by moha              #+#    #+#             */
-/*   Updated: 2024/10/11 16:37:47 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/17 21:41:23 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ int	_wildcards_proc(t_pdata data, int *i)
 	j = *i;
 	while (data->prompt[*i] && !ft_isspace(data->prompt[*i]))
 	{
-		if (_tok_id(data->prompt[*i], _TOKENS) && data->prompt[*i] != '*')
+		if (data->prompt[*i] == '(' || data->prompt[*i] == ')')
+			return (_err_print(_ERR_TOKEN, data->tokens->d_bot->addr_1, true, 2));
+		else if (_tok_id(data->prompt[*i], _OPERATORS))
 			break ;
 		*i += 1;
 	}
@@ -37,19 +39,13 @@ int	_wildcards_proc(t_pdata data, int *i)
 	if (!str)
 		return (_FAILURE);
 	_dlst_push_back(&data->tokens, str, NULL, '*');
-	if (data->prompt[*i] && !ft_isspace(data->prompt[*i])
-		&& _tok_id(data->prompt[*i], _JOINERS))
+	if (data->prompt[*i] && !ft_isspace(data->prompt[*i]) && _tok_id(data->prompt[*i], _JOINERS))
 		data->tokens->d_bot->flag = true;
 	return (_SUCCESS);
 }
 
 int	_sub_proc(t_pdata data, int *i)
 {
-	char	x;
-
-	x = data->prompt[*i + 1];
-	if (x == '(' || x == ')')
-		return (_err_print(_ERR_TOKEN, &x, true, 2));
 	if (data->prompt[*i] == '(')
 	{
 		_dlst_push_back(&data->tokens, ft_substr(data->prompt, *i, 1), NULL,
@@ -66,8 +62,24 @@ int	_sub_proc(t_pdata data, int *i)
 			return (_FAILURE);
 		data->args.parnth++;
 	}
+	if (data->tokens->d_bot->prev && (data->tokens->d_bot->prev->x == '(' || data->tokens->d_bot->prev->x == ')'))
+		return (_err_print(_ERR_TOKEN, data->tokens->d_bot->addr_1, true, 2));
 	*i += 1;
 	return (_SUCCESS);
+}
+
+int _is_wild(t_pdata data, int *i)
+{
+	int j;
+
+	j = *i + 1;
+	while (data->prompt[j] && !ft_isspace(data->prompt[j]))
+	{
+		if (data->prompt[j] == '*')
+			return (true);
+		j++;
+	}
+	return (false);
 }
 
 int	_tok_proc(t_pdata data, int *i)

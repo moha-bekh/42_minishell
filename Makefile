@@ -97,6 +97,7 @@ _UTILS			:=		_dlst_print\
 						_tok_id\
 						_varstr_conv\
 						_xpd_conv\
+						_xpd_full_asterix\
 						_xpd_needed\
 
 SRCS			+=		$(addprefix $(SRC_DIR), $(addsuffix .c, $(_SRC)))

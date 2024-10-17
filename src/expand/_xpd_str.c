@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 12:47:09 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/11 02:37:31 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/17 16:54:32 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char	*_xpd_env_var(t_pdata data, char *line, char *buf, int *i)
 	return (buf);
 }
 
-char	*_xpd_str(t_pdata data, char *line)
+char	*_xpd_str(t_pdata data, char *line, bool save_quote)
 {
 	char	*buf;
 	int		i;
@@ -78,7 +78,7 @@ char	*_xpd_str(t_pdata data, char *line)
 		return (NULL);
 	i = 0;
 	j = 0;
-	while (line[i])
+	while (line[i] && j < 4096)
 	{
 		if (line[i] == '$' && (_is_varchr(line[i + 1]) || line[i + 1] == '?'))
 		{
@@ -90,6 +90,8 @@ char	*_xpd_str(t_pdata data, char *line)
 			j = ft_strlen(buf);
 			continue ;
 		}
+		if ((line[i] == '"' || line[i] == '\'') && !save_quote)
+			i++;
 		buf[j++] = line[i++];
 	}
 	free(line);

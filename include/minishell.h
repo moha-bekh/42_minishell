@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/10/12 10:16:11 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/17 21:32:31 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ void					_execution(t_pdata data, t_pncmd cmd);
 
 /* EXPAND */
 int						_xpd_line(t_pdata data, t_ppnlst token);
-int						_xpd_wildcards(t_pdata data, t_ppnlst token);
-char					*_xpd_str(t_pdata data, char *line);
+int						_xpd_wildcards(t_pdata data, t_ppnlst token, bool to_str);
+char					*_xpd_str(t_pdata data, char *line, bool save_quote);
 /* EXPAND UTILS */
 int						_xpd_right_border(t_ppnlst token, t_ppadlst list);
 int						_xpd_left_border(t_ppnlst token, t_ppadlst list);
@@ -115,6 +115,7 @@ int						_resolve_path(t_pdata data, t_ppncmd cmd);
 int						_tok_id(char a, char *str);
 int						_varstr_conv(char *str);
 int						_xpd_conv(char c);
+int	_xpd_full_asterix(char *str);
 int						_xpd_needed(char *str);
 
 struct					s_args
@@ -196,6 +197,7 @@ enum					e_return
 # define _O_RWCA O_WRONLY | O_CREAT | O_APPEND, 0644
 
 # define _TOKENS "*'\"()$|&<>"
+# define _WORD_SEP "()$|&<>"
 # define _OPERATORS "&|"
 # define _SUBSHELL "()"
 # define _PIPELINE "|"

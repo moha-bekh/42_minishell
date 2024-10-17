@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _word.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:23:36 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/11 17:59:10 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/17 21:19:08 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,30 @@ int	_join_word(t_pdata data, int *i, int j)
 	return (_SUCCESS);
 }
 
+void _convert_to_wildcard(t_ppnlst token)
+{
+	int i;
+	char *str;
+	char quote;
+
+	str = (*token)->addr_1;
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '"' || str[i] == '\'')
+		{
+			quote = str[i];
+			while (str[++i] && str[i] != quote)
+				;
+		}
+		if (str[i] == '*')
+		{
+			(*token)->x = '*';
+			return ;
+		}
+	}
+}
+
 int	_new_word(t_pdata data, int *i, int j)
 {
 	char	*str;
@@ -39,6 +63,7 @@ int	_new_word(t_pdata data, int *i, int j)
 	_dlst_push_back(&data->tokens, str, NULL, _WORD);
 	if (!data->tokens->d_bot->addr_1)
 		return (_FAILURE);
+	_convert_to_wildcard(&data->tokens->d_bot);
 	return (_SUCCESS);
 }
 
@@ -47,11 +72,9 @@ int	_word_proc(t_pdata data, int *i)
 	int	j;
 
 	j = *i;
-	while (data->prompt[*i] && !ft_isspace(data->prompt[*i])
-		&& !_tok_id(data->prompt[*i], _TOKENS))
+	while (data->prompt[*i] && !ft_isspace(data->prompt[*i]) && !_tok_id(data->prompt[*i], _WORD_SEP))
 		*i += 1;
-	if (data->tokens && data->tokens->d_bot->flag && data->tokens->d_bot->prev
-		&& data->tokens->d_bot->prev->x == 'H')
+	if (data->tokens && data->tokens->d_bot->flag && data->tokens->d_bot->prev && data->tokens->d_bot->prev->x == 'H')
 	{
 		if (_join_word(data, i, j))
 			return (_FAILURE);
@@ -61,8 +84,7 @@ int	_word_proc(t_pdata data, int *i)
 		if (_new_word(data, i, j))
 			return (_FAILURE);
 	}
-	if (data->prompt[*i] && !ft_isspace(data->prompt[*i])
-		&& _tok_id(data->prompt[*i], _JOINERS))
+	if (data->prompt[*i] && !ft_isspace(data->prompt[*i]) && _tok_id(data->prompt[*i], _JOINERS))
 		data->tokens->d_bot->flag = true;
 	else
 		data->tokens->d_bot->flag = false;

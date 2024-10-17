@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 17:38:12 by moha              #+#    #+#             */
-/*   Updated: 2024/10/12 02:41:55 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/17 21:32:16 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,14 @@ int	_check_patterns(t_pnlst token, char **patt)
 	char	*tmp;
 	int		i;
 
-	tmp = (char *)token->addr_1;
+	tmp = token->addr_1;
 	i = 0;
 	while (patt[i])
 	{
 		tmp = ft_strnstr(tmp, patt[i], ft_strlen(tmp));
 		if (!tmp)
 			return (false);
+		tmp++;
 		i++;
 	}
 	return (true);
@@ -38,28 +39,51 @@ int	_xpd_wildcards_filter(t_ppadlst list, char **patterns)
 	{
 		if (!_check_patterns(tmp, patterns))
 		{
-			_dlst_pop_in(list, &tmp);
-			if (*list)
-				tmp = (*list)->d_top;
-			else
-				break ;
+			free(tmp->addr_1);
+			tmp->addr_1 = ft_strdup("");
 		}
-		else
-			tmp = tmp->next;
+		tmp = tmp->next;
 	}
 	return (_SUCCESS);
 }
 
-int	_xpd_merge_list(t_ppnlst token, t_ppadlst list)
+int _xpd_merge_string(t_ppnlst token, t_ppadlst list)
+{
+	char *tmp;
+	t_pnlst node;
+
+	node = (*list)->d_top;
+	free((*token)->addr_1);
+	(*token)->addr_1 = ft_strdup("");
+	while (node)
+	{
+		tmp = ft_strjoin((*token)->addr_1, node->addr_1);
+		if (!tmp)
+			return (_FAILURE);
+		free((*token)->addr_1);
+		(*token)->addr_1 = tmp;
+		tmp = ft_strjoin((*token)->addr_1, " ");
+		if (!tmp)
+			return (_FAILURE);
+		free((*token)->addr_1);
+		(*token)->addr_1 = tmp;
+		node = node->next;
+	}
+	return (_SUCCESS);
+}
+
+int	_xpd_merge_list(t_ppnlst token, t_ppadlst list, bool to_str)
 {
 	t_pnlst		tmp;
-	t_ppnlst	to_clear;
 	char		*str;
 
-	to_clear = token;
+	if (!to_str)
+		return (_xpd_merge_string(token, list));
 	tmp = (*list)->d_top;
 	while (tmp)
 	{
+		if (!tmp->addr_1)
+			tmp = tmp->next;
 		str = ft_strdup(tmp->addr_1);
 		if (!str)
 			return (_FAILURE);
@@ -69,37 +93,40 @@ int	_xpd_merge_list(t_ppnlst token, t_ppadlst list)
 	}
 	if (list)
 	{
-		free((*to_clear)->addr_1);
-		(*to_clear)->addr_1 = NULL;
+		free((*token)->addr_1);
+		(*token)->addr_1 = NULL;
 	}
 	_dlst_clear(list);
 	return (_SUCCESS);
 }
 
-int	_xpd_wildcards_proc(t_ppnlst token, t_ppadlst list)
+int	_xpd_wildcards_proc(t_pdata data, t_ppnlst token, t_ppadlst list, bool to_str)
 {
-	char	*str;
 	char	**patterns;
+	char 	*str;
 
-	str = (*token)->addr_1;
-	if (str[0] != '*')
-		return (_xpd_left_border(token, list));
-	if (str[ft_strlen(str) - 1] != '*')
-		return (_xpd_right_border(token, list));
-	if (_xpd_full_astrix(str))
+
+	(*token)->addr_1 = _xpd_str(data, (*token)->addr_1, false);
+	if (_xpd_full_asterix((*token)->addr_1))
 	{
-		_xpd_merge_list(token, list);
+		_xpd_merge_list(token, list, to_str);
 		return (_dlst_clear(list), _SUCCESS);
 	}
+	str = (*token)->addr_1;
+	if (str[0] != '*')
+		_xpd_left_border(token, list);
+	if (str[ft_strlen(str) - 1] != '*')
+		_xpd_right_border(token, list);
 	patterns = ft_split((*token)->addr_1, '*');
-	_xpd_wildcards_filter(list, patterns);
+	if (*list)
+		_xpd_wildcards_filter(list, patterns);
 	ft_free_arr(patterns);
 	if (!*list)
 		return (_SUCCESS);
-	return (_xpd_merge_list(token, list));
+	return (_xpd_merge_list(token, list, to_str));
 }
 
-int	_xpd_wildcards(t_pdata data, t_ppnlst token)
+int	_xpd_wildcards(t_pdata data, t_ppnlst token, bool to_str)
 {
 	struct dirent	*entry;
 	char			*cwd_name;
@@ -123,7 +150,7 @@ int	_xpd_wildcards(t_pdata data, t_ppnlst token)
 		entry = readdir(cwd_dir);
 	}
 	closedir(cwd_dir);
-	if (_xpd_wildcards_proc(token, &data->xpd))
+	if (data->xpd && _xpd_wildcards_proc(data, token, &data->xpd, to_str))
 		return (_FAILURE);
 	return (_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 16:22:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/11 03:28:35 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/17 21:32:46 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,14 @@ int	_xpd_line(t_pdata data, t_ppnlst token)
 	tmp = *token;
 	while (tmp && tmp->x != _PIPE && !_tok_id(tmp->x, _TYP_SEP))
 	{
-		if (tmp->x == '*' && _xpd_wildcards(data, &tmp))
+		if (tmp->x == '$' && _xpd_var(data, &tmp))
 			return (_FAILURE);
-		else if (tmp->x == '$' && _xpd_var(data, &tmp))
+		// if (_xpd_full_asterix(tmp->addr_1))
+		// 	tmp->x = '*';
+		else if (tmp->x == '*' && _xpd_wildcards(data, &tmp, false))
 			return (_FAILURE);
 		if (tmp->x == '"' && _xpd_needed(tmp->addr_1))
-			tmp->addr_1 = _xpd_str(data, tmp->addr_1);
+			tmp->addr_1 = _xpd_str(data, tmp->addr_1, true);
 		tmp = tmp->next;
 	}
 	_join_strings(token);

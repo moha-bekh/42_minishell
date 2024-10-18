@@ -1,20 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ishexALPHA.c                                    :+:      :+:    :+:   */
+/*   _check_patterns.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/29 08:00:59 by moha              #+#    #+#             */
-/*   Updated: 2024/10/18 13:33:43 by mbekheir         ###   ########.fr       */
+/*   Created: 2024/10/18 13:34:47 by mbekheir          #+#    #+#             */
+/*   Updated: 2024/10/18 13:35:40 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_ishex_alpha_(int c)
+int	_check_patterns(t_pnlst token, char **patt)
 {
-	if ((c >= 'A' && c <= 'Z'))
-		return (1);
-	return (0);
+	char	*tmp;
+	int		i;
+
+	tmp = token->addr_1;
+	i = 0;
+	while (patt[i])
+	{
+		tmp = ft_strnstr(tmp, patt[i], ft_strlen(tmp));
+		if (!tmp)
+			return (false);
+		tmp++;
+		i++;
+	}
+	return (true);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _exit.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:43 by moha              #+#    #+#             */
-/*   Updated: 2024/10/17 16:43:45 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/18 13:11:56 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	_exit_(t_pdata data, t_pncmd cmd, char **args)
 		if (!cmd->prev && !cmd->next)
 			ft_dprintf(STDERR_FILENO, "exit\n");
 		_data_clear(data);
-		exit(0);
+		exit(data->_errno);
 	}
 	if (i == 1)
 		_exit_arg(data, cmd, args);

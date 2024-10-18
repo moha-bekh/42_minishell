@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _word.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:23:36 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/17 21:19:08 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/18 13:31:14 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ int	_join_word(t_pdata data, int *i, int j)
 	return (_SUCCESS);
 }
 
-void _convert_to_wildcard(t_ppnlst token)
+void	_convert_to_wildcard(t_ppnlst token)
 {
-	int i;
-	char *str;
-	char quote;
+	int		i;
+	char	*str;
+	char	quote;
 
 	str = (*token)->addr_1;
 	i = -1;
@@ -72,9 +72,11 @@ int	_word_proc(t_pdata data, int *i)
 	int	j;
 
 	j = *i;
-	while (data->prompt[*i] && !ft_isspace(data->prompt[*i]) && !_tok_id(data->prompt[*i], _WORD_SEP))
+	while (data->prompt[*i] && !ft_isspace(data->prompt[*i])
+		&& !_tok_id(data->prompt[*i], _WORD_SEP))
 		*i += 1;
-	if (data->tokens && data->tokens->d_bot->flag && data->tokens->d_bot->prev && data->tokens->d_bot->prev->x == 'H')
+	if (data->tokens && data->tokens->d_bot->flag && data->tokens->d_bot->prev
+		&& data->tokens->d_bot->prev->x == 'H')
 	{
 		if (_join_word(data, i, j))
 			return (_FAILURE);
@@ -84,7 +86,8 @@ int	_word_proc(t_pdata data, int *i)
 		if (_new_word(data, i, j))
 			return (_FAILURE);
 	}
-	if (data->prompt[*i] && !ft_isspace(data->prompt[*i]) && _tok_id(data->prompt[*i], _JOINERS))
+	if (data->prompt[*i] && !ft_isspace(data->prompt[*i])
+		&& _tok_id(data->prompt[*i], _JOINERS))
 		data->tokens->d_bot->flag = true;
 	else
 		data->tokens->d_bot->flag = false;

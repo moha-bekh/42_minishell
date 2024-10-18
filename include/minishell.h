@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/10/17 21:32:31 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/18 15:37:17 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,43 @@
 # include <sys/wait.h>
 # include <termios.h>
 
-typedef struct s_data t_data, *t_pdata, **t_ppdata;
-
 extern int				g_sig_num;
+
+struct					s_args
+{
+	int					ac;
+	char				**av;
+	char				**env;
+	char				**env_path;
+	char				*_hard_path;
+	char				**hard_paths;
+	int					parnth;
+	int					nb_hd;
+};
+
+struct					s_shell
+{
+	int					_stdin;
+	int					_stdout;
+	struct termios		org_term;
+	struct termios		new_term;
+	struct sigaction	s_sigint;
+	struct sigaction	s_sigquit;
+};
+
+typedef struct s_data
+{
+	char				*prompt;
+	struct s_args		args;
+	t_padlst			builtins;
+	t_padlst			env;
+	t_padlst			export;
+	t_padlst			tokens;
+	t_pbtree			tree;
+	t_padlst			xpd;
+	int					_errno;
+	struct s_shell		shell;
+} t_data, *t_pdata,	**t_ppdata;
 
 /* SIGNALS */
 void					_hndl_sigint(int sig);
@@ -67,7 +101,8 @@ void					_execution(t_pdata data, t_pncmd cmd);
 
 /* EXPAND */
 int						_xpd_line(t_pdata data, t_ppnlst token);
-int						_xpd_wildcards(t_pdata data, t_ppnlst token, bool to_str);
+int						_xpd_wildcards(t_pdata data, t_ppnlst token,
+							bool to_str);
 char					*_xpd_str(t_pdata data, char *line, bool save_quote);
 /* EXPAND UTILS */
 int						_xpd_right_border(t_ppnlst token, t_ppadlst list);
@@ -91,6 +126,7 @@ int						_pwd(t_pdata data);
 int						_unset(t_pdata data, char **args);
 
 /* UTILS */
+int						_check_patterns(t_pnlst token, char **patt);
 void					_bt_print(t_pbtree node, int i);
 void					_dlst_print_builtins(t_padlst dlst);
 void					_dlst_print_env(t_padlst dlst);
@@ -115,44 +151,8 @@ int						_resolve_path(t_pdata data, t_ppncmd cmd);
 int						_tok_id(char a, char *str);
 int						_varstr_conv(char *str);
 int						_xpd_conv(char c);
-int	_xpd_full_asterix(char *str);
+int						_xpd_full_asterix(char *str);
 int						_xpd_needed(char *str);
-
-struct					s_args
-{
-	int					ac;
-	char				**av;
-	char				**env;
-	char				**env_path;
-	char				*_hard_path;
-	char				**hard_paths;
-	int					parnth;
-	int					nb_hd;
-};
-
-struct					s_shell
-{
-	int					_stdin;
-	int					_stdout;
-	struct termios		org_term;
-	struct termios		new_term;
-	struct sigaction	s_sigint;
-	struct sigaction	s_sigquit;
-};
-
-struct					s_data
-{
-	char				*prompt;
-	struct s_args		args;
-	t_padlst			builtins;
-	t_padlst			env;
-	t_padlst			export;
-	t_padlst			tokens;
-	t_pbtree			tree;
-	t_padlst			xpd;
-	int					_errno;
-	struct s_shell		shell;
-};
 
 enum					e_tokens
 {
@@ -179,7 +179,8 @@ enum					e_return
 # define _ERR_IS_DIR "bash: %s: Is a directory\n"
 # define _ERR_NO_FILE "bash: %s: No such file or directory\n"
 # define _ERR_NO_DIR "bash: cd: %s: No such file or directory\n"
-# define _ERR_PWD "pwd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n"
+# define _ERR_PWD "pwd: error retrieving current directory: \
+	getcwd: cannot access parent directories: No such file or directory\n"
 
 # define _ERR_ENV_NO_FILE "env: %s: No such file or directory\n"
 # define _ERR_EXPORT_INVALID "bash: export: `%s': not a valid identifier\n"
@@ -189,12 +190,10 @@ enum					e_return
 
 # define _ERR_PERM "bash: %s: Permission denied\n"
 # define _ERR_AMBIGOUS "bash: %s: ambiguous redirect\n"
-# define _ERR_HERE_EOF "bash: warning: here-document delimited by end-of-file (wanted `%s')\n"
+# define _ERR_HERE_EOF "bash: warning: here-document delimited by end-of-file \
+	(wanted `%s')\n"
 
 # define _PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-
-# define _O_RWCT O_WRONLY | O_CREAT | O_TRUNC, 0644
-# define _O_RWCA O_WRONLY | O_CREAT | O_APPEND, 0644
 
 # define _TOKENS "*'\"()$|&<>"
 # define _WORD_SEP "()$|&<>"

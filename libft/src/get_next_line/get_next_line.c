@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 17:47:06 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/21 15:01:33 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/18 13:33:04 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,14 @@ void	read_and_stock(int fd, t_pplist lst)
 	int		rd;
 
 	rd = 1;
-	// if (!*lst)
-	// 	return ;
+	if (!*lst)
+		return ;
 	while (!is_new_line(*lst) && rd != 0)
 	{
-		buf = ft_calloc((BF + 1), sizeof(char));
+		buf = ft_calloc((BUFFER_SIZE + 1), sizeof(char));
 		if (!buf)
 			return ;
-		rd = (int)read(fd, buf, BF);
+		rd = (int)read(fd, buf, BUFFER_SIZE);
 		if ((!*lst && rd == 0) || rd == -1)
 			return (free(buf));
 		buf[rd] = '\0';
@@ -122,9 +122,9 @@ bool	clean_list(t_pplist lst)
 
 char	*get_next_line(int fd, t_pplist lst)
 {
-	char			*line;
+	char	*line;
 
-	if (fd < 0 || BF <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	line = NULL;
 	read_and_stock(fd, lst);

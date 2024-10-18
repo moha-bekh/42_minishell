@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/10/17 21:59:26 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/18 13:17:52 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,13 @@ void	_canonical_mode(t_pdata data)
 	{
 		data->prompt = readline("minishell$ ");
 		if (!data->prompt)
-			return (write(1, "exit\n", 5), _data_clear(data));
+			return (write(1, "exit\n", 5), (void)_data_clear_exit(data, -1));
 		add_history(data->prompt);
 		if (_atol(data))
 		{
 			_data_structs_clear(data);
 			continue ;
 		}
-		// _dlst_print_tokens(data->tokens);
 		_tree_builder(&data->tree, data->tokens->d_top);
 		if (_exec(data, &data->tree))
 		{
@@ -81,7 +80,7 @@ void	_non_canonical_mode(t_pdata data)
 	{
 		data->prompt = readline(NULL);
 		if (!data->prompt)
-			return (_data_clear(data));
+			return ((void)_data_clear_exit(data, -1));
 		if (_atol(data))
 		{
 			_data_structs_clear(data);

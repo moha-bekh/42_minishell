@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 09:41:33 by ajordan-          #+#    #+#             */
-/*   Updated: 2024/10/09 16:12:47 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/18 15:43:31 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,12 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-typedef struct s_list t_list, *t_plist, **t_pplist;     // SIMPLE LIST
-typedef struct s_adlst t_adlst, *t_padlst, **t_ppadlst; // DOUBLE LIST MANAGER
-typedef struct s_nlst t_nlst, *t_pnlst, **t_ppnlst;     // DOUBLE LIST NODE
-typedef struct s_btree t_btree, *t_pbtree, **t_ppbtree; // BINARY TREE
-
-typedef struct s_ncmd t_ncmd, *t_pncmd, **t_ppncmd; // CMD LIST
-// typedef struct s_redir t_redir, *t_predir;                // REDIRS
-typedef struct s_ft_dprintf t_fd_dprintf, *t_ft_pdprintf; // FT_DPRINTF
+typedef struct s_list t_list, *t_plist,		**t_pplist; // SIMPLE LIST
+typedef struct s_adlst t_adlst, *t_padlst,	**t_ppadlst; // DOUBLE LIST MANAGER
+typedef struct s_nlst t_nlst, *t_pnlst,		**t_ppnlst; // DOUBLE LIST NODE
+typedef struct s_btree t_btree, *t_pbtree,	**t_ppbtree; // BINARY TREE
+typedef struct s_ncmd t_ncmd, *t_pncmd,		**t_ppncmd; // CMD LIST
+typedef struct s_ft_dprintf t_fd_dprintf,	*t_ft_pdprintf; // FT_DPRINTF
 
 /* ALLOC && FREE */
 int					_alloc(void **target, size_t size);
@@ -110,7 +108,7 @@ int					ft_isdigit(int c);
 int					ft_isprint(int c);
 bool				ft_isspace(int c);
 int					ft_ishex_alpha(int c);
-int					ft_ishexALPHA(int c);
+int					ft_ishex_alpha_(int c);
 
 /* FT_MEM */
 void				ft_bzero(void *s, size_t n);
@@ -185,15 +183,6 @@ void				generate_line(t_list *line_list, char **line);
 void				free_list(t_list *line_list);
 size_t				ft_strlen(const char *s);
 
-// /* GNL */
-// char				*get_next_line(int fd, t_pplist lst);
-// /* GNL UTILS */
-// int					is_new_line(t_plist lst);
-// t_plist				get_last_node(t_plist lst);
-// void				generate_line(t_plist lst, char **line);
-// void				free_list(t_pplist lst);
-// size_t				ft_strlen(const char *s);
-
 /* SORT */
 void				quick_sort(int *tab, int start, int end);
 
@@ -263,13 +252,6 @@ struct				s_adlst
 		};
 	};
 };
-
-// struct				s_list
-// {
-// 	char			*key;
-// 	char			*value;
-// 	t_plist			next;
-// };
 
 struct				s_ft_dprintf
 {

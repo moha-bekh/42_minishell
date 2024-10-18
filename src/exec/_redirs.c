@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _redirs.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 06:39:42 by moha              #+#    #+#             */
-/*   Updated: 2024/10/12 02:17:28 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/18 15:36:28 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,11 @@ int	_swap_fd_redir_out(t_ppncmd cmd)
 	if (access((*cmd)->redirs.out_name, W_OK))
 		return (_err_print(_ERR_PERM, (*cmd)->redirs.out_name, true, 1));
 	if ((*cmd)->redirs.out_trunc)
-		(*cmd)->redirs.fd[1] = open((*cmd)->redirs.out_name, _O_RWCT);
+		(*cmd)->redirs.fd[1] = open((*cmd)->redirs.out_name,
+				O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else
-		(*cmd)->redirs.fd[1] = open((*cmd)->redirs.out_name, _O_RWCA);
+		(*cmd)->redirs.fd[1] = open((*cmd)->redirs.out_name,
+				O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if ((*cmd)->redirs.fd[1] < 0)
 		return (perror("open"), _FAILURE);
 	if (dup2((*cmd)->redirs.fd[1], STDOUT_FILENO) < 0)

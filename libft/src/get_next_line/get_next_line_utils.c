@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 17:47:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/21 14:59:39 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/18 13:36:58 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	is_new_line(t_plist lst)
 
 t_plist	get_last_node(t_plist lst)
 {
-	t_plist current;
+	t_plist	current;
 
 	if (!lst)
 		return (NULL);

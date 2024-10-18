@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _xpd_str.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 12:47:09 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/17 16:54:32 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/18 13:36:08 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,7 @@ char	*_xpd_str(t_pdata data, char *line, bool save_quote)
 	{
 		if (line[i] == '$' && (_is_varchr(line[i + 1]) || line[i + 1] == '?'))
 		{
-			i++;
-			if (line[i] == '?')
+			if (line[++i] == '?')
 				buf = _xpd_errno(data, buf, &i);
 			else
 				buf = _xpd_env_var(data, line, buf, &i);

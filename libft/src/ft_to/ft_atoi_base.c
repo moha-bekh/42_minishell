@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 08:05:29 by moha              #+#    #+#             */
-/*   Updated: 2024/07/26 16:32:52 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/18 15:38:31 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 int	is_valid(int c, int base)
 {
 	char	*lbase;
-	char	*Ubase;
+	char	*ubase;
 	int		i;
 
 	lbase = "0123456789abcdef";
-	Ubase = "0123456789ABCDEF";
+	ubase = "0123456789ABCDEF";
 	i = -1;
 	while (++i < base)
 	{
-		if (c == lbase[i] || c == Ubase[i])
+		if (c == lbase[i] || c == ubase[i])
 			return (1);
 	}
 	return (0);
@@ -60,7 +60,7 @@ int	ft_atoi_base(const char *str, int base)
 			res += str[i] - '0';
 		else if (ft_ishex_alpha(str[i]))
 			res += str[i] - 'a' + 10;
-		else if (ft_ishexALPHA(str[i]))
+		else if (ft_ishex_alpha_(str[i]))
 			res += str[i] - 'A' + 10;
 		i++;
 	}

@@ -3,32 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   _xpd_wildcards.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 17:38:12 by moha              #+#    #+#             */
-/*   Updated: 2024/10/17 21:32:16 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/18 13:34:37 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	_check_patterns(t_pnlst token, char **patt)
-{
-	char	*tmp;
-	int		i;
-
-	tmp = token->addr_1;
-	i = 0;
-	while (patt[i])
-	{
-		tmp = ft_strnstr(tmp, patt[i], ft_strlen(tmp));
-		if (!tmp)
-			return (false);
-		tmp++;
-		i++;
-	}
-	return (true);
-}
 
 int	_xpd_wildcards_filter(t_ppadlst list, char **patterns)
 {
@@ -47,14 +29,14 @@ int	_xpd_wildcards_filter(t_ppadlst list, char **patterns)
 	return (_SUCCESS);
 }
 
-int _xpd_merge_string(t_ppnlst token, t_ppadlst list)
+int	_xpd_merge_string(t_ppnlst token, t_ppadlst list)
 {
-	char *tmp;
-	t_pnlst node;
+	char	*tmp;
+	t_pnlst	node;
 
 	node = (*list)->d_top;
 	free((*token)->addr_1);
-	(*token)->addr_1 = ft_strdup("");
+	(*token)->addr_1 = ft_strdup(" ");
 	while (node)
 	{
 		tmp = ft_strjoin((*token)->addr_1, node->addr_1);
@@ -72,13 +54,13 @@ int _xpd_merge_string(t_ppnlst token, t_ppadlst list)
 	return (_SUCCESS);
 }
 
-int	_xpd_merge_list(t_ppnlst token, t_ppadlst list, bool to_str)
+int	_xpd_merge_list(t_ppnlst token, t_ppadlst list)
 {
-	t_pnlst		tmp;
-	char		*str;
+	t_pnlst	tmp;
+	char	*str;
 
-	if (!to_str)
-		return (_xpd_merge_string(token, list));
+	free((*token)->addr_1);
+	(*token)->addr_1 = NULL;
 	tmp = (*list)->d_top;
 	while (tmp)
 	{
@@ -91,25 +73,21 @@ int	_xpd_merge_list(t_ppnlst token, t_ppadlst list, bool to_str)
 		token = &(*token)->next;
 		tmp = tmp->next;
 	}
-	if (list)
-	{
-		free((*token)->addr_1);
-		(*token)->addr_1 = NULL;
-	}
 	_dlst_clear(list);
 	return (_SUCCESS);
 }
 
-int	_xpd_wildcards_proc(t_pdata data, t_ppnlst token, t_ppadlst list, bool to_str)
+int	_xpd_wildcards_proc(t_ppnlst token, t_ppadlst list, bool to_str)
 {
 	char	**patterns;
-	char 	*str;
+	char	*str;
 
-
-	(*token)->addr_1 = _xpd_str(data, (*token)->addr_1, false);
 	if (_xpd_full_asterix((*token)->addr_1))
 	{
-		_xpd_merge_list(token, list, to_str);
+		if (!to_str)
+			return (_xpd_merge_string(token, list));
+		else
+			_xpd_merge_list(token, list);
 		return (_dlst_clear(list), _SUCCESS);
 	}
 	str = (*token)->addr_1;
@@ -123,7 +101,9 @@ int	_xpd_wildcards_proc(t_pdata data, t_ppnlst token, t_ppadlst list, bool to_st
 	ft_free_arr(patterns);
 	if (!*list)
 		return (_SUCCESS);
-	return (_xpd_merge_list(token, list, to_str));
+	if (!to_str)
+		return (_xpd_merge_string(token, list));
+	return (_xpd_merge_list(token, list));
 }
 
 int	_xpd_wildcards(t_pdata data, t_ppnlst token, bool to_str)
@@ -150,7 +130,7 @@ int	_xpd_wildcards(t_pdata data, t_ppnlst token, bool to_str)
 		entry = readdir(cwd_dir);
 	}
 	closedir(cwd_dir);
-	if (data->xpd && _xpd_wildcards_proc(data, token, &data->xpd, to_str))
+	if (data->xpd && _xpd_wildcards_proc(token, &data->xpd, to_str))
 		return (_FAILURE);
 	return (_SUCCESS);
 }

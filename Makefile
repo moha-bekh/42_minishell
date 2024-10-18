@@ -77,7 +77,8 @@ _EXPAND			:= 		_xpd\
 _PARS			:= 		_parsing\
 						_redirs
 
-_UTILS			:=		_dlst_print\
+_UTILS			:=		_check_patterns\
+						_dlst_print\
 						_err_print\
 						_exec_parent_wait_loop\
 						_get_data\

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _xpd.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 16:22:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/17 21:32:46 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/18 13:30:44 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,16 @@ int	_xpd_line(t_pdata data, t_ppnlst token)
 	{
 		if (tmp->x == '$' && _xpd_var(data, &tmp))
 			return (_FAILURE);
-		// if (_xpd_full_asterix(tmp->addr_1))
-		// 	tmp->x = '*';
-		else if (tmp->x == '*' && _xpd_wildcards(data, &tmp, false))
-			return (_FAILURE);
 		if (tmp->x == '"' && _xpd_needed(tmp->addr_1))
 			tmp->addr_1 = _xpd_str(data, tmp->addr_1, true);
+		tmp->x = '*';
+		tmp = tmp->next;
+	}
+	tmp = *token;
+	while (tmp && tmp->x != _PIPE && !_tok_id(tmp->x, _TYP_SEP))
+	{
+		if (tmp->x == '*' && _xpd_wildcards(data, &tmp, true))
+			return (_FAILURE);
 		tmp = tmp->next;
 	}
 	_join_strings(token);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _dollar.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:36:10 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/17 21:54:20 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/18 13:31:23 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ int	_var_(t_pdata data, int *i)
 		j = ++(*i);
 	while (data->prompt[*i] && _is_varchr(data->prompt[*i]))
 		*i += 1;
-	_dlst_push_back(&data->tokens, ft_substr(data->prompt, j, (*i - j)), NULL, '$');
+	_dlst_push_back(&data->tokens, ft_substr(data->prompt, j, (*i - j)), NULL,
+		'$');
 	if (!data->tokens->d_bot->addr_1)
 		return (_FAILURE);
 	if (data->prompt[*i] && !ft_isspace(data->prompt[*i]))
@@ -55,9 +56,11 @@ int	_dollar_proc(t_pdata data, int *i)
 	else
 	{
 		j = *i;
-		while (data->prompt[++(*i)] && !ft_isspace(data->prompt[*i]) && data->prompt[*i] != '$')
+		while (data->prompt[++(*i)] && !ft_isspace(data->prompt[*i])
+			&& data->prompt[*i] != '$')
 			*i += 1;
-		_dlst_push_back(&data->tokens, ft_substr(data->prompt, j, (*i - j)), NULL, 'W');
+		_dlst_push_back(&data->tokens, ft_substr(data->prompt, j, (*i - j)),
+			NULL, 'W');
 		if (!data->tokens->d_bot->addr_1)
 			return (_FAILURE);
 	}

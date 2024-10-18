@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _dlst_push.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:32:43 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/09/21 01:16:49 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/18 13:32:19 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,65 +68,67 @@ void	_dlst_push_back(t_ppadlst dlst, void *addr_1, void *addr_2, int x)
 	(*dlst)->d_size++;
 }
 
-void _dlst_push_before(t_ppadlst dlst, t_pnlst node, void *addr_1, void *addr_2)
+void	_dlst_push_before(t_ppadlst dlst, t_pnlst node, void *addr_1,
+		void *addr_2)
 {
-    t_pnlst new;
+	t_pnlst	new;
 
 	new = _dlst_new_node();
 	if (!new)
 		return ;
-    if (!*dlst)
-    {
+	if (!*dlst)
+	{
 		*dlst = _dlst_new_manager();
 		if (!*dlst)
 			return (free(new));
-        (*dlst)->d_top = new;
-        (*dlst)->d_bot = new;
-    }
+		(*dlst)->d_top = new;
+		(*dlst)->d_bot = new;
+	}
 	_dlst_merge_nodes(*dlst, node->prev, new, node);
-    new->addr_1 = addr_1;
-    new->addr_2 = addr_2;
-    new->manager = *dlst;
-    (*dlst)->d_size++;
+	new->addr_1 = addr_1;
+	new->addr_2 = addr_2;
+	new->manager = *dlst;
+	(*dlst)->d_size++;
 }
 
-void _dlst_push_after(t_ppadlst dlst, t_pnlst node, void *addr_1, void *addr_2)
+void	_dlst_push_after(t_ppadlst dlst, t_pnlst node, void *addr_1,
+		void *addr_2)
 {
-    t_pnlst new;
+	t_pnlst	new;
 
 	new = _dlst_new_node();
 	if (!new)
 		return ;
-    if (!*dlst)
-    {
+	if (!*dlst)
+	{
 		*dlst = _dlst_new_manager();
 		if (!*dlst)
 			return (free(new));
-        (*dlst)->d_top = new;
-        (*dlst)->d_bot = new;
-    }
+		(*dlst)->d_top = new;
+		(*dlst)->d_bot = new;
+	}
 	_dlst_merge_nodes(*dlst, node, new, node->next);
-    new->addr_1 = addr_1;
-    new->addr_2 = addr_2;
-    new->manager = *dlst;
-    (*dlst)->d_size++;
+	new->addr_1 = addr_1;
+	new->addr_2 = addr_2;
+	new->manager = *dlst;
+	(*dlst)->d_size++;
 }
 
-    // else if ((*dlst)->d_bot == node)
-    // {
-    //     (*dlst)->d_bot->next = new;
-    //     new->prev = (*dlst)->d_bot;
-    //     (*dlst)->d_bot = new;
-    // }
-    // else
-    // {
-    //     node->next->prev = new;
-    //     new->next = node->next;
-    //     new->prev = node;
-    //     node->next = new;
-    // }
+// else if ((*dlst)->d_bot == node)
+// {
+//     (*dlst)->d_bot->next = new;
+//     new->prev = (*dlst)->d_bot;
+//     (*dlst)->d_bot = new;
+// }
+// else
+// {
+//     node->next->prev = new;
+//     new->next = node->next;
+//     new->prev = node;
+//     node->next = new;
+// }
 
-	// void	_dlst_push_in(t_ppadlst dlst, t_pnlst node, void *addr_1, void *addr_2)
+// void	_dlst_push_in(t_ppadlst dlst, t_pnlst node, void *addr_1, void *addr_2)
 // {
 // 	t_pnlst	new;
 

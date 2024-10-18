@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 13:02:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/12 10:00:40 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/18 15:36:01 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ int	_pars_redir_outt(t_ppncmd cmd, t_pnlst token, bool inside)
 		(*cmd)->redirs.out_access = true;
 		return (_SUCCESS);
 	}
-	(*cmd)->redirs.fd[1] = open(token->addr_1, _O_RWCT);
+	(*cmd)->redirs.fd[1] = open(token->addr_1, O_WRONLY | O_CREAT | O_TRUNC,
+			0644);
 	if ((*cmd)->redirs.fd[1] < 0)
 		return (perror("open"), _FAILURE);
 	close((*cmd)->redirs.fd[1]);
@@ -64,7 +65,8 @@ int	_pars_redir_outa(t_ppncmd cmd, t_pnlst token, bool inside)
 		(*cmd)->redirs.out_access = true;
 		return (_SUCCESS);
 	}
-	(*cmd)->redirs.fd[1] = open(token->addr_1, _O_RWCT);
+	(*cmd)->redirs.fd[1] = open(token->addr_1, O_WRONLY | O_CREAT | O_TRUNC,
+			0644);
 	if ((*cmd)->redirs.fd[1] < 0)
 		return (perror("open"), _FAILURE);
 	close((*cmd)->redirs.fd[1]);

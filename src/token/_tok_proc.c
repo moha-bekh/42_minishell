@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _tok_proc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 16:12:52 by moha              #+#    #+#             */
-/*   Updated: 2024/10/18 13:31:10 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/20 20:15:57 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ int	_wildcards_proc(t_pdata data, int *i)
 	if (!str)
 		return (_FAILURE);
 	_dlst_push_back(&data->tokens, str, NULL, '*');
-	if (data->prompt[*i] && !ft_isspace(data->prompt[*i])
-		&& _tok_id(data->prompt[*i], _JOINERS))
+	if (data->prompt[*i] && !ft_isspace(data->prompt[*i]) && _tok_id(data->prompt[*i], _JOINERS))
 		data->tokens->d_bot->flag = true;
 	return (_SUCCESS);
 }
@@ -64,8 +63,7 @@ int	_sub_proc(t_pdata data, int *i)
 			return (_FAILURE);
 		data->args.parnth++;
 	}
-	if (data->tokens->d_bot->prev && (data->tokens->d_bot->prev->x == '('
-			|| data->tokens->d_bot->prev->x == ')'))
+	if (data->tokens->d_bot->prev && (data->tokens->d_bot->prev->x == '(' || data->tokens->d_bot->prev->x == ')'))
 		return (_err_print(_ERR_TOKEN, data->tokens->d_bot->addr_1, true, 2));
 	*i += 1;
 	return (_SUCCESS);

@@ -83,6 +83,7 @@ _UTILS			:=		_check_patterns\
 						_exec_parent_wait_loop\
 						_get_data\
 						_get_env_value\
+						_get_path\
 						_get_rname\
 						_is_builtin\
 						_is_overflow\

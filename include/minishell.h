@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/10/18 15:37:17 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/21 00:16:26 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int						_unset(t_pdata data, char **args);
 
 /* UTILS */
 int						_check_patterns(t_pnlst token, char **patt);
-void					_bt_print(t_pbtree node, int i);
+// void					_bt_print(t_pbtree node, int i);
 void					_dlst_print_builtins(t_padlst dlst);
 void					_dlst_print_env(t_padlst dlst);
 void					_dlst_print_export(t_padlst dlst);
@@ -136,6 +136,7 @@ int						_err_print(char *str, void *arg, bool ptr, int _errno);
 int						_exec_parent_wait_loop(t_pdata data, t_ppbtree node);
 t_pdata					_get_data(void);
 char					*_get_env_value(t_pdata data, char *key);
+char					*_get_path(t_pdata data);
 char					*_get_rname(void);
 int						_is_builtin(t_pdata data, char **args);
 int						_is_overflow(char *str);

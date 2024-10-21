@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 22:10:26 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/12 10:10:47 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/21 21:38:16 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ char	**_ltoa(t_padlst dlst)
 		if (!pmt)
 			return (NULL);
 		arr[i] = ft_strjoin(pmt, tmp->addr_2);
+		if (!arr[i])
+			return (arr);
 		free(pmt);
 		pmt = NULL;
-		if (!arr[i])
-			return (NULL);
 		i++;
 		tmp = tmp->next;
 	}

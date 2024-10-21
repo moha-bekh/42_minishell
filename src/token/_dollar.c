@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:36:10 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/18 13:31:23 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/21 14:06:02 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@ int	_errno_(t_pdata data, int *i)
 	if (!data->tokens->d_bot->addr_1)
 		return (_FAILURE);
 	*i += 2;
+	if (data->prompt[*i] && !ft_isspace(data->prompt[*i]))
+		data->tokens->d_bot->flag = true;
+	else
+		data->tokens->d_bot->flag = false;
 	return (_SUCCESS);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:23:36 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/18 13:31:14 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/21 14:05:54 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	_word_proc(t_pdata data, int *i)
 
 	j = *i;
 	while (data->prompt[*i] && !ft_isspace(data->prompt[*i])
-		&& !_tok_id(data->prompt[*i], _WORD_SEP))
+		&& !_tok_id(data->prompt[*i], _TOKENS))
 		*i += 1;
 	if (data->tokens && data->tokens->d_bot->flag && data->tokens->d_bot->prev
 		&& data->tokens->d_bot->prev->x == 'H')

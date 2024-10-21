@@ -6,7 +6,7 @@
 /*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 11:19:04 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/21 00:15:35 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/21 10:27:04 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int _path_incwd(t_pdata data, t_ppncmd cmd, char **paths)
 			free(tmp);
 			ft_free_arr(paths);
 			_err_print(_ERR_PERM, (*cmd)->args[0], true, 126);
-			return (_data_clear_exit(data, 126));
+			_data_clear_exit(data, 126);
 		}
 	}
 	return (_SUCCESS);
@@ -84,12 +84,12 @@ int _try_n_set_path(t_ppncmd cmd, char *path)
 	if (access(path, F_OK))
 	{
 		_err_print(_ERR_NO_FILE, path, true, 127);
-		return (_FAILURE);
+		_data_clear_exit(_get_data(), 127);
 	}
 	if (access(path, X_OK))
 	{
 		_err_print(_ERR_PERM, path, true, 126);
-		return (_FAILURE);
+		_data_clear_exit(_get_data(), 126);
 	}
 	(*cmd)->path = ft_strdup(path);
 	if (!(*cmd)->path)
@@ -114,11 +114,21 @@ int _resolve_path(t_pdata data, t_ppncmd cmd)
 	}
 	tmp = _find_path_(cmd, paths);
 	if (!tmp)
-		return (_FAILURE);
-	if (_try_n_set_path(cmd, tmp))
-		return (free(tmp), _FAILURE);
-	free(tmp);
-	if (!(*cmd)->path && _path_incwd(data, cmd, paths))
-		return (_FAILURE);
+	{
+		if (_path_incwd(data, cmd, paths))
+			return (_FAILURE);
+		else
+		{
+			(*cmd)->path = ft_strdup((*cmd)->args[0]);
+			if (!(*cmd)->path)
+				return (_FAILURE);
+		}
+	}
+	else
+	{
+		if (_try_n_set_path(cmd, tmp))
+			return (free(tmp), _FAILURE);
+		free(tmp);
+	}
 	return (_SUCCESS);
 }

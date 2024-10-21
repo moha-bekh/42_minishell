@@ -1,27 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _get_path.c                                        :+:      :+:    :+:   */
+/*   _get_paths.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/21 00:15:47 by oek               #+#    #+#             */
-/*   Updated: 2024/10/21 10:39:53 by mbekheir         ###   ########.fr       */
+/*   Created: 2024/10/21 10:51:13 by mbekheir          #+#    #+#             */
+/*   Updated: 2024/10/21 10:51:17 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*_get_path(t_pdata data)
+int	_get_paths_(t_pdata data, char ***paths)
 {
-	t_pnlst	tmp;
+	char	*tmp;
 
-	tmp = data->env->d_top;
-	while (tmp)
+	*paths = NULL;
+	tmp = _get_path(data);
+	if (tmp)
 	{
-		if (!ft_strcmp(tmp->addr_1, "PATH"))
-			return (tmp->addr_2);
-		tmp = tmp->next;
+		*paths = ft_split(tmp, ':');
+		if (!*paths)
+			return (_FAILURE);
 	}
-	return (NULL);
+	else if (!tmp && data->args._hard_path)
+	{
+		*paths = ft_split(data->args._hard_path, ':');
+		if (!*paths)
+			return (_FAILURE);
+	}
+	return (_SUCCESS);
 }

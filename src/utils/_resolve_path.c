@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   _resolve_path.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 11:19:04 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/21 10:27:04 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/21 10:51:13 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int _path_incwd(t_pdata data, t_ppncmd cmd, char **paths)
+int	_path_incwd(t_pdata data, t_ppncmd cmd, char **paths)
 {
-	char *tmp;
+	char	*tmp;
 
 	tmp = ft_strjoin("./", (*cmd)->args[0]);
 	if (!tmp)
@@ -31,14 +31,15 @@ int _path_incwd(t_pdata data, t_ppncmd cmd, char **paths)
 			_data_clear_exit(data, 126);
 		}
 	}
+	free(tmp);
 	return (_SUCCESS);
 }
 
-char *_find_path_(t_ppncmd cmd, char **paths)
+char	*_find_path_(t_ppncmd cmd, char **paths)
 {
-	char *path;
-	char *tmp;
-	int i;
+	char	*path;
+	char	*tmp;
+	int		i;
 
 	i = -1;
 	while (paths[++i])
@@ -58,28 +59,7 @@ char *_find_path_(t_ppncmd cmd, char **paths)
 	return (ft_free_arr(paths), NULL);
 }
 
-int _get_paths_(t_pdata data, char ***paths)
-{
-	char *tmp;
-
-	*paths = NULL;
-	tmp = _get_path(data);
-	if (tmp)
-	{
-		*paths = ft_split(tmp, ':');
-		if (!*paths)
-			return (_FAILURE);
-	}
-	else if (!tmp && data->args._hard_path)
-	{
-		*paths = ft_split(data->args._hard_path, ':');
-		if (!*paths)
-			return (_FAILURE);
-	}
-	return (_SUCCESS);
-}
-
-int _try_n_set_path(t_ppncmd cmd, char *path)
+int	_try_n_set_path(t_ppncmd cmd, char *path)
 {
 	if (access(path, F_OK))
 	{
@@ -97,21 +77,11 @@ int _try_n_set_path(t_ppncmd cmd, char *path)
 	return (_SUCCESS);
 }
 
-int _resolve_path(t_pdata data, t_ppncmd cmd)
+int	_path_finder(t_pdata data, t_ppncmd cmd, char **paths)
 {
-	char **paths;
-	char *tmp;
+	char	*tmp;
 
-	paths = NULL;
-	if (ft_strchr((*cmd)->args[0], '/'))
-		return (_try_n_set_path(cmd, (*cmd)->args[0]));
-	if (_get_paths_(data, &paths))
-		return (_FAILURE);
-	if (!paths)
-	{
-		_err_print(_ERR_NO_FILE, (*cmd)->args[0], true, 127);
-		return (_data_clear_exit(data, 127));
-	}
+	tmp = NULL;
 	tmp = _find_path_(cmd, paths);
 	if (!tmp)
 	{
@@ -130,5 +100,24 @@ int _resolve_path(t_pdata data, t_ppncmd cmd)
 			return (free(tmp), _FAILURE);
 		free(tmp);
 	}
+	return (_SUCCESS);
+}
+
+int	_resolve_path(t_pdata data, t_ppncmd cmd)
+{
+	char	**paths;
+
+	if (ft_strchr((*cmd)->args[0], '/'))
+		return (_try_n_set_path(cmd, (*cmd)->args[0]));
+	paths = NULL;
+	if (_get_paths_(data, &paths))
+		return (_FAILURE);
+	if (!paths)
+	{
+		_err_print(_ERR_NO_FILE, (*cmd)->args[0], true, 127);
+		return (_data_clear_exit(data, 127));
+	}
+	if (_path_finder(data, cmd, paths))
+		return (_FAILURE);
 	return (_SUCCESS);
 }

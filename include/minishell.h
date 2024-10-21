@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/10/21 00:16:26 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/21 10:51:44 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct s_data
 	t_padlst			xpd;
 	int					_errno;
 	struct s_shell		shell;
-} t_data, *t_pdata,	**t_ppdata;
+} t_data, *t_pdata, **t_ppdata;
 
 /* SIGNALS */
 void					_hndl_sigint(int sig);
@@ -137,6 +137,7 @@ int						_exec_parent_wait_loop(t_pdata data, t_ppbtree node);
 t_pdata					_get_data(void);
 char					*_get_env_value(t_pdata data, char *key);
 char					*_get_path(t_pdata data);
+int						_get_paths_(t_pdata data, char ***paths);
 char					*_get_rname(void);
 int						_is_builtin(t_pdata data, char **args);
 int						_is_overflow(char *str);
@@ -180,7 +181,8 @@ enum					e_return
 # define _ERR_IS_DIR "bash: %s: Is a directory\n"
 # define _ERR_NO_FILE "bash: %s: No such file or directory\n"
 # define _ERR_NO_DIR "bash: cd: %s: No such file or directory\n"
-# define _ERR_PWD "pwd: error retrieving current directory: \
+# define _ERR_PWD \
+	"pwd: error retrieving current directory: \
 	getcwd: cannot access parent directories: No such file or directory\n"
 
 # define _ERR_ENV_NO_FILE "env: %s: No such file or directory\n"
@@ -191,7 +193,8 @@ enum					e_return
 
 # define _ERR_PERM "bash: %s: Permission denied\n"
 # define _ERR_AMBIGOUS "bash: %s: ambiguous redirect\n"
-# define _ERR_HERE_EOF "bash: warning: here-document delimited by end-of-file \
+# define _ERR_HERE_EOF \
+	"bash: warning: here-document delimited by end-of-file \
 	(wanted `%s')\n"
 
 # define _PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"

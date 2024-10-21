@@ -84,6 +84,7 @@ _UTILS			:=		_check_patterns\
 						_get_data\
 						_get_env_value\
 						_get_path\
+						_get_paths_\
 						_get_rname\
 						_is_builtin\
 						_is_overflow\

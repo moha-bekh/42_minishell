@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: moha <moha@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 15:06:27 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/05/10 00:34:18 by moha             ###   ########.fr       */
+/*   Updated: 2024/10/22 12:03:05 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	while (s2[++j])
 		s3[i++] = s2[j];
 	s3[i] = '\0';
+	// printf("s3: %s\n", s3);
 	return (s3);
 }

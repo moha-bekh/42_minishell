@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 18:16:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/21 21:37:41 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/22 12:14:07 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void	_execution(t_pdata data, t_pncmd cmd)
 	env = _ltoa(data->env);
 	if (!env)
 		_data_clear_exit(data, 1);
+	_dlst_print_tokens(data->tokens);
 	execve(cmd->path, cmd->args, env);
 	if (cmd->args)
 		_err_print(_ERR_NOT_FOUND, cmd->args[0], true, 127);

@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:05:28 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/23 11:10:33 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/23 12:04:13 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ int	_join_proc(t_ppnlst tmp)
 	*tmp = (*tmp)->next;
 	if (!(*tmp))
 		return (1);
-	if ((*tmp)->prev->x == '"' || (*tmp)->prev->x == '\'')
-		(*tmp)->x = '\'';
 	if ((*tmp)->x == '$')
 	{
 		old = (*tmp)->addr_1;
@@ -30,6 +28,8 @@ int	_join_proc(t_ppnlst tmp)
 	old = (*tmp)->addr_1;
 	(*tmp)->addr_1 = ft_strjoin((*tmp)->prev->addr_1, (*tmp)->addr_1);
 	free(old);
+	if ((*tmp)->prev->x == '"' || (*tmp)->prev->x == '\'')
+		(*tmp)->x = '\'';
 	if ((*tmp)->prev)
 		_dlst_pop_in(&(*tmp)->manager, &(*tmp)->prev);
 	else

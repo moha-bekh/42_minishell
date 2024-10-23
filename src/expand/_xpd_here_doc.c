@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:11:19 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/23 11:11:32 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/23 12:08:22 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ int	_xpd_here_doc(t_pdata data, t_ppncmd cmd)
 		tmp = get_next_line(fd[0]);
 		if (!tmp)
 			break ;
-		printf("tmp: %s\n", tmp);
 		tmp = _xpd_str(data, tmp, true);
 		ft_dprintf(fd[1], "%s\n", tmp);
 		free(tmp);
 		tmp = NULL;
 	}
 	close(fd[0]);
+	unlink((*cmd)->redirs.in_name);
 	close(fd[1]);
 	(*cmd)->redirs.in_name = new_hd;
 	return (_SUCCESS);

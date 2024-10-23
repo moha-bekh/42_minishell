@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _tok_proc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 16:12:52 by moha              #+#    #+#             */
-/*   Updated: 2024/10/21 10:39:27 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/23 21:39:23 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	_tok_proc(t_pdata data, int *i)
 		return (_FAILURE);
 	else if (data->prompt[*i] == '$' && _dollar_proc(data, i))
 		return (_FAILURE);
-	else if (data->prompt[*i] == '*' && _wildcards_proc(data, i))
-		return (_FAILURE);
+	// else if (data->prompt[*i] == '*' && _wildcards_proc(data, i))
+	// 	return (_FAILURE);
 	return (_SUCCESS);
 }

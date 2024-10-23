@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _join_limiters.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:05:28 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/23 12:04:13 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/23 21:22:57 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	_join_proc(t_ppnlst tmp)
 	*tmp = (*tmp)->next;
 	if (!(*tmp))
 		return (1);
-	if ((*tmp)->x == '$')
+	if ((*tmp)->x == '$' && ft_strcmp((*tmp)->addr_1, "$?"))
 	{
 		old = (*tmp)->addr_1;
 		(*tmp)->addr_1 = ft_strjoin("$", (*tmp)->addr_1);

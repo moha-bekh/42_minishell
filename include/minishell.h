@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/10/23 12:13:52 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/23 21:39:49 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,7 @@ enum					e_return
 
 # define _PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
-# define _TOKENS "*'\"()$|&<>"
+# define _TOKENS "'\"()$|&<>"
 # define _WORD_SEP "()$|&<>"
 # define _OPERATORS "&|"
 # define _SUBSHELL "()"

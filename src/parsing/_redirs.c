@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _redirs.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 13:02:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/23 01:58:09 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/23 21:19:52 by oek              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	_pars_redir_outa(t_ppncmd cmd, t_pnlst token, bool inside)
 		(*cmd)->redirs.out_access = true;
 		return (_SUCCESS);
 	}
-	(*cmd)->redirs.fd[1] = open(token->addr_1, O_WRONLY | O_CREAT | O_TRUNC,
+	(*cmd)->redirs.fd[1] = open(token->addr_1, O_WRONLY | O_CREAT | O_APPEND,
 			0644);
 	if ((*cmd)->redirs.fd[1] < 0)
 		return (perror("open"), _FAILURE);

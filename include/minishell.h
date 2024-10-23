@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/10/23 01:54:20 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/23 11:12:47 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,7 @@ int						_is_builtin(t_pdata data, char **args);
 int						_is_overflow(char *str);
 int						_is_varchr(char c);
 void					_join_flag(t_pdata data, int i);
+int						_join_limiters(t_pdata data);
 int						_join_strings(t_ppnlst token);
 int						_join_limiters(t_pdata data);
 int						_key_exist(t_padlst env, char *arg);

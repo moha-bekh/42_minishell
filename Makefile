@@ -2,7 +2,6 @@ PROJECT =				minishell
 NAME =					minishell
 
 CC =					cc
-# CFLAGS =				-Wall -Wextra -g3
 CFLAGS =				-Wall -Wextra -Werror -g3
 DEPFLAGS =				-MMD -MP
 
@@ -64,15 +63,11 @@ _EXEC			:=		_exec\
 						_redirs\
 						_exec_utils\
 
-# _EXEC			:= 		_exec_process\
-# 						_exec_proc\
-# 						_exec_builtin\
-# 						_redirs\
-
 _EXPAND			:= 		_xpd\
 						_xpd_str\
 						_xpd_wildcards\
 						_xpd_wildcards_utils\
+						_xpd_here_doc\
 
 _PARS			:= 		_parsing\
 						_redirs
@@ -90,6 +85,7 @@ _UTILS			:=		_check_patterns\
 						_is_overflow\
 						_is_varchr\
 						_join_flag\
+						_join_limiters\
 						_join_strings\
 						_key_exist\
 						_limit_quoted\

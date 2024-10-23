@@ -1,5 +1,6 @@
 PROJECT =				minishell
 NAME =					minishell
+NAME_BONUS =			minishell_bonus
 
 CC =					cc
 CFLAGS =				-Wall -Wextra -Werror -g3
@@ -112,7 +113,10 @@ SRCS			+=		$(addprefix $(SRC_DIR), $(addprefix $(UTILS_DIR), $(addsuffix .c, $(_
 OBJS = 					$(SRCS:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
 all:					$(NAME)
-						@echo "$(GREEN)$(PROJECT) : All done!$(DEFAULT)"
+						@echo "$(GREEN)$(PROJECT) : Mandatory done!$(DEFAULT)"
+
+bonus:					$(NAME_BONUS)
+						@echo "$(GREEN)$(PROJECT) : Bonus done!$(DEFAULT)"
 
 $(OBJ_DIR)%.o:			$(SRC_DIR)%.c
 						@mkdir -p $(@D)
@@ -123,13 +127,17 @@ $(NAME): $(OBJS)
 						@make -sC ./libft
 						@$(CC) $(FLAGS) $(OBJS) $(LIBRARYS) -o $(NAME)
 
+$(NAME_BONUS): $(OBJS)
+						@make -sC ./libft
+						@$(CC) $(FLAGS) $(OBJS) $(LIBRARYS) -o $(NAME_BONUS)
+
 clean:
 						@rm -rf $(OBJ_DIR)
 						@echo "$(CYAN)$(PROJECT) : Objs & Deps files cleaned!$(DEFAULT)"
 
 fclean:					clean
 						@make fclean -sC ./libft
-						@rm -f $(NAME)
+						@rm -f $(NAME) $(NAME_BONUS)
 						@echo "$(PURPLE)$(PROJECT) : Content cleaned!$(DEFAULT)"
 
 re:						fclean all

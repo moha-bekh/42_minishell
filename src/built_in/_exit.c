@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 22:01:43 by moha              #+#    #+#             */
-/*   Updated: 2024/10/22 22:24:22 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/23 12:37:16 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	_exit_(t_pdata data, t_pncmd cmd, char **args)
 	if (!i)
 	{
 		if (cmd->pid && isatty(STDERR_FILENO))
-			ft_dprintf(STDERR_FILENO, "__exit\n");
+			ft_dprintf(STDERR_FILENO, "exit\n");
 		_data_clear(data);
 		exit(data->_errno);
 	}

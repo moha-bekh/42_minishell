@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/10/23 08:50:15 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/23 13:04:08 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	_canonical_mode(t_pdata data)
 	while (true)
 	{
 		if (isatty(STDERR_FILENO))
-			data->prompt = readline("minishell$ ");
+		data->prompt = readline("minishell$ ");
 		else
 			data->prompt = readline(NULL);
 		if (!data->prompt)

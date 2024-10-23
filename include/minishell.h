@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/10/21 14:09:44 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/23 01:54:20 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ struct					s_shell
 	struct termios		new_term;
 	struct sigaction	s_sigint;
 	struct sigaction	s_sigquit;
+	struct sigaction	s_sigterm;
 };
 
 typedef struct s_data
@@ -127,7 +128,6 @@ int						_unset(t_pdata data, char **args);
 
 /* UTILS */
 int						_check_patterns(t_pnlst token, char **patt);
-// void					_bt_print(t_pbtree node, int i);
 void					_dlst_print_builtins(t_padlst dlst);
 void					_dlst_print_env(t_padlst dlst);
 void					_dlst_print_export(t_padlst dlst);
@@ -144,6 +144,7 @@ int						_is_overflow(char *str);
 int						_is_varchr(char c);
 void					_join_flag(t_pdata data, int i);
 int						_join_strings(t_ppnlst token);
+int						_join_limiters(t_pdata data);
 int						_key_exist(t_padlst env, char *arg);
 int						_limit_quoted(char *str);
 char					**_ltoa(t_padlst dlst);
@@ -214,11 +215,11 @@ enum					e_return
 # define _TYP_REDIRS "<>HN"
 
 # define WHITE "\033[0;97m"
-# define RESET "\033[0;39m"
+# define RESET "\001\033[0;39m\002"
 
 # define CYAN "\033[0;96m"
 # define BLUE "\033[0;94m"
-# define MAGENTA "\033[0;95m"
+# define MAGENTA "\001\033[0;95m\002"
 
 # define GREEN "\033[0;92m"
 # define YELLOW "\033[0;93m"

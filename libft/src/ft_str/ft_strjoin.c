@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 15:06:27 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/22 12:03:05 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/23 01:53:22 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,5 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	while (s2[++j])
 		s3[i++] = s2[j];
 	s3[i] = '\0';
-	// printf("s3: %s\n", s3);
 	return (s3);
 }

@@ -6,11 +6,39 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 06:39:42 by moha              #+#    #+#             */
-/*   Updated: 2024/10/22 12:05:53 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/23 02:42:35 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	_xpd_here_doc(t_pdata data, t_ppncmd cmd)
+{
+	int		fd[2];
+	char	*new_hd;
+	char	*tmp;
+
+	fd[0] = open((*cmd)->redirs.in_name, O_RDONLY);
+	tmp = _get_rname();
+	new_hd = ft_strjoin("/tmp/", tmp);
+	free(tmp);
+	fd[1] = open(new_hd, O_RDWR | O_CREAT | O_APPEND, 0644);
+	while (1)
+	{
+		tmp = get_next_line(fd[0]);
+		if (!tmp)
+			break ;
+		printf("tmp: %s\n", tmp);
+		tmp = _xpd_str(data, tmp, true);
+		ft_dprintf(fd[1], "%s\n", tmp);
+		free(tmp);
+		tmp = NULL;
+	}
+	close(fd[0]);
+	close(fd[1]);
+	(*cmd)->redirs.in_name = new_hd;
+	return (_SUCCESS);
+}
 
 int	_swap_fd_redir_in(t_ppncmd cmd)
 {
@@ -20,12 +48,17 @@ int	_swap_fd_redir_in(t_ppncmd cmd)
 		return (_err_print(_ERR_NO_FILE, (*cmd)->redirs.in_name, true, 1));
 	else if (access((*cmd)->redirs.in_name, R_OK))
 		return (_err_print(_ERR_PERM, (*cmd)->redirs.in_name, true, 1));
-	(*cmd)->redirs.fd[0] = open((*cmd)->redirs.in_name, O_RDONLY);
-	if ((*cmd)->redirs.fd[0] < 0)
-		return (perror("open"), _FAILURE);
-	if (dup2((*cmd)->redirs.fd[0], STDIN_FILENO) < 0)
-		return (perror("dup2"), _FAILURE);
-	close((*cmd)->redirs.fd[0]);
+	if ((*cmd)->redirs.is_here_doc && (*cmd)->redirs.xpd_hd)
+		_xpd_here_doc(_get_data(), cmd);
+	else
+	{
+		(*cmd)->redirs.fd[0] = open((*cmd)->redirs.in_name, O_RDONLY);
+		if ((*cmd)->redirs.fd[0] < 0)
+			return (perror("open"), _FAILURE);
+		if (dup2((*cmd)->redirs.fd[0], STDIN_FILENO) < 0)
+			return (perror("dup2"), _FAILURE);
+		close((*cmd)->redirs.fd[0]);
+	}
 	return (_SUCCESS);
 }
 

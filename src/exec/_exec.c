@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 18:20:38 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/22 12:17:37 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/23 03:10:09 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int	_exec_child_proc(t_pdata data, t_pncmd cmd)
 
 int	_exec_process(t_pdata data, t_pncmd cmd)
 {
-	_dlst_print_tokens(data->tokens);
 	if (_xpd_line(data, &cmd->token) || _pars_args_line(data, &cmd, &cmd->token,
 			true))
 		return (_FAILURE);
@@ -89,6 +88,8 @@ int	_exec_subshell(t_pdata data, t_ppbtree node)
 	else
 	{
 		waitpid(pid, &data->_errno, 0);
+		if (tcsetattr(STDIN_FILENO, TCSANOW, &data->shell.new_term) == -1)
+			return (perror("tcsetattr"), _FAILURE);
 		if (WIFEXITED(data->_errno))
 			data->_errno = WEXITSTATUS(data->_errno);
 		else if (WIFSIGNALED(data->_errno))

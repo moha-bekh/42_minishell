@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 18:31:00 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/12 10:00:49 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/23 00:16:12 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	_exec_parent_wait_loop(t_pdata data, t_ppbtree node)
 		if (cmd->pid)
 		{
 			waitpid(cmd->pid, &data->_errno, 0);
+			tcsetattr(STDIN_FILENO, TCSANOW, &data->shell.new_term);
 			if (WIFEXITED(data->_errno))
 				data->_errno = WEXITSTATUS(data->_errno);
 			else if (WIFSIGNALED(data->_errno))

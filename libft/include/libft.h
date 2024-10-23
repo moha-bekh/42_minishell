@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/20 09:41:33 by ajordan-          #+#    #+#             */
-/*   Updated: 2024/10/18 15:43:31 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/23 02:38:59 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,6 +220,8 @@ struct				s_redir
 	bool			out_trunc;
 	bool			out_inside;
 	bool			here_inside;
+	bool			is_here_doc;
+	bool			xpd_hd;
 };
 
 struct				s_ncmd

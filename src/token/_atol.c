@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _atol.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 15:24:25 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/17 17:46:07 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/23 01:52:27 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	_atol(t_pdata data)
 		else if (data->prompt[i])
 			i++;
 	}
-	if (_check_bot(data) || _here_doc_filler(data))
+	if (_check_bot(data) || _join_limiters(data) || _here_doc_filler(data))
 		return (_FAILURE);
 	return (_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 06:00:00 by moha              #+#    #+#             */
-/*   Updated: 2024/10/21 14:08:22 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/23 03:09:58 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,12 @@ int	_shell_init(t_pdata data)
 				| ECHOK | ISIG | IEXTEN);
 		data->shell.new_term.c_lflag &= ~(ECHONL | ECHOPRT | ECHOKE);
 		if (tcsetattr(STDIN_FILENO, TCSANOW, &data->shell.new_term) == -1)
-			return (_FAILURE);
+			return (perror("tcsetattr"), _FAILURE);
 		rl_outstream = stderr;
 	}
 	else
+		rl_outstream = stdin;
+	if (!isatty(STDERR_FILENO) || !isatty(STDOUT_FILENO))
 		rl_outstream = stdin;
 	return (_SUCCESS);
 }
@@ -54,7 +56,10 @@ void	_canonical_mode(t_pdata data)
 {
 	while (true)
 	{
-		data->prompt = readline("minishell$ ");
+		if (isatty(STDERR_FILENO))
+			data->prompt = readline("minishell$ ");
+		else
+			data->prompt = readline(NULL);
 		if (!data->prompt)
 			return (write(1, "exit\n", 5), (void)_data_clear_exit(data, -1));
 		add_history(data->prompt);
@@ -99,10 +104,10 @@ void	_non_canonical_mode(t_pdata data)
 
 int	main(int ac, char **av, char **ev)
 {
-	if (_stdio_init() || _shell_init(_get_data()) || _sig_init(_get_data()))
-		return (_FAILURE);
 	if (_data_init(_get_data(), ac, av, ev))
 		return (_data_clear(_get_data()), _FAILURE);
+	if (_stdio_init() || _shell_init(_get_data()) || _sig_init(_get_data()))
+		return (_FAILURE);
 	if (isatty(STDIN_FILENO))
 		_canonical_mode(_get_data());
 	else

@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:23:36 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/22 13:31:28 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/23 01:52:56 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,17 +75,8 @@ int	_word_proc(t_pdata data, int *i)
 	while (data->prompt[*i] && !ft_isspace(data->prompt[*i])
 		&& !_tok_id(data->prompt[*i], _TOKENS))
 		*i += 1;
-	if (data->tokens && data->tokens->d_bot->flag && data->tokens->d_bot->prev
-		&& data->tokens->d_bot->prev->x == 'H')
-	{
-		if (_join_word(data, i, j))
-			return (_FAILURE);
-	}
-	else
-	{
-		if (_new_word(data, i, j))
-			return (_FAILURE);
-	}
+	if (_new_word(data, i, j))
+		return (_FAILURE);
 	if (data->prompt[*i] && !ft_isspace(data->prompt[*i])
 		&& _tok_id(data->prompt[*i], _JOINERS))
 		data->tokens->d_bot->flag = true;
@@ -93,3 +84,12 @@ int	_word_proc(t_pdata data, int *i)
 		data->tokens->d_bot->flag = false;
 	return (_SUCCESS);
 }
+// if (data->tokens && data->tokens->d_bot->flag && data->tokens->d_bot->prev
+	// && data->tokens->d_bot->prev->x == 'H')
+// {
+// if (_join_word(data, i, j))
+// return (_FAILURE);
+// }
+// else
+// {
+// }

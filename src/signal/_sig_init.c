@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 19:14:13 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/11 19:32:49 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/23 01:50:49 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,19 @@
 
 void	_hndl_sigint(int sig)
 {
-	if (sig == SIGINT)
-	{
-		_get_data()->_errno = 130;
-		write(STDOUT_FILENO, "\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
+	(void)sig;
+	_get_data()->_errno = 130;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
+
+void	_hndl_sigterm(int sig)
+{
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &_get_data()->shell.new_term) == -1)
+		return (perror("tcsetattr"));
+	_exit(sig);
 }
 
 int	_sig_init(t_pdata data)
@@ -31,6 +36,12 @@ int	_sig_init(t_pdata data)
 		data->shell.s_sigint.sa_flags = 0;
 		data->shell.s_sigint.sa_handler = _hndl_sigint;
 		sigaction(SIGINT, &data->shell.s_sigint, NULL);
+	}
+	{
+		sigemptyset(&data->shell.s_sigterm.sa_mask);
+		data->shell.s_sigterm.sa_flags = 0;
+		data->shell.s_sigterm.sa_handler = _hndl_sigterm;
+		sigaction(SIGTERM, &data->shell.s_sigterm, NULL);
 	}
 	{
 		sigemptyset(&data->shell.s_sigquit.sa_mask);

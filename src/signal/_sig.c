@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:14:46 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/11 19:32:35 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/23 01:50:44 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,22 @@
 
 void	_hndl_hd_sigint(int sig)
 {
-	if (sig == SIGINT)
-	{
-		_get_data()->_errno = 130;
-		write(STDOUT_FILENO, "\n", 1);
-		_data_clear(_get_data());
-	}
+	(void)sig;
+	_get_data()->_errno = 130;
+	write(STDOUT_FILENO, "\n", 1);
+	_data_clear(_get_data());
+}
+
+void	_sig_child_sigint(int sig)
+{
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &_get_data()->shell.new_term) == -1)
+		return (perror("tcsetattr"));
+	_exit(sig);
 }
 
 int	_sig_child_dfl(t_pdata data)
 {
-	data->shell.s_sigint.sa_handler = SIG_DFL;
+	data->shell.s_sigint.sa_handler = _sig_child_sigint;
 	if (sigaction(SIGINT, &data->shell.s_sigint, NULL))
 		return (_FAILURE);
 	data->shell.s_sigquit.sa_handler = SIG_DFL;

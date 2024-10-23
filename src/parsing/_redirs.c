@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 13:02:48 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/22 11:54:53 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/23 01:58:09 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	_pars_redir_in(t_ppncmd cmd, t_pnlst token)
 	if (!access(token->addr_1, F_OK | R_OK))
 		(*cmd)->redirs.in_access = true;
 	(*cmd)->redirs.in_name = token->addr_1;
+	(*cmd)->redirs.is_here_doc = false;
 	return (_SUCCESS);
 }
 
@@ -89,6 +90,7 @@ int	_pars_heredoc(t_ppncmd cmd, t_pnlst token, bool inside)
 		if (inside)
 			(*cmd)->redirs.here_inside = true;
 		(*cmd)->redirs.in_name = token->addr_1;
+		(*cmd)->redirs.is_here_doc = true;
 	}
 	return (_SUCCESS);
 }

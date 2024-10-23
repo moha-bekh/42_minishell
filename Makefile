@@ -2,8 +2,8 @@ PROJECT =				minishell
 NAME =					minishell
 
 CC =					cc
-CFLAGS =				-Wall -Wextra -g3
-# CFLAGS =				-Wall -Wextra -Werror -g3
+# CFLAGS =				-Wall -Wextra -g3
+CFLAGS =				-Wall -Wextra -Werror -g3
 DEPFLAGS =				-MMD -MP
 
 FLAGS =					$(CFLAGS) $(DEPFLAGS)

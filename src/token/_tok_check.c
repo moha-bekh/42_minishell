@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/31 16:12:25 by moha              #+#    #+#             */
-/*   Updated: 2024/10/11 19:44:57 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/25 17:36:38 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,34 @@ int	_check_sub(t_pdata data)
 	return (_SUCCESS);
 }
 
+int	_check_anb_sub(t_pnlst token)
+{
+	t_pnlst	tmp;
+
+	tmp = token;
+	while (tmp)
+	{
+		if (tmp->x == '(' && tmp->prev && (_tok_id(tmp->prev->x, _JOINERS)
+				|| tmp->prev->x == 'W'))
+			return (_err_print(_ERR_TOKEN, tmp->next->addr_1, true, 2));
+		if (tmp && tmp->x == ')')
+		{
+			tmp = tmp->next;
+			while (tmp && !_tok_id(tmp->x, _AFTER_SUB))
+			{
+				if (tmp && _tok_id(tmp->x, _REDIRS))
+					tmp = tmp->next->next;
+				else if (tmp && (tmp->x == 'W' || _tok_id(tmp->x, _JOINERS)))
+					return (_err_print(_ERR_TOKEN, tmp->addr_1, true, 2));
+				tmp = tmp->next;
+			}
+			continue ;
+		}
+		tmp = tmp->next;
+	}
+	return (_SUCCESS);
+}
+
 int	_check_top(t_pdata data)
 {
 	t_pnlst	tmp;
@@ -77,6 +105,8 @@ int	_check_bot(t_pdata data)
 	}
 	data->args.parnth = 0;
 	if (_check_sub(data))
+		return (_FAILURE);
+	if (_check_anb_sub(data->tokens->d_top))
 		return (_FAILURE);
 	return (_SUCCESS);
 }

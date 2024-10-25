@@ -6,13 +6,13 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 23:44:34 by moha              #+#    #+#             */
-/*   Updated: 2024/10/22 23:50:56 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/25 11:52:50 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	g_ptr_errno;
+int	g_sig;
 
 int	_builtins_init(t_pdata data)
 {

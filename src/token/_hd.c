@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:16:30 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/22 12:09:37 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/25 17:33:08 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,28 +21,26 @@ void	_hd_open_fd(t_pdata data, t_pnlst token, int *fd)
 
 void	_hd_fill_loop(t_pdata data, t_pnlst token, char *line)
 {
-	int	fd;
-
-	_hd_open_fd(data, token, &fd);
-	while (true && data->_errno != 130)
+	_hd_open_fd(data, token, &data->args.fd);
+	while (true)
 	{
 		line = readline("> ");
-		if (!line && data->_errno != 130)
+		if (!line)
 		{
 			ft_dprintf(2, _ERR_HERE_EOF, token->next->addr_1);
-			close(fd);
+			close(data->args.fd);
 			_data_clear_exit(data, 0);
 		}
-		if (!ft_strcmp(line, token->next->addr_1))
+		if (token->next && !ft_strcmp(line, token->next->addr_1))
 			break ;
 		if (line && !_tok_id(token->next->x, _QUOTES))
 			line = _xpd_str(data, line, true);
 		if (line)
-			ft_dprintf(fd, "%s\n", line);
+			ft_dprintf(data->args.fd, "%s\n", line);
 		free(line);
 		line = NULL;
 	}
-	close(fd);
+	close(data->args.fd);
 }
 
 int	_hd_parent_proc(t_pdata data, t_pnlst token, pid_t *pid)
@@ -77,8 +75,6 @@ int	_hd_fill(t_pdata data, t_pnlst token)
 		sigaction(SIGINT, &data->shell.s_sigint, NULL);
 		_hd_fill_loop(data, token, line);
 		free(line);
-		if (data->_errno == 130)
-			_data_clear_exit(data, 130);
 		_data_clear_exit(data, 0);
 	}
 	else if (pid != 0 && _hd_parent_proc(data, token, &pid))

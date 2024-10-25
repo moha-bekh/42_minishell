@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:31:50 by moha              #+#    #+#             */
-/*   Updated: 2024/10/23 21:39:49 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/25 17:38:36 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <sys/wait.h>
 # include <termios.h>
 
-extern int				g_sig_num;
+extern int	g_sig;
 
 struct					s_args
 {
@@ -36,6 +36,7 @@ struct					s_args
 	char				**hard_paths;
 	int					parnth;
 	int					nb_hd;
+	int					fd;
 };
 
 struct					s_shell
@@ -210,6 +211,7 @@ enum					e_return
 # define _OTHERS "$*"
 # define _SCOPES "(\"'"
 # define _JOINERS "\"'$*"
+# define _AFTER_SUB "()<>&|"
 
 # define _STX_OP "AOP"
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _sig.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alblanc <alblanc@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/11 16:14:46 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/23 16:19:29 by alblanc          ###   ########.fr       */
+/*   Updated: 2024/10/25 17:33:43 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 void	_hndl_hd_sigint(int sig)
 {
-	(void)sig;
+	sig = g_sig;
 	_get_data()->_errno = 130;
 	write(STDOUT_FILENO, "\n", 1);
-	_data_clear(_get_data());
+	close(_get_data()->args.fd);
+	_data_clear_exit(_get_data(), 130);
 }
 
 void	_sig_child_sigint(int sig)

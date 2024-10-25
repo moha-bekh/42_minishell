@@ -6,7 +6,7 @@
 /*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 18:43:02 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/12 10:00:34 by mbekheir         ###   ########.fr       */
+/*   Updated: 2024/10/25 12:01:13 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,7 @@ int	_pars_redirs(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 			continue ;
 		}
 		if (!inside && tmp->addr_1)
-		{
-			data->_errno = 2;
-			return (ft_dprintf(2, _ERR_TOKEN, tmp->addr_1), _FAILURE);
-		}
+			return (_err_print(_ERR_TOKEN, tmp->addr_1, true, 2), _FAILURE);
 		tmp = tmp->next;
 	}
 	if (tmp && tmp->x == ')' && tmp->next && _pars_redirs(data, cmd, &tmp->next,
@@ -106,3 +103,8 @@ int	_pars_args_line(t_pdata data, t_ppncmd cmd, t_ppnlst token, bool inside)
 		return (_FAILURE);
 	return (_pars_redirs(data, cmd, token, inside));
 }
+
+		// {
+		// 	data->_errno = 2;
+		// 	return (ft_dprintf(2, _ERR_TOKEN, tmp->addr_1), _FAILURE);
+		// }

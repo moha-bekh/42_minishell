@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _xpd.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oek <oek@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mbekheir <mbekheir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 16:22:33 by mbekheir          #+#    #+#             */
-/*   Updated: 2024/10/23 21:33:35 by oek              ###   ########.fr       */
+/*   Updated: 2024/10/25 11:43:00 by mbekheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ int	_xpd_line(t_pdata data, t_ppnlst token)
 	tmp = *token;
 	while (tmp && tmp->x != _PIPE && !_tok_id(tmp->x, _TYP_SEP))
 	{
-		if ((tmp->x == '*' || (tmp->x == '$' && tmp->addr_1)) && _xpd_wildcards(data, &tmp, true))
+		if ((tmp->x == '*' || (tmp->x == '$' && tmp->addr_1))
+			&& _xpd_wildcards(data, &tmp, true))
 			return (_FAILURE);
 		tmp = tmp->next;
 	}
